@@ -19,8 +19,8 @@ type VideoDbType = {
 const videos: VideoDbType[] = [
     {
         id: 0,
-        title: "string",
-        author: "string",
+        title: "The First Video",
+        author: "It's me",
         canBeDownloaded: true,
         minAgeRestriction: null,
         createdAt: "2023-12-08T19:46:21.116Z",
@@ -33,11 +33,18 @@ const videos: VideoDbType[] = [
 
 type RequestWithParams<P> = Request<P, {}, {}, {}>
 type RequestWithBody<B> = Request<{}, {}, B, {}>
+type RequestWithParamsAndBody<P,B> = Request<P, {}, B, {}>
 
 type CreateVideoType = {
     title: string,
     author: string,
     availableResolutions: typeof AvailableResolutions
+}
+
+type UpdateVideoType = CreateVideoType & {
+    canBeDownloaded: boolean,
+    minAgeRestriction: number | null,
+    publicationDate: Date
 }
 
 type ErrorMessage = {
@@ -52,7 +59,6 @@ type ErrorType = {
 app.get('/videos', (req: Request, res: Response) => {
     res.send(videos)
 })
-
 app.get('/videos/:id', (req: RequestWithParams<{id: string }>, res: Response) => {
     const videoId: number = +req.params.id
 
@@ -63,12 +69,9 @@ app.get('/videos/:id', (req: RequestWithParams<{id: string }>, res: Response) =>
 
     res.send(videos.find(v => v.id === videoId))
 })
-
 app.post('/videos', (req: RequestWithBody<CreateVideoType>, res: Response) => {
     const errors: ErrorType = {
-        errorMessages: [
-
-        ]
+        errorMessages: []
     }
 
     let {title, author, availableResolutions } = req.body
@@ -112,8 +115,38 @@ app.post('/videos', (req: RequestWithBody<CreateVideoType>, res: Response) => {
 
     res.status(201).send(newVideo)
 })
+app.put('/videos/:id', (req: RequestWithParamsAndBody<{id: string},UpdateVideoType>, res: Response) => {
+    const videoId: number = +req.params.id
 
+    if (!videoId) {
+        res.sendStatus(404)
+        return
+    }
 
+    const targetVideo: VideoDbType | undefined = videos.find(v => v.id === videoId)
+
+    if (!targetVideo) {
+        res.sendStatus(404)
+        return
+    }
+
+    let {title,
+        author,
+        availableResolutions,
+        canBeDownloaded,
+        minAgeRestriction,
+        publicationDate
+    } = req.body
+
+    if (title) targetVideo.title
+    if (author) targetVideo.author
+    if (availableResolutions) targetVideo.availableResolutions
+    if (canBeDownloaded) targetVideo.canBeDownloaded
+    if (minAgeRestriction) targetVideo.minAgeRestriction
+    if (publicationDate) targetVideo.publicationDate
+
+    res.status(204)
+})
 
 
 
