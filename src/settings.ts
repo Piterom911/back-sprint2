@@ -16,7 +16,7 @@ type VideoDbType = {
     availableResolutions: typeof AvailableResolutions
 }
 
-const videos: VideoDbType[] = [
+let videos: VideoDbType[] = [
     {
         id: 1,
         title: "The First Video",
@@ -159,6 +159,7 @@ app.delete('/videos/:id', (req: RequestWithParams<{id: string }>, res: Response)
         return
     }
 
+    videos = videos.filter(v => v.id !== videoId)
     res.sendStatus(204)
 })
 
