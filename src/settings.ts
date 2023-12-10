@@ -18,7 +18,7 @@ type VideoDbType = {
 
 const videos: VideoDbType[] = [
     {
-        id: 0,
+        id: 1,
         title: "The First Video",
         author: "It's me",
         canBeDownloaded: true,
@@ -93,7 +93,10 @@ app.post('/videos', (req: RequestWithBody<CreateVideoType>, res: Response) => {
         availableResolutions = []
     }
 
-    if (errors.errorMessages.length) res.status(400).send(errors)
+    if (errors.errorMessages.length) {
+        res.status(400).send(errors)
+        return
+    }
 
     const createdAt: Date = new Date()
     const publicationDate: Date = new Date()
@@ -138,12 +141,13 @@ app.put('/videos/:id', (req: RequestWithParamsAndBody<{id: string},UpdateVideoTy
         publicationDate
     } = req.body
 
-    if (title) targetVideo.title
-    if (author) targetVideo.author
-    if (availableResolutions) targetVideo.availableResolutions
-    if (canBeDownloaded) targetVideo.canBeDownloaded
-    if (minAgeRestriction) targetVideo.minAgeRestriction
-    if (publicationDate) targetVideo.publicationDate
+
+    if (title) targetVideo.title = title
+    if (author) targetVideo.author = author
+    if (availableResolutions) targetVideo.availableResolutions = availableResolutions
+    if (canBeDownloaded) targetVideo.canBeDownloaded = canBeDownloaded
+    if (minAgeRestriction) targetVideo.minAgeRestriction = minAgeRestriction
+    if (publicationDate) targetVideo.publicationDate = publicationDate.toISOString()
 
     res.status(204)
 })
