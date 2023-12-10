@@ -34,7 +34,7 @@ type RequestWithParams<P> = Request<P, {}, {}, {}>
 type RequestWithBody<B> = Request<{}, {}, B, {}>
 type RequestWithParamsAndBody<P,B> = Request<P, {}, B, {}>
 
-type CreateVideoType = {
+export type CreateVideoType = {
     title: string,
     author: string,
     availableResolutions: typeof AvailableResolutions
@@ -103,7 +103,7 @@ app.post('/videos', (req: RequestWithBody<CreateVideoType>, res: Response) => {
 
     const newVideo: VideoDbType = {
         id: +(new Date()),
-        canBeDownloaded: false,
+        canBeDownloaded: true,
         minAgeRestriction: null,
         createdAt: createdAt.toISOString(),
         publicationDate: publicationDate.toISOString(),
