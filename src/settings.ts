@@ -67,7 +67,9 @@ app.get('/videos/:id', (req: RequestWithParams<{id: string }>, res: Response) =>
         return
     }
 
-    res.send(videos.find(v => v.id === videoId))
+    const targetVideo = videos.find(v => v.id === videoId)
+
+    targetVideo ? res.send(targetVideo): res.sendStatus(404)
 })
 app.post('/videos', (req: RequestWithBody<CreateVideoType>, res: Response) => {
     const errors: ErrorType = {
