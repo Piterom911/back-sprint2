@@ -15,7 +15,6 @@ type VideoDbType = {
     publicationDate: string,
     availableResolutions: typeof AvailableResolutions
 }
-
 let videos: VideoDbType[] = [
     {
         id: 1,
@@ -40,18 +39,15 @@ type CreateVideoType = {
     author: string,
     availableResolutions: typeof AvailableResolutions
 }
-
 type UpdateVideoType = CreateVideoType & {
     canBeDownloaded: boolean,
     minAgeRestriction: number | null,
     publicationDate: Date
 }
-
 type ErrorMessage = {
     message: string,
     field: string
 }
-
 type ErrorType = {
     errorMessages: ErrorMessage[]
 }
@@ -162,6 +158,10 @@ app.delete('/videos/:id', (req: RequestWithParams<{id: string }>, res: Response)
     }
 
     videos = videos.filter(v => v.id !== videoId)
+    res.sendStatus(204)
+})
+app.delete('/__test__/data', (req: Request, res: Response) => {
+    videos = []
     res.sendStatus(204)
 })
 
