@@ -147,6 +147,16 @@ app.put('/videos/:id', (req: RequestWithParamsAndBody<{id: string},UpdateVideoTy
 
     res.status(204)
 })
+app.delete('/videos/:id', (req: RequestWithParams<{id: string }>, res: Response) => {
+    const videoId: number = +req.params.id
+
+    if (!videoId) {
+        res.sendStatus(404)
+        return
+    }
+
+    res.sendStatus(204)
+})
 
 
 
