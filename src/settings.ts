@@ -15,20 +15,6 @@ type VideoDbType = {
     publicationDate: string,
     availableResolutions: typeof AvailableResolutions
 }
-let videos: VideoDbType[] = [
-    {
-        id: 1,
-        title: "The First Video",
-        author: "It's me",
-        canBeDownloaded: true,
-        minAgeRestriction: null,
-        createdAt: "2023-12-08T19:46:21.116Z",
-        publicationDate: "2023-12-08T19:46:21.116Z",
-        availableResolutions: [
-            "P144"
-        ]
-    }
-]
 
 type RequestWithParams<P> = Request<P, {}, {}, {}>
 type RequestWithBody<B> = Request<{}, {}, B, {}>
@@ -51,6 +37,39 @@ type ErrorMessage = {
 type ErrorType = {
     errorMessages: ErrorMessage[]
 }
+
+
+let videos: VideoDbType[] = [
+    {
+        id: 1,
+        title: "The First Video",
+        author: "It's me",
+        canBeDownloaded: true,
+        minAgeRestriction: null,
+        createdAt: "2023-12-08T19:46:21.116Z",
+        publicationDate: "2023-12-08T19:46:21.116Z",
+        availableResolutions: [
+            "P144"
+        ]
+    },
+    {
+        id: 2,
+        title: "Zweites Video",
+        author: "Auf jeden Fall bin ich das",
+        canBeDownloaded: true,
+        minAgeRestriction: null,
+        createdAt: "2023-12-08T19:46:21.116Z",
+        publicationDate: "2023-12-08T19:46:21.116Z",
+        availableResolutions: [
+            "P2160"
+        ]
+    }
+]
+
+app.delete('/hometask_01/api/testing/all-data', (req: Request, res: Response) => {
+    videos = []
+    res.sendStatus(204)
+})
 
 app.get('/', (req: Request, res: Response) => {
     res.send("all right")
@@ -183,6 +202,7 @@ app.delete('/videos/:id', (req: RequestWithParams<{id: string }>, res: Response)
     }
 
     videos = videos.filter(v => v.id !== videoId)
+    console.log(videoId)
     res.sendStatus(204)
 })
 app.delete('/__test__/data', (req: Request, res: Response) => {

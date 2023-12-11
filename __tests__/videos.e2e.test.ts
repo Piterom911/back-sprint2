@@ -29,7 +29,7 @@ describe('/videos', () => {
             .expect(200, [])
     })
 
-    let responseCreatedVideo: any = undefined;
+    let videoExampleForTests: any = undefined;
     it('should  create an object with correct video properties', async () => {
         const newVideoReqData: CreateVideoType = {
             title: 'Ein Versuch',
@@ -46,12 +46,12 @@ describe('/videos', () => {
             publicationDate: expect.any(String)
         }
 
-        responseCreatedVideo = await request(app)
+        videoExampleForTests = await request(app)
             .post('/videos')
             .send(newVideoReqData)
             .expect(201)   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!  .expect(201, createdVideoObj)
 
-        expect(responseCreatedVideo.body).toEqual(createdVideoObj)
+        expect(videoExampleForTests.body).toEqual(createdVideoObj)
 
         const responseAllVideos = await request(app)
             .get('/videos')
@@ -71,7 +71,7 @@ describe('/videos', () => {
         }
 
         await request(app)
-            .put('/videos/' + responseCreatedVideo.body.id)
+            .put('/videos/' + videoExampleForTests.body.id)
             .send(updateVideoReqData)
             .expect(204)
     })
@@ -82,13 +82,25 @@ describe('/videos', () => {
         }
 
         const response = await request(app)
-            .put('/videos/' + responseCreatedVideo.body.id)
+            .put('/videos/' + videoExampleForTests.body.id)
             .send(updateVideoReqData)
             .expect(400)
-        console.log(response.body)
+
         expect(response.body).toEqual({
             errorMessages: expect.arrayContaining([{ message: expect.any(String), field: expect.any(String) }])
         })
+    })
+
+    it('deletes target video object', async () => {
+        videoExampleForTests = await request(app)
+            .delete('/videos/' + videoExampleForTests.body.id )
+            .expect(204)
+
+        await request(app)
+            .get('/videos')
+            .expect(200, [])
+
+        console.log(videoExampleForTests.body)
     })
 
 })
