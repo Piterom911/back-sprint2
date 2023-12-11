@@ -39,7 +39,7 @@ export type CreateVideoType = {
     author: string,
     availableResolutions: typeof AvailableResolutions
 }
-type UpdateVideoType = CreateVideoType & {
+export type UpdateVideoType = CreateVideoType & {
     canBeDownloaded: boolean,
     minAgeRestriction: number | null,
     publicationDate: Date
@@ -52,6 +52,9 @@ type ErrorType = {
     errorMessages: ErrorMessage[]
 }
 
+app.get('/', (req: Request, res: Response) => {
+    res.send("all right")
+})
 app.get('/videos', (req: Request, res: Response) => {
     res.send(videos)
 })
@@ -117,38 +120,60 @@ app.post('/videos', (req: RequestWithBody<CreateVideoType>, res: Response) => {
     res.status(201).send(newVideo)
 })
 app.put('/videos/:id', (req: RequestWithParamsAndBody<{id: string},UpdateVideoType>, res: Response) => {
-    const videoId: number = +req.params.id
-
-    if (!videoId) {
-        res.sendStatus(404)
-        return
+    const errors: ErrorType = {
+        errorMessages: []
     }
 
-    const targetVideo: VideoDbType | undefined = videos.find(v => v.id === videoId)
+    try {
+        const videoId: number = +req.params.id
 
-    if (!targetVideo) {
-        res.sendStatus(404)
-        return
+        if (!videoId) {
+            res.sendStatus(404)
+            return
+        }
+
+        const targetVideo: VideoDbType | undefined = videos.find(v => v.id === videoId)
+
+        if (!targetVideo) {
+            res.sendStatus(404)
+            return
+        }
+
+        let {title,
+            author,
+            availableResolutions,
+            canBeDownloaded,
+            minAgeRestriction,
+            publicationDate
+        } = req.body
+
+        if (title) {
+            targetVideo.title = title
+        } else  {
+            errors.errorMessages.push({message: 'Must be', field: 'title'})
+        }
+        if (author) {
+            targetVideo.author = author
+        } else  {
+            errors.errorMessages.push({message: 'Must be', field: 'author'})
+        }
+        if (availableResolutions) targetVideo.availableResolutions = availableResolutions
+        if (canBeDownloaded) targetVideo.canBeDownloaded = canBeDownloaded
+        if (minAgeRestriction) targetVideo.minAgeRestriction = minAgeRestriction
+        if (publicationDate) targetVideo.publicationDate = publicationDate.toString()
+
+        if (errors.errorMessages.length) {
+            res.status(400).send(errors)
+            return
+        }
+
+        res.sendStatus(204)
+    } catch (error) {
+        console.error('Error in update video data:', error);
+        res.sendStatus(500);
     }
-
-    let {title,
-        author,
-        availableResolutions,
-        canBeDownloaded,
-        minAgeRestriction,
-        publicationDate
-    } = req.body
-
-
-    if (title) targetVideo.title = title
-    if (author) targetVideo.author = author
-    if (availableResolutions) targetVideo.availableResolutions = availableResolutions
-    if (canBeDownloaded) targetVideo.canBeDownloaded = canBeDownloaded
-    if (minAgeRestriction) targetVideo.minAgeRestriction = minAgeRestriction
-    if (publicationDate) targetVideo.publicationDate = publicationDate.toISOString()
-
-    res.status(204)
 })
+
 app.delete('/videos/:id', (req: RequestWithParams<{id: string }>, res: Response) => {
     const videoId: number = +req.params.id
 

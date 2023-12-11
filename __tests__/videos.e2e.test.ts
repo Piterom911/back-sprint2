@@ -1,5 +1,5 @@
 import request from 'supertest'
-import {app, CreateVideoType} from "../src/settings";
+import {app, CreateVideoType, UpdateVideoType} from "../src/settings";
 
 describe('/videos', () => {
     beforeAll(async () => {
@@ -29,7 +29,7 @@ describe('/videos', () => {
             .expect(200, [])
     })
 
-
+    let responseCreatedVideo: any = undefined;
     it('should  create an object with correct video properties', async () => {
         const newVideoReqData: CreateVideoType = {
             title: 'Ein Versuch',
@@ -46,12 +46,12 @@ describe('/videos', () => {
             publicationDate: expect.any(String)
         }
 
-        const response = await request(app)
+        responseCreatedVideo = await request(app)
             .post('/videos')
             .send(newVideoReqData)
             .expect(201)   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!  .expect(201, createdVideoObj)
 
-        expect(response.body).toEqual(createdVideoObj)
+        expect(responseCreatedVideo.body).toEqual(createdVideoObj)
 
         const responseAllVideos = await request(app)
             .get('/videos')
@@ -60,5 +60,35 @@ describe('/videos', () => {
         expect(responseAllVideos.body).toEqual([createdVideoObj])
     })
 
+    it('should update video data', async () => {
+        const updateVideoReqData: UpdateVideoType = {
+            title: 'Put new data to this video object',
+            author: 'Of course me',
+            availableResolutions: ['P144'],
+            canBeDownloaded: true,
+            minAgeRestriction: null,
+            publicationDate: new Date()
+        }
+
+        await request(app)
+            .put('/videos/' + responseCreatedVideo.body.id)
+            .send(updateVideoReqData)
+            .expect(204)
+    })
+
+    it('should`nt update video data', async () => {
+        const updateVideoReqData = {
+            author: 'Of course me',
+        }
+
+        const response = await request(app)
+            .put('/videos/' + responseCreatedVideo.body.id)
+            .send(updateVideoReqData)
+            .expect(400)
+        console.log(response.body)
+        expect(response.body).toEqual({
+            errorMessages: expect.arrayContaining([{ message: expect.any(String), field: expect.any(String) }])
+        })
+    })
 
 })
