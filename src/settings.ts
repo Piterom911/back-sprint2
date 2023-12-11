@@ -36,7 +36,7 @@ type ErrorMessage = {
 }
 
 type ErrorType = {
-    errorMessages: ErrorMessage[]
+    errorsMessages: ErrorMessage[]
 }
 
 export const videoUris = {
@@ -51,7 +51,7 @@ let videos: VideoDbType[] = [
         id: 1,
         title: "The First Video",
         author: "It's me",
-        canBeDownloaded: true,
+        canBeDownloaded: false,
         minAgeRestriction: null,
         createdAt: "2023-12-08T19:46:21.116Z",
         publicationDate: "2023-12-08T19:46:21.116Z",
@@ -63,7 +63,7 @@ let videos: VideoDbType[] = [
         id: 2,
         title: "Zweites Video",
         author: "Auf jeden Fall bin ich das",
-        canBeDownloaded: true,
+        canBeDownloaded: false,
         minAgeRestriction: null,
         createdAt: "2023-12-08T19:46:21.116Z",
         publicationDate: "2023-12-08T19:46:21.116Z",
@@ -98,29 +98,29 @@ app.get(videoUris.videoById, (req: RequestWithParams<{id: string }>, res: Respon
 })
 app.post(videoUris.videos, (req: RequestWithBody<CreateVideoType>, res: Response) => {
     const errors: ErrorType = {
-        errorMessages: []
+        errorsMessages: []
     }
 
     let {title, author, availableResolutions } = req.body
 
     if (!title || typeof title !== 'string' || !title.trim() || title.length > 40) {
-        errors.errorMessages.push({message: 'Invalid value', field: 'title'})
+        errors.errorsMessages.push({message: 'Invalid value', field: 'title'})
     }
 
     if (!author || typeof author !== 'string' || !author.trim() || author.length > 20) {
-        errors.errorMessages.push({message: 'Invalid value', field: 'author'})
+        errors.errorsMessages.push({message: 'Invalid value', field: 'author'})
     }
 
     if (availableResolutions && Array.isArray(availableResolutions)) {
         availableResolutions.map(r => {
             !AvailableResolutions.includes(r)
-            && errors.errorMessages.push({message: 'Invalid Resolutions', field: 'Available Resolutions'})
+            && errors.errorsMessages.push({message: 'Invalid Resolutions', field: 'Available Resolutions'})
         })
     } else {
         availableResolutions = []
     }
 
-    if (errors.errorMessages.length) {
+    if (errors.errorsMessages.length) {
         res.status(400).send(errors)
         return
     }
@@ -132,7 +132,7 @@ app.post(videoUris.videos, (req: RequestWithBody<CreateVideoType>, res: Response
 
     const newVideo: VideoDbType = {
         id: +(new Date()),
-        canBeDownloaded: true,
+        canBeDownloaded: false,
         minAgeRestriction: null,
         createdAt: createdAt.toISOString(),
         publicationDate: publicationDate.toISOString(),
@@ -147,7 +147,7 @@ app.post(videoUris.videos, (req: RequestWithBody<CreateVideoType>, res: Response
 })
 app.put(videoUris.videoById, (req: RequestWithParamsAndBody<{id: string},UpdateVideoType>, res: Response) => {
     const errors: ErrorType = {
-        errorMessages: []
+        errorsMessages: []
     }
 
     try {
@@ -176,19 +176,19 @@ app.put(videoUris.videoById, (req: RequestWithParamsAndBody<{id: string},UpdateV
         if (title) {
             targetVideo.title = title
         } else  {
-            errors.errorMessages.push({message: 'Must be', field: 'title'})
+            errors.errorsMessages.push({message: 'Must be', field: 'title'})
         }
         if (author) {
             targetVideo.author = author
         } else  {
-            errors.errorMessages.push({message: 'Must be', field: 'author'})
+            errors.errorsMessages.push({message: 'Must be', field: 'author'})
         }
         if (availableResolutions) targetVideo.availableResolutions = availableResolutions
         if (canBeDownloaded) targetVideo.canBeDownloaded = canBeDownloaded
         if (minAgeRestriction) targetVideo.minAgeRestriction = minAgeRestriction
         if (publicationDate) targetVideo.publicationDate = publicationDate.toString()
 
-        if (errors.errorMessages.length) {
+        if (errors.errorsMessages.length) {
             res.status(400).send(errors)
             return
         }
