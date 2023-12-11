@@ -38,6 +38,12 @@ type ErrorType = {
     errorMessages: ErrorMessage[]
 }
 
+export const videoUris = {
+    videos:'/hometask_01/api/videos',
+    deleteAll: '/hometask_01/api/testing/all-data',
+    videoById: '/hometask_01/api/videos/:id',
+}
+
 
 let videos: VideoDbType[] = [
     {
@@ -66,7 +72,7 @@ let videos: VideoDbType[] = [
     }
 ]
 
-app.delete('/hometask_01/api/testing/all-data', (req: Request, res: Response) => {
+app.delete(videoUris.deleteAll, (req: Request, res: Response) => {
     videos = []
     res.sendStatus(204)
 })
@@ -74,10 +80,10 @@ app.delete('/hometask_01/api/testing/all-data', (req: Request, res: Response) =>
 app.get('/', (req: Request, res: Response) => {
     res.send("all right")
 })
-app.get('/videos', (req: Request, res: Response) => {
+app.get(videoUris.videos, (req: Request, res: Response) => {
     res.send(videos)
 })
-app.get('/videos/:id', (req: RequestWithParams<{id: string }>, res: Response) => {
+app.get(videoUris.videoById, (req: RequestWithParams<{id: string }>, res: Response) => {
     const videoId: number = +req.params.id
 
     if (!videoId) {
@@ -89,7 +95,7 @@ app.get('/videos/:id', (req: RequestWithParams<{id: string }>, res: Response) =>
 
     targetVideo ? res.send(targetVideo): res.sendStatus(404)
 })
-app.post('/videos', (req: RequestWithBody<CreateVideoType>, res: Response) => {
+app.post(videoUris.videos, (req: RequestWithBody<CreateVideoType>, res: Response) => {
     const errors: ErrorType = {
         errorMessages: []
     }
@@ -138,7 +144,7 @@ app.post('/videos', (req: RequestWithBody<CreateVideoType>, res: Response) => {
 
     res.status(201).send(newVideo)
 })
-app.put('/videos/:id', (req: RequestWithParamsAndBody<{id: string},UpdateVideoType>, res: Response) => {
+app.put(videoUris.videoById, (req: RequestWithParamsAndBody<{id: string},UpdateVideoType>, res: Response) => {
     const errors: ErrorType = {
         errorMessages: []
     }
@@ -193,7 +199,7 @@ app.put('/videos/:id', (req: RequestWithParamsAndBody<{id: string},UpdateVideoTy
     }
 })
 
-app.delete('/videos/:id', (req: RequestWithParams<{id: string }>, res: Response) => {
+app.delete(videoUris.videoById, (req: RequestWithParams<{id: string }>, res: Response) => {
     const videoId: number = +req.params.id
 
     if (!videoId) {

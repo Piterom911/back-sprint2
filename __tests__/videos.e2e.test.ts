@@ -1,31 +1,31 @@
 import request from 'supertest'
-import {app, CreateVideoType, UpdateVideoType} from "../src/settings";
+import {app, CreateVideoType, UpdateVideoType, videoUris} from "../src/settings";
 
-describe('/videos', () => {
+describe('Endpoint videos', () => {
     beforeAll(async () => {
         await request(app).delete('/__test__/data')
     })
 
     it('should return status 200 and an empty array', async () => {
         await request(app)
-            .get('/videos')
+            .get(videoUris.videos)
             .expect(200, [])
     })
 
     it('should return status 404 for not existing video', async () => {
         await request(app)
-            .get('/videos/938475')
+            .get(`${videoUris.videos}/938475`)
             .expect(404)
     })
 
     it('should`nt create an object with correct video properties', async () => {
         await request(app)
-            .post('/videos')
+            .post(videoUris.videos)
             .send({title: 'An attempt'})
             .expect(400)
 
         await request(app)
-            .get('/videos')
+            .get(videoUris.videos)
             .expect(200, [])
     })
 
@@ -47,14 +47,14 @@ describe('/videos', () => {
         }
 
         videoExampleForTests = await request(app)
-            .post('/videos')
+            .post(videoUris.videos)
             .send(newVideoReqData)
             .expect(201)   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!  .expect(201, createdVideoObj)
 
         expect(videoExampleForTests.body).toEqual(createdVideoObj)
 
         const responseAllVideos = await request(app)
-            .get('/videos')
+            .get(videoUris.videos)
             .expect(200) // !!!!!!!!!!!!!!!!!!!!!!!!!!!!  ..expect(200, [createdVideoObj])
 
         expect(responseAllVideos.body).toEqual([createdVideoObj])
@@ -71,7 +71,7 @@ describe('/videos', () => {
         }
 
         await request(app)
-            .put('/videos/' + videoExampleForTests.body.id)
+            .put(`${videoUris.videos}/` + videoExampleForTests.body.id)
             .send(updateVideoReqData)
             .expect(204)
     })
@@ -82,7 +82,7 @@ describe('/videos', () => {
         }
 
         const response = await request(app)
-            .put('/videos/' + videoExampleForTests.body.id)
+            .put(`${videoUris.videos}/` + videoExampleForTests.body.id)
             .send(updateVideoReqData)
             .expect(400)
 
@@ -93,11 +93,11 @@ describe('/videos', () => {
 
     it('deletes target video object', async () => {
         videoExampleForTests = await request(app)
-            .delete('/videos/' + videoExampleForTests.body.id )
+            .delete(`${videoUris.videos}/` + videoExampleForTests.body.id )
             .expect(204)
 
         await request(app)
-            .get('/videos')
+            .get(videoUris.videos)
             .expect(200, [])
 
         console.log(videoExampleForTests.body)
