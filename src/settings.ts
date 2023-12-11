@@ -39,9 +39,9 @@ type ErrorType = {
 }
 
 export const videoUris = {
-    videos:'/hometask_01/api/videos',
-    deleteAll: '/hometask_01/api/testing/all-data',
-    videoById: '/hometask_01/api/videos/:id',
+    allVideosForTests: '/testing/all-data',
+    videos:'/videos',
+    videoById: '/videos/:id',
 }
 
 
@@ -72,7 +72,7 @@ let videos: VideoDbType[] = [
     }
 ]
 
-app.delete(videoUris.deleteAll, (req: Request, res: Response) => {
+app.delete(videoUris.allVideosForTests, (req: Request, res: Response) => {
     videos = []
     res.sendStatus(204)
 })
