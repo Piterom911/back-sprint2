@@ -183,6 +183,11 @@ app.put(videoUris.videoById, (req: RequestWithParamsAndBody<{ id: string }, Upda
         } else {
             errors.errorsMessages.push({message: 'Must be', field: 'title'})
         }
+        if (title && title.length > 40) errors.errorsMessages.push({message: 'The Title ist to long', field: 'title'})
+        if (minAgeRestriction && minAgeRestriction > 18 || minAgeRestriction && minAgeRestriction < 0) {
+            errors.errorsMessages.push({message: 'Check the age', field: 'minAgeRestriction'})
+        }
+        if (minAgeRestriction) targetVideo.minAgeRestriction = minAgeRestriction
         if (author) {
             targetVideo.author = author
         } else {
@@ -194,7 +199,6 @@ app.put(videoUris.videoById, (req: RequestWithParamsAndBody<{ id: string }, Upda
             errors.errorsMessages.push({message: 'Must be a boolean type', field: 'canBeDownloaded'})
         }
         if (availableResolutions) targetVideo.availableResolutions = availableResolutions
-        if (minAgeRestriction) targetVideo.minAgeRestriction = minAgeRestriction
         if (publicationDate) targetVideo.publicationDate = publicationDate.toString()
 
         if (errors.errorsMessages.length) {
@@ -225,7 +229,6 @@ app.delete(videoUris.videoById, (req: RequestWithParams<{ id: string }>, res: Re
     }
 
     videos = videos.filter(v => v.id !== videoId)
-    console.log(videoId)
     res.sendStatus(204)
 })
 app.delete('/__test__/data', (req: Request, res: Response) => {
