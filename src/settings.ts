@@ -1,4 +1,5 @@
 import express, {Request, Response} from 'express'
+import {log} from "util";
 
 export const app = express()
 app.use(express.json())
@@ -28,7 +29,7 @@ export type CreateVideoType = {
 export type UpdateVideoType = CreateVideoType & {
     canBeDownloaded: boolean,
     minAgeRestriction: number | null,
-    publicationDate: Date
+    publicationDate: string
 }
 type ErrorMessage = {
     message: string,
@@ -163,6 +164,7 @@ app.put(videoUris.videoById, (req: RequestWithParamsAndBody<{ id: string }, Upda
         }
 
         const targetVideo: VideoDbType | undefined = videos.find(v => v.id === videoId)
+        const isoDateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
 
         if (!targetVideo) {
             res.sendStatus(404)
@@ -184,7 +186,8 @@ app.put(videoUris.videoById, (req: RequestWithParamsAndBody<{ id: string }, Upda
             errors.errorsMessages.push({message: 'Must be', field: 'title'})
         }
         if (title && title.length > 40) errors.errorsMessages.push({message: 'The Title ist to long', field: 'title'})
-        if (minAgeRestriction && minAgeRestriction > 18 || minAgeRestriction && minAgeRestriction < 0) {
+        if (author && author.length > 20) errors.errorsMessages.push({message: 'The Author Name ist to long', field: 'author'})
+        if (minAgeRestriction && minAgeRestriction > 18 || minAgeRestriction && minAgeRestriction < 1) {
             errors.errorsMessages.push({message: 'Check the age', field: 'minAgeRestriction'})
         }
         if (minAgeRestriction) targetVideo.minAgeRestriction = minAgeRestriction
@@ -199,7 +202,11 @@ app.put(videoUris.videoById, (req: RequestWithParamsAndBody<{ id: string }, Upda
             errors.errorsMessages.push({message: 'Must be a boolean type', field: 'canBeDownloaded'})
         }
         if (availableResolutions) targetVideo.availableResolutions = availableResolutions
-        if (publicationDate) targetVideo.publicationDate = publicationDate.toString()
+        if (publicationDate && isoDateRegex.test(publicationDate)) {
+            targetVideo.publicationDate = publicationDate
+        } else {
+            errors.errorsMessages.push({message: 'Date format is wrong', field: 'publicationDate'})
+        }
 
         if (errors.errorsMessages.length) {
             res.status(400).send(errors)

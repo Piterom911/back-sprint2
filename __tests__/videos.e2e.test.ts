@@ -67,7 +67,7 @@ describe('Endpoint videos', () => {
             availableResolutions: ['P144'],
             canBeDownloaded: true,
             minAgeRestriction: null,
-            publicationDate: new Date()
+            publicationDate: new Date().toISOString()
         }
 
         await request(app)
