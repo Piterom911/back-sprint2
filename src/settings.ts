@@ -114,7 +114,7 @@ app.post(videoUris.videos, (req: RequestWithBody<CreateVideoType>, res: Response
     if (availableResolutions && Array.isArray(availableResolutions)) {
         availableResolutions.map(r => {
             !AvailableResolutions.includes(r)
-            && errors.errorsMessages.push({message: 'Invalid Resolutions', field: 'Available Resolutions'})
+            && errors.errorsMessages.push({message: 'Invalid Resolutions', field: 'availableResolutions'})
         })
     } else {
         availableResolutions = []
@@ -183,8 +183,12 @@ app.put(videoUris.videoById, (req: RequestWithParamsAndBody<{id: string},UpdateV
         } else  {
             errors.errorsMessages.push({message: 'Must be', field: 'author'})
         }
+        if (canBeDownloaded && typeof canBeDownloaded === 'boolean') {
+            targetVideo.canBeDownloaded = canBeDownloaded
+        } else {
+            errors.errorsMessages.push({message: 'Must be a boolean type', field: 'canBeDownloaded'})
+        }
         if (availableResolutions) targetVideo.availableResolutions = availableResolutions
-        if (canBeDownloaded) targetVideo.canBeDownloaded = canBeDownloaded
         if (minAgeRestriction) targetVideo.minAgeRestriction = minAgeRestriction
         if (publicationDate) targetVideo.publicationDate = publicationDate.toString()
 
@@ -214,7 +218,7 @@ app.delete(videoUris.videoById, (req: RequestWithParams<{id: string }>, res: Res
 })
 app.delete('/__test__/data', (req: Request, res: Response) => {
     videos = []
-    res.sendStatus(204)
+    res.sendStatus(404)
 })
 
 
