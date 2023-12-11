@@ -34,6 +34,7 @@ type ErrorMessage = {
     message: string,
     field: string
 }
+
 type ErrorType = {
     errorMessages: ErrorMessage[]
 }
