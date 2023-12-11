@@ -40,7 +40,7 @@ describe('Endpoint videos', () => {
         const createdVideoObj = {
             ...newVideoReqData,
             id: expect.any(Number),
-            canBeDownloaded: true,
+            canBeDownloaded: false,
             minAgeRestriction: null,
             createdAt: expect.any(String),
             publicationDate: expect.any(String)
@@ -87,7 +87,7 @@ describe('Endpoint videos', () => {
             .expect(400)
 
         expect(response.body).toEqual({
-            errorMessages: expect.arrayContaining([{ message: expect.any(String), field: expect.any(String) }])
+            errorsMessages: expect.arrayContaining([{ message: expect.any(String), field: expect.any(String) }])
         })
     })
 

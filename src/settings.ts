@@ -18,7 +18,7 @@ type VideoDbType = {
 
 type RequestWithParams<P> = Request<P, {}, {}, {}>
 type RequestWithBody<B> = Request<{}, {}, B, {}>
-type RequestWithParamsAndBody<P,B> = Request<P, {}, B, {}>
+type RequestWithParamsAndBody<P, B> = Request<P, {}, B, {}>
 
 export type CreateVideoType = {
     title: string,
@@ -41,7 +41,7 @@ type ErrorType = {
 
 export const videoUris = {
     allVideosForTests: '/testing/all-data',
-    videos:'/videos',
+    videos: '/videos',
     videoById: '/videos/:id',
 }
 
@@ -84,7 +84,7 @@ app.get('/', (req: Request, res: Response) => {
 app.get(videoUris.videos, (req: Request, res: Response) => {
     res.send(videos)
 })
-app.get(videoUris.videoById, (req: RequestWithParams<{id: string }>, res: Response) => {
+app.get(videoUris.videoById, (req: RequestWithParams<{ id: string }>, res: Response) => {
     const videoId: number = +req.params.id
 
     if (!videoId) {
@@ -94,14 +94,18 @@ app.get(videoUris.videoById, (req: RequestWithParams<{id: string }>, res: Respon
 
     const targetVideo = videos.find(v => v.id === videoId)
 
-    targetVideo ? res.send(targetVideo): res.sendStatus(404)
+    if (!targetVideo) {
+        res.sendStatus(404)
+        return
+    }
+    res.send(targetVideo)
 })
 app.post(videoUris.videos, (req: RequestWithBody<CreateVideoType>, res: Response) => {
     const errors: ErrorType = {
         errorsMessages: []
     }
 
-    let {title, author, availableResolutions } = req.body
+    let {title, author, availableResolutions} = req.body
 
     if (!title || typeof title !== 'string' || !title.trim() || title.length > 40) {
         errors.errorsMessages.push({message: 'Invalid value', field: 'title'})
@@ -145,7 +149,7 @@ app.post(videoUris.videos, (req: RequestWithBody<CreateVideoType>, res: Response
 
     res.status(201).send(newVideo)
 })
-app.put(videoUris.videoById, (req: RequestWithParamsAndBody<{id: string},UpdateVideoType>, res: Response) => {
+app.put(videoUris.videoById, (req: RequestWithParamsAndBody<{ id: string }, UpdateVideoType>, res: Response) => {
     const errors: ErrorType = {
         errorsMessages: []
     }
@@ -165,7 +169,8 @@ app.put(videoUris.videoById, (req: RequestWithParamsAndBody<{id: string},UpdateV
             return
         }
 
-        let {title,
+        let {
+            title,
             author,
             availableResolutions,
             canBeDownloaded,
@@ -175,12 +180,12 @@ app.put(videoUris.videoById, (req: RequestWithParamsAndBody<{id: string},UpdateV
 
         if (title) {
             targetVideo.title = title
-        } else  {
+        } else {
             errors.errorsMessages.push({message: 'Must be', field: 'title'})
         }
         if (author) {
             targetVideo.author = author
-        } else  {
+        } else {
             errors.errorsMessages.push({message: 'Must be', field: 'author'})
         }
         if (canBeDownloaded && typeof canBeDownloaded === 'boolean') {
@@ -204,10 +209,17 @@ app.put(videoUris.videoById, (req: RequestWithParamsAndBody<{id: string},UpdateV
     }
 })
 
-app.delete(videoUris.videoById, (req: RequestWithParams<{id: string }>, res: Response) => {
+app.delete(videoUris.videoById, (req: RequestWithParams<{ id: string }>, res: Response) => {
     const videoId: number = +req.params.id
 
     if (!videoId) {
+        res.sendStatus(404)
+        return
+    }
+
+    const targetVideo: VideoDbType | undefined = videos.find(v => v.id === videoId)
+
+    if (!targetVideo) {
         res.sendStatus(404)
         return
     }
