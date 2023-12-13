@@ -1,6 +1,7 @@
 import {Router, Request, Response} from "express"
 import {BlogsRepository} from "../repositories/blogs-repository";
 import {authMiddleware} from "../middlewares/auth/auth-middleware";
+import {blogValidation} from "../validators/blog-validator";
 
 export const blogsRouter = Router({})
 
@@ -17,7 +18,7 @@ blogsRouter.get('/:id', (res: Response, req: Request) => {
 
     res.send(targetBlog)
 })
-blogsRouter.post('/', authMiddleware, (res: Response, req: Request) => {
+blogsRouter.post('/', authMiddleware, blogValidation(), (res: Response, req: Request) => {
     const id = req.params.id
     if (!id) res.send(401)
 
