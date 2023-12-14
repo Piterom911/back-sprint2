@@ -21,7 +21,7 @@ describe('Endpoints videos', () => {
             .expect(404)
     })
 
-    it('should`nt create an object with correct video properties', async () => {
+    it('should`nt create an object with incorrect video properties', async () => {
         await request(app)
             .post('/videos')
             .send({title: 'An attempt'})
@@ -102,8 +102,6 @@ describe('Endpoints videos', () => {
         await request(app)
             .get('/videos')
             .expect(200, [])
-
-        console.log(videoExampleForTests.body)
     })
 
 })

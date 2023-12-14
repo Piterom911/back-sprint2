@@ -4,15 +4,15 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    if (req.headers['authorization'] !== 'Basic YWRtaW46cXdlcnR5') {
-        res.sendStatus(401)
-        return
-    }
+    // if (req.headers['authorization'] !== 'Basic YWRtaW46cXdlcnR5') {
+    //     res.sendStatus(401)
+    //     return
+    // }
+    //
+    // next()
 
-    next()
 
-
-    // OR
+    // OR a Better Option to check authorization
 
 
     const auth = req.headers['authorization']

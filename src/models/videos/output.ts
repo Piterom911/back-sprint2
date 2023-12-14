@@ -1,4 +1,4 @@
-import {AvailableResolutions} from "../common";
+import {AvailableVideoResolutions} from "../common";
 
 export type VideoModel = {
     id: number,
@@ -8,5 +8,5 @@ export type VideoModel = {
     minAgeRestriction: number | null,
     createdAt: string,
     publicationDate: string,
-    availableResolutions: typeof AvailableResolutions
+    availableResolutions: typeof AvailableVideoResolutions
 }
