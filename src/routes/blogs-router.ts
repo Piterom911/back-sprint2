@@ -20,7 +20,7 @@ blogsRouter.get('/:id', (res: Response, req: Request) => {
 })
 blogsRouter.post('/', authMiddleware, blogValidation(), (res: Response, req: Request) => {
     const result = BlogsRepository.postNewEntity(req.body)
-    res.send(result)
+    res.sendStatus(201).json(result)
 })
 blogsRouter.put('/:id', authMiddleware, blogValidation(), (req: Request, res: Response) => {
     const id = req.params.id
