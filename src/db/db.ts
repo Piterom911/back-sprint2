@@ -3,13 +3,13 @@ import {DBType} from "../models/db/db";
 export const db: DBType = {
     blogs: [
         {
-            id: 'Some id12345',
+            id: 'id12345',
             name: 'Romandus Romius',
             websiteUrl: "https://www.dogodadev.me",
             description: 'this was one of my websites, But now I have nothing('
         },
         {
-            id: 'Some id2',
+            id: 'id2',
             name: 'Dogodovich Brauchman',
             websiteUrl: "https://www.mnogonado.me",
             description: 'This will be my first time hiking in the mountains'
@@ -17,7 +17,7 @@ export const db: DBType = {
     ],
     posts: [
         {
-            id: 'Some id123',
+            id: 'id123',
             blogId: 'Some blogId123',
             blogName: 'Blog Name 123',
             title: 'Some post title 123',
@@ -25,7 +25,7 @@ export const db: DBType = {
             shortDescription: 'I can explain you whatever you want but it can be not true)))'
         },
         {
-            id: 'Some id234',
+            id: 'id234',
             blogId: 'Some blogId234',
             blogName: 'Blog Name 234',
             title: 'Some post title 234',
