@@ -5,11 +5,11 @@ import {postValidation} from "../validators/post-validator";
 
 export const postsRouter = Router({})
 
-postsRouter.get('/', (res: Response, req: Request) => {
+postsRouter.get('/', (req: Request, res: Response) => {
     const posts = PostsRepository.getAllEntities()
     res.send(posts)
 })
-postsRouter.get('/:id', (res: Response, req: Request) => {
+postsRouter.get('/:id', (req: Request, res: Response) => {
     const id = req.params.id
     if (!id) res.send(400)
 
@@ -18,7 +18,7 @@ postsRouter.get('/:id', (res: Response, req: Request) => {
 
     res.send(targetPost)
 })
-postsRouter.post('/', authMiddleware, postValidation(), (res: Response, req: Request) => {
+postsRouter.post('/', authMiddleware, postValidation(), (req: Request, res: Response) => {
     const result = PostsRepository.postNewEntity(req.body)
     res.sendStatus(201).json(result)
 })

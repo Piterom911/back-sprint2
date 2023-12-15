@@ -5,11 +5,11 @@ import {blogValidation} from "../validators/blog-validator";
 
 export const blogsRouter = Router({})
 
-blogsRouter.get('/', (res: Response, req: Request) => {
+blogsRouter.get('/', (req: Request, res: Response) => {
     const blogs = BlogsRepository.getAllEntities()
     res.send(blogs)
 })
-blogsRouter.get('/:id', (res: Response, req: Request) => {
+blogsRouter.get('/:id', (req: Request, res: Response) => {
     const id = req.params.id
     if (!id) res.send(400)
 
@@ -18,7 +18,7 @@ blogsRouter.get('/:id', (res: Response, req: Request) => {
 
     res.send(targetBlog)
 })
-blogsRouter.post('/', authMiddleware, blogValidation(), (res: Response, req: Request) => {
+blogsRouter.post('/', authMiddleware, blogValidation(), (req: Request, res: Response) => {
     const result = BlogsRepository.postNewEntity(req.body)
     res.sendStatus(201).json(result)
 })
