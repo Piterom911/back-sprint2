@@ -12,6 +12,8 @@ app.use('/posts', postsRouter)
 
 app.delete('/testing/all-data', (req: Request, res: Response) => {
     db.videos = []
+    db.posts = []
+    db.blogs = []
     res.sendStatus(204)
 })
 
