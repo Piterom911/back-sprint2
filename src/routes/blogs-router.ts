@@ -6,24 +6,52 @@ import {blogValidation} from "../validators/blog-validator";
 export const blogsRouter = Router({})
 
 blogsRouter.get('/', (res: Response, req: Request) => {
-    const blogs = BlogsRepository.getAllBlogs()
+    const blogs = BlogsRepository.getAllEntities()
     res.send(blogs)
 })
 blogsRouter.get('/:id', (res: Response, req: Request) => {
     const id = req.params.id
     if (!id) res.send(400)
 
-    const targetBlog = BlogsRepository.getBlogById(id)
+    const targetBlog = BlogsRepository.getEntityById(id)
     if (!targetBlog) res.send(404)
 
     res.send(targetBlog)
 })
 blogsRouter.post('/', authMiddleware, blogValidation(), (res: Response, req: Request) => {
+    const result = BlogsRepository.postNewEntity(req.body)
+    res.send(result)
+})
+blogsRouter.put('/:id', authMiddleware, blogValidation(), (req: Request, res: Response) => {
     const id = req.params.id
     if (!id) res.send(401)
 
-    const targetBlog = BlogsRepository.getBlogById(id)
+    const targetBlog = BlogsRepository.updateEntity(id, req.body)
     if (!targetBlog) res.send(404)
 
-    res.send(targetBlog)
+    res.send(204)
 })
+blogsRouter.delete('/:id', (req: Request, res: Response) => {
+    const id = req.params.id
+    if (!id) res.send(401)
+
+    const targetBlog = BlogsRepository.deleteEntity(id)
+    if (!targetBlog) res.send(404)
+
+    res.send(204)
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

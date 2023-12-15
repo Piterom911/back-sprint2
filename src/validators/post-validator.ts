@@ -21,7 +21,7 @@ export const contentValidation = body('content')
     .withMessage('Incorrect content')
 
 export const blogIdValidation = body('blogId').isString().trim().custom(value => {
-    const blog = BlogsRepository.getBlogById(value)
+    const blog = BlogsRepository.getEntityById(value)
     if (!blog) {
         throw Error('Incorrect blogId')
     }
