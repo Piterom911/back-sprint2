@@ -13,7 +13,7 @@ export class PostsRepository {
 
     static postNewEntity(newEntityData: PostCreateModel) {
         let {title,content,blogId, shortDescription} = newEntityData
-        const id: string = new Date().toString()
+        const id: string = new Date().toISOString()
         const blogName = 'Any string'
 
         const newPost: PostModel = {

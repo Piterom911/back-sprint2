@@ -1,5 +1,6 @@
 import {NextFunction, Request, Response} from "express";
 import dotenv from 'dotenv'
+import 'dotenv/config'
 
 dotenv.config()
 
@@ -32,7 +33,6 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
     // admin:qwerty
 
     const [login, password] = decodedData.split(':')
-
     if (login !== process.env.AUTH_LOGIN || password !== process.env.AUTH_PASSWORD) {
         res.sendStatus(401)
         return

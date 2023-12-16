@@ -12,7 +12,7 @@ export class BlogsRepository {
 
     static postNewEntity(newEntityData: BlogCreateModel) {
         let {name, description, websiteUrl} = newEntityData
-        const id: string = new Date().toString()
+        const id: string = (new Date()).toISOString()
 
         const newBlog = {
             id,

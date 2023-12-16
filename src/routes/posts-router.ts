@@ -20,7 +20,7 @@ postsRouter.get('/:id', (req: Request, res: Response) => {
 })
 postsRouter.post('/', authMiddleware, postValidation(), (req: Request, res: Response) => {
     const result = PostsRepository.postNewEntity(req.body)
-    res.sendStatus(201).json(result)
+    res.status(201).send(result)
 })
 postsRouter.put('/:id', authMiddleware, postValidation(), (req: Request, res: Response) => {
     const id = req.params.id
@@ -31,7 +31,7 @@ postsRouter.put('/:id', authMiddleware, postValidation(), (req: Request, res: Re
 
     res.send(204)
 })
-postsRouter.delete('/:id', (req: Request, res: Response) => {
+postsRouter.delete('/:id', authMiddleware, (req: Request, res: Response) => {
     const id = req.params.id
     if (!id) res.send(401)
 

@@ -20,7 +20,7 @@ blogsRouter.get('/:id', (req: Request, res: Response) => {
 })
 blogsRouter.post('/', authMiddleware, blogValidation(), (req: Request, res: Response) => {
     const result = BlogsRepository.postNewEntity(req.body)
-    res.sendStatus(201).json(result)
+    res.status(201).send(result)
 })
 blogsRouter.put('/:id', authMiddleware, blogValidation(), (req: Request, res: Response) => {
     const id = req.params.id
@@ -31,14 +31,16 @@ blogsRouter.put('/:id', authMiddleware, blogValidation(), (req: Request, res: Re
 
     res.send(204)
 })
-blogsRouter.delete('/:id', (req: Request, res: Response) => {
+blogsRouter.delete('/:id', authMiddleware, (req: Request, res: Response) => {
     const id = req.params.id
-    if (!id) res.send(401)
 
     const targetBlog = BlogsRepository.deleteEntity(id)
-    if (!targetBlog) res.send(404)
+    if (!targetBlog) {
+        res.sendStatus(404);
+        return
+    }
 
-    res.send(204)
+    res.sendStatus(204)
 })
 
 
