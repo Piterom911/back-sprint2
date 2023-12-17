@@ -1,34 +1,35 @@
 import request from 'supertest'
 import {VideoCreateModel, VideoUpdateModel} from "../src/models/videos/input";
 import {app} from "../src/app";
+import {URI_PATHS} from "../src/models/common";
 
 const getRequest = () => request(app)
 
 describe('Endpoints videos', () => {
     beforeAll(async () => {
-        await getRequest().delete('/testing/all-data')
+        await getRequest().delete(URI_PATHS.tests)
     })
 
     it('should return status 200 and an empty array', async () => {
-        await request(app)
-            .get('/videos')
+        await getRequest()
+            .get(URI_PATHS.videos)
             .expect(200, [])
     })
 
     it('should return status 404 for not existing video', async () => {
-        await request(app)
-            .get('/videos/938475')
+        await getRequest()
+            .get(`${URI_PATHS.videos}/938475`)
             .expect(404)
     })
 
     it('should`nt create an object with incorrect video properties', async () => {
-        await request(app)
-            .post('/videos')
+        await getRequest()
+            .post(URI_PATHS.videos)
             .send({title: 'An attempt'})
             .expect(400)
 
-        await request(app)
-            .get('/videos')
+        await getRequest()
+            .get(URI_PATHS.videos)
             .expect(200, [])
     })
 
@@ -49,15 +50,15 @@ describe('Endpoints videos', () => {
             publicationDate: expect.any(String)
         }
 
-        videoExampleForTests = await request(app)
-            .post('/videos')
+        videoExampleForTests = await getRequest()
+            .post(URI_PATHS.videos)
             .send(newVideoReqData)
             .expect(201)   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!  .expect(201, createdVideoObj)
 
         expect(videoExampleForTests.body).toEqual(createdVideoObj)
 
-        const responseAllVideos = await request(app)
-            .get('/videos')
+        const responseAllVideos = await getRequest()
+            .get(URI_PATHS.videos)
             .expect(200) // !!!!!!!!!!!!!!!!!!!!!!!!!!!!  ..expect(200, [createdVideoObj])
 
         expect(responseAllVideos.body).toEqual([createdVideoObj])
@@ -74,7 +75,7 @@ describe('Endpoints videos', () => {
         }
 
         await request(app)
-            .put('/videos/' + videoExampleForTests.body.id)
+            .put(`${URI_PATHS.videos}/` + videoExampleForTests.body.id)
             .send(updateVideoReqData)
             .expect(204)
     })
@@ -84,8 +85,8 @@ describe('Endpoints videos', () => {
             author: 'Of course me',
         }
 
-        const response = await request(app)
-            .put('/videos/' + videoExampleForTests.body.id)
+        const response = await getRequest()
+            .put(`${URI_PATHS.videos}/` + videoExampleForTests.body.id)
             .send(updateVideoReqData)
             .expect(400)
 
@@ -95,12 +96,12 @@ describe('Endpoints videos', () => {
     })
 
     it('deletes target video object', async () => {
-        videoExampleForTests = await request(app)
-            .delete('/videos/' + videoExampleForTests.body.id )
+        videoExampleForTests = await getRequest()
+            .delete(`${URI_PATHS.videos}/` + videoExampleForTests.body.id )
             .expect(204)
 
         await request(app)
-            .get('/videos')
+            .get(URI_PATHS.videos)
             .expect(200, [])
     })
 
