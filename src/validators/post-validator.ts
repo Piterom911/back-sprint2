@@ -21,13 +21,13 @@ export const contentValidation = body('content')
     .withMessage('Incorrect content')
 
 export const blogIdValidation = body('blogId').isString().trim()
-    // .custom(value => {
-    //     const blog = BlogsRepository.getEntityById(value)
-    //     if (!blog) {
-    //         throw Error('Incorrect blogId')
-    //     }
-    //     return true
-    // })
+    .custom(async (value) => {
+        const blog = await BlogsRepository.getEntityById(value)
+        if (!blog) {
+            throw Error('Incorrect blogId')
+        }
+        return true
+    })
     .withMessage('Incorrect blogId')
 
 export const postValidation = () =>

@@ -1,5 +1,5 @@
 import {db} from "../db/db";
-import {VideoModel} from "../models/videos/output";
+import {OutputVideoType} from "../models/videos/output";
 import {VideoCreateModel, VideoUpdateModel} from "../models/videos/input";
 
 export class VideosRepository {
@@ -17,7 +17,7 @@ export class VideosRepository {
         const publicationDate: Date = new Date()
         publicationDate.setDate(createdAt.getDate() + 1)
 
-        const createdVideo: VideoModel = {
+        const createdVideo: OutputVideoType = {
             id: +(new Date()),
             canBeDownloaded: false,
             minAgeRestriction: null,

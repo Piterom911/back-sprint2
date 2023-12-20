@@ -9,7 +9,7 @@ import {
 import {app} from "../app";
 import {db} from "../db/db";
 import {VideoCreateModel, VideoUpdateModel} from "../models/videos/input";
-import {VideoModel} from "../models/videos/output";
+import {OutputVideoType} from "../models/videos/output";
 import {VideosRepository} from "../repositories/videos-repository";
 import {videoUpdateValidation, videoValidation} from "../validators/video-validator";
 

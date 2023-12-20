@@ -1,4 +1,4 @@
-export type PostModel = {
+export type OutputPostType = {
     id: string,
     title: string,
     shortDescription: string,

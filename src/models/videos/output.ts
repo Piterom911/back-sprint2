@@ -1,6 +1,6 @@
 import {AvailableVideoResolutions} from "../common";
 
-export type VideoModel = {
+export type OutputVideoType = {
     id: number,
     title: string,
     author: string,

@@ -1,6 +1,6 @@
 import {db} from "../db/db";
 import {PostCreateModel, PostUpdateModel} from "../models/post/intup";
-import {PostModel} from "../models/post/output";
+import {OutputPostType} from "../models/post/output";
 
 export class PostsRepository {
     static getAllEntities() {
@@ -16,7 +16,7 @@ export class PostsRepository {
         const id: string = new Date().toISOString()
         const blogName = 'Any string'
 
-        const newPost: PostModel = {
+        const newPost: OutputPostType = {
             id,
             title,
             content,

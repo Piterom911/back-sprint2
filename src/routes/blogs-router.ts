@@ -2,39 +2,62 @@ import {Router, Request, Response} from "express"
 import {BlogsRepository} from "../repositories/blogs-repository";
 import {authMiddleware} from "../middlewares/auth/auth-middleware";
 import {blogValidation} from "../validators/blog-validator";
+import {ObjectId} from "mongodb";
 
 export const blogsRouter = Router({})
 
-blogsRouter.get('/', (req: Request, res: Response) => {
-    const blogs = BlogsRepository.getAllEntities()
+blogsRouter.get('/', async (req: Request, res: Response) => {
+    const blogs = await BlogsRepository.getAllEntities()
     res.send(blogs)
 })
-blogsRouter.get('/:id', (req: Request, res: Response) => {
+blogsRouter.get('/:id',  async (req: Request, res: Response) => {
     const id = req.params.id
-    if (!id) res.send(400)
+    if (!ObjectId.isValid(id)) {
+        res.send(404)
+        return
+    }
 
-    const targetBlog = BlogsRepository.getEntityById(id)
+    const targetBlog = await BlogsRepository.getEntityById(id)
     if (!targetBlog) res.send(404)
 
     res.send(targetBlog)
 })
-blogsRouter.post('/', authMiddleware, blogValidation(), (req: Request, res: Response) => {
-    const result = BlogsRepository.postNewEntity(req.body)
+blogsRouter.post('/', authMiddleware, blogValidation(), async (req: Request, res: Response) => {
+    const result = await BlogsRepository.postNewEntity(req.body)
     res.status(201).send(result)
 })
-blogsRouter.put('/:id', authMiddleware, blogValidation(), (req: Request, res: Response) => {
+blogsRouter.put('/:id', authMiddleware, blogValidation(), async (req: Request, res: Response) => {
     const id = req.params.id
-    if (!id) res.send(401)
+    if (!ObjectId.isValid(id)) {
+        res.sendStatus(404)
+        return
+    }
 
-    const targetBlog = BlogsRepository.updateEntity(id, req.body)
-    if (!targetBlog) res.send(404)
+    const name = req.body.name
+    const description = req.body.description
+    const websiteUrl = req.body.websiteUrl
 
-    res.send(204)
+    const blog = await BlogsRepository.getEntityById(id)
+    if (!blog) {
+        res.sendStatus(404)
+    }
+
+    const targetBlog = await BlogsRepository.updateEntity(id, {name, description, websiteUrl})
+    if (!targetBlog) {
+        res.sendStatus(404)
+        return
+    }
+
+    res.sendStatus(204)
 })
-blogsRouter.delete('/:id', authMiddleware, (req: Request, res: Response) => {
+blogsRouter.delete('/:id', authMiddleware, async (req: Request, res: Response) => {
     const id = req.params.id
+    if (!ObjectId.isValid(id)) {
+        res.send(404)
+        return
+    }
 
-    const targetBlog = BlogsRepository.deleteEntity(id)
+    const targetBlog = await BlogsRepository.deleteEntity(id)
     if (!targetBlog) {
         res.sendStatus(404);
         return

@@ -1,7 +1,6 @@
 import request from 'supertest'
 import {app} from "../src/app";
 import {URI_PATHS} from "../src/models/common";
-import any = jasmine.any;
 
 const getRequest = () => request(app)
 
