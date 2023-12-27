@@ -5,8 +5,6 @@ import {HTTP_REQUEST_STATUS, URI_PATHS} from "../src/models/common";
 const getRequest = () => request(app)
 
 describe('Endpoints posts', () => {
-    let token: any
-
     beforeAll(async () => {
         await getRequest().delete(URI_PATHS.tests)
     })

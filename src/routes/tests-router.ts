@@ -1,6 +1,6 @@
-import {Router, Request, Response} from "express"
-import {blogCollection, database, db, postCollection, videoCollection} from "../db/db";
-import {HTTP_REQUEST_STATUS, URI_PATHS} from "../models/common";
+import {Request, Response, Router} from "express"
+import {blogCollection, postCollection, videoCollection} from "../db/db";
+import {HTTP_REQUEST_STATUS} from "../models/common";
 
 export const testsRouter = Router({})
 

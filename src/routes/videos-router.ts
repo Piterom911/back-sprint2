@@ -1,15 +1,6 @@
 import {Request, Response, Router} from "express";
-import {
-    AvailableVideoResolutions,
-    ErrorType, HTTP_REQUEST_STATUS,
-    RequestWithBody,
-    RequestWithParams,
-    RequestWithParamsAndBody
-} from "../models/common";
-import {app} from "../app";
-import {db} from "../db/db";
+import {HTTP_REQUEST_STATUS, RequestWithBody, RequestWithParams, RequestWithParamsAndBody} from "../models/common";
 import {VideoCreateModel, VideoUpdateModel} from "../models/videos/input";
-import {OutputVideoType} from "../models/videos/output";
 import {VideosRepository} from "../repositories/videos-repository";
 import {videoUpdateValidation, videoValidation} from "../validators/video-validator";
 

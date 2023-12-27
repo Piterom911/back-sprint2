@@ -1,12 +1,11 @@
 import request from 'supertest'
 import {app} from "../src/app";
 import {HTTP_REQUEST_STATUS, URI_PATHS} from "../src/models/common";
-import any = jasmine.any;
+
 
 const getRequest = () => request(app)
 
 describe('Endpoints videos', () => {
-    let token: any
 
     beforeAll(async () => {
         await getRequest().delete(URI_PATHS.tests)
