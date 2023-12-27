@@ -1,16 +1,20 @@
 import {NextFunction, Request, Response} from "express";
 import dotenv from 'dotenv'
 import 'dotenv/config'
+import {HTTP_REQUEST_STATUS} from "../../models/common";
 
 dotenv.config()
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    // if (req.headers['authorization'] !== 'Basic YWRtaW46cXdlcnR5') {
-    //     res.sendStatus(401)
-    //     return
-    // }
-    //
-    // next()
+    // Not good to use
+    /*
+    if (req.headers['authorization'] !== 'Basic YWRtaW46cXdlcnR5') {
+        res.sendStatus(HTTP_REQUEST_STATUS.UNAUTHORIZED)
+        return
+    }
+
+    next()
+    */
 
 
     // OR a Better Option to check authorization
@@ -18,14 +22,14 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
 
     const auth = req.headers['authorization']
     if (!auth) {
-        res.sendStatus(401)
+        res.sendStatus(HTTP_REQUEST_STATUS.UNAUTHORIZED)
         return
     }
 
     const [basic, token ] = auth.split(' ')
 
     if (basic !== 'Basic') {
-        res.sendStatus(401)
+        res.sendStatus(HTTP_REQUEST_STATUS.UNAUTHORIZED)
         return
     }
 
@@ -34,7 +38,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
 
     const [login, password] = decodedData.split(':')
     if (login !== process.env.AUTH_LOGIN || password !== process.env.AUTH_PASSWORD) {
-        res.sendStatus(401)
+        res.sendStatus(HTTP_REQUEST_STATUS.UNAUTHORIZED)
         return
     }
 

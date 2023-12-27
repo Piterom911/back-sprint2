@@ -1,6 +1,6 @@
 import request from 'supertest'
 import {app} from "../src/app";
-import {URI_PATHS} from "../src/models/common";
+import {HTTP_REQUEST_STATUS, URI_PATHS} from "../src/models/common";
 import any = jasmine.any;
 
 const getRequest = () => request(app)
@@ -15,13 +15,13 @@ describe('Endpoints videos', () => {
     it('should return status 200 and an empty array', async () => {
         await getRequest()
             .get(URI_PATHS.blogs)
-            .expect(200, [])
+            .expect(HTTP_REQUEST_STATUS.OK, [])
     })
 
     it('should return status 404 for not existing blog', async () => {
         await getRequest()
             .get(`${URI_PATHS.blogs}/938475`)
-            .expect(404)
+            .expect(HTTP_REQUEST_STATUS.NOT_FOUND)
     })
 
     it('should return 401 status code', async () => {
@@ -29,11 +29,11 @@ describe('Endpoints videos', () => {
             .post(URI_PATHS.blogs)
             .set('Authorization', `Basic YWRtaW46cXdlcnR5asd`)
             .send({name: 'An attempt'})
-            .expect(401)
+            .expect(HTTP_REQUEST_STATUS.UNAUTHORIZED)
 
         await getRequest()
             .get(URI_PATHS.blogs)
-            .expect(200, [])
+            .expect(HTTP_REQUEST_STATUS.OK, [])
     })
 
     it('should`nt create an object with incorrect blog properties', async () => {
@@ -41,11 +41,11 @@ describe('Endpoints videos', () => {
             .post(URI_PATHS.blogs)
             .set('Authorization', `Basic YWRtaW46cXdlcnR5`)
             .send({name: 'An attempt'})
-            .expect(400)
+            .expect(HTTP_REQUEST_STATUS.BAD_REQUEST)
 
         await getRequest()
             .get(URI_PATHS.blogs)
-            .expect(200, [])
+            .expect(HTTP_REQUEST_STATUS.OK, [])
     })
 
     let blogExampleForTests: any = undefined;
@@ -60,13 +60,13 @@ describe('Endpoints videos', () => {
             .post(URI_PATHS.blogs)
             .set('Authorization', `Basic YWRtaW46cXdlcnR5`)
             .send(newBlogReqData)
-            .expect(201)
+            .expect(HTTP_REQUEST_STATUS.CREATED)
 
         expect(blogExampleForTests.body).toEqual({...newBlogReqData, id: expect.any(String)})
 
         const responseAllBlogs = await getRequest()
             .get(URI_PATHS.blogs)
-            .expect(200) // !!!!!!!!!!!!!!!!!!!!!!!!!!!!  ..expect(200, [createdVideoObj])
+            .expect(HTTP_REQUEST_STATUS.OK) // !!!!!!!!!!!!!!!!!!!!!!!!!!!!  ..expect(HTTP_REQUEST_STATUS.OK, [createdVideoObj])
 
         expect(responseAllBlogs.body).toEqual([blogExampleForTests.body])
     })
@@ -82,7 +82,7 @@ describe('Endpoints videos', () => {
             .put(`${URI_PATHS.blogs}/` + blogExampleForTests.body.id)
             .set('Authorization', `Basic YWRtaW46cXdlcnR5`)
             .send(updateBlogReqData)
-            .expect(204)
+            .expect(HTTP_REQUEST_STATUS.NO_CONTENT)
     })
 
     it('should`nt update video data', async () => {
@@ -94,7 +94,7 @@ describe('Endpoints videos', () => {
             .put(`${URI_PATHS.blogs}/` + blogExampleForTests.body.id)
             .set('Authorization', `Basic YWRtaW46cXdlcnR5`)
             .send(updateBlogReqData)
-            .expect(400)
+            .expect(HTTP_REQUEST_STATUS.BAD_REQUEST)
 
         expect(response.body).toEqual({
             errorsMessages: expect.arrayContaining([{ message: expect.any(String), field: expect.any(String) }])
@@ -105,11 +105,11 @@ describe('Endpoints videos', () => {
         blogExampleForTests = await getRequest()
             .delete(`${URI_PATHS.blogs}/` + blogExampleForTests.body.id )
             .set('Authorization', `Basic YWRtaW46cXdlcnR5`)
-            .expect(204)
+            .expect(HTTP_REQUEST_STATUS.NO_CONTENT)
 
         await request(app)
             .get(URI_PATHS.blogs)
-            .expect(200, [])
+            .expect(HTTP_REQUEST_STATUS.OK, [])
     })
 
 })

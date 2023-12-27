@@ -1,6 +1,6 @@
 import {Router, Request, Response} from "express"
 import {blogCollection, database, db, postCollection, videoCollection} from "../db/db";
-import {URI_PATHS} from "../models/common";
+import {HTTP_REQUEST_STATUS, URI_PATHS} from "../models/common";
 
 export const testsRouter = Router({})
 
@@ -11,7 +11,7 @@ testsRouter.delete('/', async (req: Request, res: Response) => {
     await postCollection.deleteMany({})
     await videoCollection.deleteMany({})
 
-    res.sendStatus(204)
+    res.sendStatus(HTTP_REQUEST_STATUS.NO_CONTENT)
 })
 
 

@@ -1,6 +1,6 @@
 import request from 'supertest'
 import {app} from "../src/app";
-import {URI_PATHS} from "../src/models/common";
+import {HTTP_REQUEST_STATUS, URI_PATHS} from "../src/models/common";
 
 const getRequest = () => request(app)
 
@@ -14,13 +14,13 @@ describe('Endpoints posts', () => {
     it('should return status 200 and an empty array', async () => {
         await getRequest()
             .get(URI_PATHS.posts)
-            .expect(200, [])
+            .expect(HTTP_REQUEST_STATUS.OK, [])
     })
 
     it('should return status 404 for not existing post', async () => {
         await getRequest()
             .get(`${URI_PATHS.posts}/938475`)
-            .expect(404)
+            .expect(HTTP_REQUEST_STATUS.NOT_FOUND)
     })
 
     it('should return 401 status code', async () => {
@@ -28,11 +28,11 @@ describe('Endpoints posts', () => {
             .post(URI_PATHS.posts)
             .set('Authorization', `Basic YWRtaW46cXdlcnR5asd`)
             .send({title: 'An attempt'})
-            .expect(401)
+            .expect(HTTP_REQUEST_STATUS.UNAUTHORIZED)
 
         await getRequest()
             .get(URI_PATHS.posts)
-            .expect(200, [])
+            .expect(HTTP_REQUEST_STATUS.OK, [])
     })
 
     it('should`nt create an object with incorrect post properties', async () => {
@@ -40,11 +40,11 @@ describe('Endpoints posts', () => {
             .post(URI_PATHS.posts)
             .set('Authorization', `Basic YWRtaW46cXdlcnR5`)
             .send({title: 'An attempt'})
-            .expect(400)
+            .expect(HTTP_REQUEST_STATUS.BAD_REQUEST)
 
         await getRequest()
             .get(URI_PATHS.posts)
-            .expect(200, [])
+            .expect(HTTP_REQUEST_STATUS.OK, [])
     })
 
     let postExampleForTests: any = undefined;
@@ -62,7 +62,7 @@ describe('Endpoints posts', () => {
             .post(URI_PATHS.posts)
             .set('Authorization', `Basic YWRtaW46cXdlcnR5`)
             .send(newPostReqData)
-            .expect(201)
+            .expect(HTTP_REQUEST_STATUS.CREATED)
 
         expect(postExampleForTests.body).toEqual({
             ...newPostReqData,
@@ -83,7 +83,7 @@ describe('Endpoints posts', () => {
             .put(`${URI_PATHS.posts}/` + postExampleForTests.body.id)
             .set('Authorization', `Basic YWRtaW46cXdlcnR5`)
             .send(updateBlogReqData)
-            .expect(204)
+            .expect(HTTP_REQUEST_STATUS.NO_CONTENT)
     })
 
     it('should`nt update post data', async () => {
@@ -95,7 +95,7 @@ describe('Endpoints posts', () => {
             .put(`${URI_PATHS.posts}/` + postExampleForTests.body.id)
             .set('Authorization', `Basic YWRtaW46cXdlcnR5`)
             .send(updateBlogReqData)
-            .expect(400)
+            .expect(HTTP_REQUEST_STATUS.BAD_REQUEST)
 
         expect(response.body).toEqual({
             errorsMessages: expect.arrayContaining([{ message: expect.any(String), field: expect.any(String) }])
@@ -106,11 +106,11 @@ describe('Endpoints posts', () => {
         postExampleForTests = await getRequest()
             .delete(`${URI_PATHS.posts}/` + postExampleForTests.body.id )
             .set('Authorization', `Basic YWRtaW46cXdlcnR5`)
-            .expect(204)
+            .expect(HTTP_REQUEST_STATUS.NO_CONTENT)
 
         await request(app)
             .get(URI_PATHS.posts)
-            .expect(200, [])
+            .expect(HTTP_REQUEST_STATUS.OK, [])
     })
 
 })

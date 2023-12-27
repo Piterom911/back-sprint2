@@ -3,6 +3,7 @@ import {BlogsRepository} from "../repositories/blogs-repository";
 import {authMiddleware} from "../middlewares/auth/auth-middleware";
 import {blogValidation} from "../validators/blog-validator";
 import {ObjectId} from "mongodb";
+import {HTTP_REQUEST_STATUS} from "../models/common";
 
 export const blogsRouter = Router({})
 
@@ -13,23 +14,23 @@ blogsRouter.get('/', async (req: Request, res: Response) => {
 blogsRouter.get('/:id',  async (req: Request, res: Response) => {
     const id = req.params.id
     if (!ObjectId.isValid(id)) {
-        res.send(404)
+        res.send(HTTP_REQUEST_STATUS.NOT_FOUND)
         return
     }
 
     const targetBlog = await BlogsRepository.getEntityById(id)
-    if (!targetBlog) res.send(404)
+    if (!targetBlog) res.send(HTTP_REQUEST_STATUS.NOT_FOUND)
 
     res.send(targetBlog)
 })
 blogsRouter.post('/', authMiddleware, blogValidation(), async (req: Request, res: Response) => {
     const result = await BlogsRepository.postNewEntity(req.body)
-    res.status(201).send(result)
+    res.status(HTTP_REQUEST_STATUS.CREATED).send(result)
 })
 blogsRouter.put('/:id', authMiddleware, blogValidation(), async (req: Request, res: Response) => {
     const id = req.params.id
     if (!ObjectId.isValid(id)) {
-        res.sendStatus(404)
+        res.sendStatus(HTTP_REQUEST_STATUS.NOT_FOUND)
         return
     }
 
@@ -39,31 +40,31 @@ blogsRouter.put('/:id', authMiddleware, blogValidation(), async (req: Request, r
 
     const blog = await BlogsRepository.getEntityById(id)
     if (!blog) {
-        res.sendStatus(404)
+        res.sendStatus(HTTP_REQUEST_STATUS.NOT_FOUND)
     }
 
     const targetBlog = await BlogsRepository.updateEntity(id, {name, description, websiteUrl})
     if (!targetBlog) {
-        res.sendStatus(404)
+        res.sendStatus(HTTP_REQUEST_STATUS.NOT_FOUND)
         return
     }
 
-    res.sendStatus(204)
+    res.sendStatus(HTTP_REQUEST_STATUS.NO_CONTENT)
 })
 blogsRouter.delete('/:id', authMiddleware, async (req: Request, res: Response) => {
     const id = req.params.id
     if (!ObjectId.isValid(id)) {
-        res.send(404)
+        res.send(HTTP_REQUEST_STATUS.NOT_FOUND)
         return
     }
 
     const targetBlog = await BlogsRepository.deleteEntity(id)
     if (!targetBlog) {
-        res.sendStatus(404);
+        res.sendStatus(HTTP_REQUEST_STATUS.NOT_FOUND);
         return
     }
 
-    res.sendStatus(204)
+    res.sendStatus(HTTP_REQUEST_STATUS.NO_CONTENT)
 })
 
 

@@ -1,7 +1,7 @@
 import {Request, Response, Router} from "express";
 import {
     AvailableVideoResolutions,
-    ErrorType,
+    ErrorType, HTTP_REQUEST_STATUS,
     RequestWithBody,
     RequestWithParams,
     RequestWithParamsAndBody
@@ -22,17 +22,17 @@ videosRouter.get('/', (req: Request, res: Response) => {
 videosRouter.get('/:id', (req: RequestWithParams<{ id: string }>, res: Response) => {
     const targetVideo = VideosRepository.getVideoById(req.params.id)
 
-    if (!targetVideo) {res.sendStatus(404)} else {res.send(targetVideo)}
+    if (!targetVideo) {res.sendStatus(HTTP_REQUEST_STATUS.NOT_FOUND)} else {res.send(targetVideo)}
 })
 videosRouter.post('/', videoValidation(), (req: RequestWithBody<VideoCreateModel>, res: Response) => {
     const result = VideosRepository.postNewVideo(req.body)
 
-    res.status(201).send(result)
+    res.status(HTTP_REQUEST_STATUS.CREATED).send(result)
 })
 videosRouter.put('/:id', videoUpdateValidation(), videoValidation(), (req: RequestWithParamsAndBody<{ id: string }, VideoUpdateModel>, res: Response) => {
     try {
         const isVideoUpdated = VideosRepository.updateVideoById(req.params.id, req.body)
-        !isVideoUpdated ? res.sendStatus(404) : res.sendStatus(204)
+        !isVideoUpdated ? res.sendStatus(HTTP_REQUEST_STATUS.NOT_FOUND) : res.sendStatus(HTTP_REQUEST_STATUS.NO_CONTENT)
     } catch (error) {
         console.error('Error in update video data:', error);
         res.sendStatus(500);
@@ -43,5 +43,5 @@ videosRouter.delete('/:id', (req: RequestWithParams<{ id: string }>, res: Respon
     const videoId: string = req.params.id
 
     const deleteResult = VideosRepository.deleteVideoById(videoId)
-    deleteResult ? res.sendStatus(204) : res.sendStatus(404)
+    deleteResult ? res.sendStatus(HTTP_REQUEST_STATUS.NO_CONTENT) : res.sendStatus(HTTP_REQUEST_STATUS.NOT_FOUND)
 })
