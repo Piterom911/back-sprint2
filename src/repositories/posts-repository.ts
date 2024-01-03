@@ -1,4 +1,4 @@
-import {database, postCollection} from "../db/db";
+import {postCollection} from "../db/db";
 import {PostCreateModel, PostUpdateModel} from "../models/post/intup";
 import {OutputPostType} from "../models/post/output";
 import {PostDBType} from "../models/db/db";
@@ -50,9 +50,9 @@ export class PostsRepository {
                     blogId: updateData.blogId,
                 }
             })
-        if (!targetEntity) return false
+        return !!targetEntity;
 
-        return true
+
     }
 
     static async deleteEntity(id: string): Promise<boolean> {

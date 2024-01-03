@@ -1,5 +1,5 @@
 import {MongoClient} from "mongodb";
-import {BlogDBType, DBType, PostDBType, VideoDBType} from "../models/db/db";
+import {BlogDBType, PostDBType, VideoDBType} from "../models/db/db";
 
 const port = 3000
 
