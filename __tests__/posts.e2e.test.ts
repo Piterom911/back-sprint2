@@ -6,7 +6,7 @@ const getRequest = () => request(app)
 
 describe('Endpoints posts', () => {
     beforeAll(async () => {
-        await getRequest().delete(URI_PATHS.tests)
+        await getRequest().delete('/testing/all-data')
     })
 
     it('should return status 200 and an empty array', async () => {

@@ -19,25 +19,45 @@ postsRouter.get('/:id', (req: Request, res: Response) => {
 
     res.send(targetPost)
 })
-postsRouter.post('/', authMiddleware, postValidation(), (req: Request, res: Response) => {
-    const result = PostsRepository.postNewEntity(req.body)
-    res.status(HTTP_REQUEST_STATUS.CREATED).send(result)
+postsRouter.post('/', authMiddleware, postValidation(), async (req: Request, res: Response) => {
+    const postId = await PostsRepository.postNewEntity(req.body)
+    if (!postId) {
+        res.sendStatus(HTTP_REQUEST_STATUS.NOT_FOUND)
+        return
+    }
+    const createdPost = await PostsRepository.getEntityById(postId)
+    if (!createdPost) {
+        res.sendStatus(HTTP_REQUEST_STATUS.NOT_FOUND)
+    }
+    res.status(HTTP_REQUEST_STATUS.CREATED).send(createdPost)
 })
-postsRouter.put('/:id', authMiddleware, postValidation(), (req: Request, res: Response) => {
+postsRouter.put('/:id', authMiddleware, postValidation(), async (req: Request, res: Response) => {
     const id = req.params.id
-    if (!id) res.send(HTTP_REQUEST_STATUS.UNAUTHORIZED)
+    if (!id) {
+        res.send(HTTP_REQUEST_STATUS.NOT_FOUND)
+        return
+    }
 
-    const targetPost = PostsRepository.updateEntity(id, req.body)
-    if (!targetPost) res.send(HTTP_REQUEST_STATUS.NOT_FOUND)
+    const targetPost = await PostsRepository.updateEntity(id, req.body)
+    if (!targetPost) {
+        res.send(HTTP_REQUEST_STATUS.NOT_FOUND)
+        return
+    }
 
     res.send(HTTP_REQUEST_STATUS.NO_CONTENT)
 })
-postsRouter.delete('/:id', authMiddleware, (req: Request, res: Response) => {
+postsRouter.delete('/:id', authMiddleware, async (req: Request, res: Response) => {
     const id = req.params.id
-    if (!id) res.send(HTTP_REQUEST_STATUS.UNAUTHORIZED)
+    if (!id) {
+        res.send(HTTP_REQUEST_STATUS.NOT_FOUND)
+        return
+    }
 
-    const targetBlog = PostsRepository.deleteEntity(id)
-    if (!targetBlog) res.send(HTTP_REQUEST_STATUS.NOT_FOUND)
+    const targetPost = await PostsRepository.deleteEntity(id)
+    if (!targetPost) {
+        res.send(HTTP_REQUEST_STATUS.NOT_FOUND)
+        return
+    }
 
     res.send(HTTP_REQUEST_STATUS.NO_CONTENT)
 })

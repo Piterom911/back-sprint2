@@ -4,7 +4,7 @@ import {HTTP_REQUEST_STATUS} from "../models/common";
 
 export const testsRouter = Router({})
 
-testsRouter.delete('/', async (req: Request, res: Response) => {
+testsRouter.delete('', async (req: Request, res: Response) => {
     // await database.dropDatabase()
 
     await blogCollection.deleteMany({})

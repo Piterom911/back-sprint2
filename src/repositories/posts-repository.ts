@@ -1,53 +1,62 @@
-import {db} from "../db/db";
+import {database, postCollection} from "../db/db";
 import {PostCreateModel, PostUpdateModel} from "../models/post/intup";
 import {OutputPostType} from "../models/post/output";
+import {PostDBType} from "../models/db/db";
+import {BlogsRepository} from "./blogs-repository";
+import {ObjectId} from "mongodb";
+import {postMapper} from "../models/mappers/mapper";
 
 export class PostsRepository {
-    static getAllEntities() {
-        return db.posts
+    static async getAllEntities() {
+        const posts =  await postCollection.find({}).toArray()
+        return posts.map(postMapper)
     }
 
-    static getEntityById(id: string) {
-        return db.posts.find(b => b.id === id)
+    static async getEntityById(id: string): Promise<OutputPostType | null> {
+        const targetPost = await postCollection.findOne({_id: new ObjectId(id)})
+        if (!targetPost) return null
+        return postMapper(targetPost)
     }
 
-    static postNewEntity(newEntityData: PostCreateModel) {
+    static async postNewEntity(newEntityData: PostCreateModel): Promise<string | null> {
         let {title,content,blogId, shortDescription} = newEntityData
-        const id: string = new Date().toISOString()
-        const blogName = 'Any string'
+        const targetBlog = await BlogsRepository.getEntityById(blogId)
 
-        const newPost: OutputPostType = {
-            id,
+        if (!targetBlog) {
+            return null
+        }
+
+        const newPost: PostDBType = {
             title,
             content,
             shortDescription,
             blogId,
-            blogName
+            blogName: targetBlog.name,
+            createdAt: new Date().toISOString()
         }
 
-        db.posts.push(newPost)
-        return newPost
+        const createdPost = await postCollection.insertOne(newPost)
+        return createdPost.insertedId.toString()
     }
 
-    static updateEntity(id: string, updateData: PostUpdateModel): boolean {
-        let targetEntity = db.posts.find(b => b.id === id)
+    static async updateEntity(id: string, updateData: PostUpdateModel): Promise<boolean> {
+        const targetEntity = await postCollection.updateOne(
+            {_id: new ObjectId(id)},
+            {
+                $set: {
+                    title: updateData.title,
+                    shortDescription: updateData.shortDescription,
+                    content: updateData.content,
+                    blogId: updateData.blogId,
+                }
+            })
         if (!targetEntity) return false
-
-        targetEntity.title = updateData.title
-        targetEntity.shortDescription = updateData.shortDescription
-        targetEntity.content = updateData.content
-        targetEntity.blogId = updateData.blogId
 
         return true
     }
 
-    static deleteEntity(id: string): boolean {
-        for (let i = 0; i  < db.posts.length; i++) {
-            if (db.posts[i].id === id) {
-                db.posts.splice(i, 1)
-                return true
-            }
-        }
-        return false
+    static async deleteEntity(id: string): Promise<boolean> {
+        const targetPost = await postCollection.deleteOne({_id: new ObjectId(id)})
+        return !!targetPost
     }
 }
