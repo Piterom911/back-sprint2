@@ -22,6 +22,7 @@ export class BlogsRepository {
             name,
             description,
             websiteUrl,
+            isMembership: false,
             createdAt: new Date().toISOString()
         }
 

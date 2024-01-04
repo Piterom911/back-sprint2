@@ -8,7 +8,9 @@ export const blogMapper = (blogDb: WithId<BlogDBType>): OutputBlogType => {
         id: blogDb._id.toString(),
         name: blogDb.name,
         description: blogDb.description,
-        websiteUrl: blogDb.websiteUrl
+        websiteUrl: blogDb.websiteUrl,
+        createdAt: blogDb.createdAt,
+        isMembership: blogDb.isMembership
     }
 }
 export const postMapper = (postDb: WithId<PostDBType>): OutputPostType => {

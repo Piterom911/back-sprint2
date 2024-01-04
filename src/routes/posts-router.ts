@@ -3,18 +3,29 @@ import {PostsRepository} from "../repositories/posts-repository";
 import {authMiddleware} from "../middlewares/auth/auth-middleware";
 import {postValidation} from "../validators/post-validator";
 import {HTTP_REQUEST_STATUS} from "../models/common";
+import {ObjectId} from "mongodb";
+import {BlogsRepository} from "../repositories/blogs-repository";
 
 export const postsRouter = Router({})
 
-postsRouter.get('/', (req: Request, res: Response) => {
-    const posts = PostsRepository.getAllEntities()
+postsRouter.get('/', async (req: Request, res: Response) => {
+    const posts = await PostsRepository.getAllEntities()
     res.send(posts)
 })
-postsRouter.get('/:id', (req: Request, res: Response) => {
+postsRouter.get('/:id', async (req: Request, res: Response) => {
     const id = req.params.id
-    if (!id) res.send(HTTP_REQUEST_STATUS.BAD_REQUEST)
+    if (!ObjectId.isValid(id)) {
+        res.send(HTTP_REQUEST_STATUS.NOT_FOUND)
+        return
+    }
 
-    const targetPost = PostsRepository.getEntityById(id)
+    const isExistedPost = await PostsRepository.getEntityById(id)
+    if (!isExistedPost) {
+        res.sendStatus(HTTP_REQUEST_STATUS.NOT_FOUND)
+        return
+    }
+
+    const targetPost = await PostsRepository.getEntityById(id)
     if (!targetPost) res.send(HTTP_REQUEST_STATUS.NOT_FOUND)
 
     res.send(targetPost)
@@ -33,8 +44,14 @@ postsRouter.post('/', authMiddleware, postValidation(), async (req: Request, res
 })
 postsRouter.put('/:id', authMiddleware, postValidation(), async (req: Request, res: Response) => {
     const id = req.params.id
-    if (!id) {
+    if (!ObjectId.isValid(id)) {
         res.send(HTTP_REQUEST_STATUS.NOT_FOUND)
+        return
+    }
+
+    const isExistedPost = await PostsRepository.getEntityById(id)
+    if (!isExistedPost) {
+        res.sendStatus(HTTP_REQUEST_STATUS.NOT_FOUND)
         return
     }
 
@@ -48,8 +65,14 @@ postsRouter.put('/:id', authMiddleware, postValidation(), async (req: Request, r
 })
 postsRouter.delete('/:id', authMiddleware, async (req: Request, res: Response) => {
     const id = req.params.id
-    if (!id) {
+    if (!ObjectId.isValid(id)) {
         res.send(HTTP_REQUEST_STATUS.NOT_FOUND)
+        return
+    }
+
+    const isExistedPost = await PostsRepository.getEntityById(id)
+    if (!isExistedPost) {
+        res.sendStatus(HTTP_REQUEST_STATUS.NOT_FOUND)
         return
     }
 

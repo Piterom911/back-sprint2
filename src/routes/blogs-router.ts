@@ -19,7 +19,10 @@ blogsRouter.get('/:id',  async (req: Request, res: Response) => {
     }
 
     const targetBlog = await BlogsRepository.getEntityById(id)
-    if (!targetBlog) res.send(HTTP_REQUEST_STATUS.NOT_FOUND)
+    if (!targetBlog) {
+        res.send(HTTP_REQUEST_STATUS.NOT_FOUND)
+        return
+    }
 
     res.send(targetBlog)
 })
@@ -48,6 +51,7 @@ blogsRouter.put('/:id', authMiddleware, blogValidation(), async (req: Request, r
     const blog = await BlogsRepository.getEntityById(id)
     if (!blog) {
         res.sendStatus(HTTP_REQUEST_STATUS.NOT_FOUND)
+        return
     }
 
     const targetBlog = await BlogsRepository.updateEntity(id, {name, description, websiteUrl})
@@ -61,10 +65,15 @@ blogsRouter.put('/:id', authMiddleware, blogValidation(), async (req: Request, r
 blogsRouter.delete('/:id', authMiddleware, async (req: Request, res: Response) => {
     const id = req.params.id
     if (!ObjectId.isValid(id)) {
-        res.send(HTTP_REQUEST_STATUS.NOT_FOUND)
+        res.sendStatus(HTTP_REQUEST_STATUS.NOT_FOUND)
         return
     }
 
+    const isExistedBlog = await BlogsRepository.getEntityById(id)
+    if (!isExistedBlog) {
+        res.sendStatus(HTTP_REQUEST_STATUS.NOT_FOUND)
+        return
+    }
     const targetBlog = await BlogsRepository.deleteEntity(id)
     if (!targetBlog) {
         res.sendStatus(HTTP_REQUEST_STATUS.NOT_FOUND);
