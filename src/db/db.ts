@@ -3,7 +3,7 @@ import {BlogDBType, PostDBType, VideoDBType} from "../models/db/db";
 
 const port = 3000
 
-const uri = process.env.MONGO_URI || 'mongodb://0.0.0.0:27017'
+const uri = 'mongodb+srv://piterom911:mongo123@cluster0.njxr62w.mongodb.net' || 'mongodb://0.0.0.0:27017'
 
 const client = new MongoClient(uri)
 
