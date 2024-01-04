@@ -24,8 +24,15 @@ blogsRouter.get('/:id',  async (req: Request, res: Response) => {
     res.send(targetBlog)
 })
 blogsRouter.post('/', authMiddleware, blogValidation(), async (req: Request, res: Response) => {
-    const result = await BlogsRepository.postNewEntity(req.body)
-    res.status(HTTP_REQUEST_STATUS.CREATED).send(result)
+    const createdBlogId = await BlogsRepository.postNewEntity(req.body)
+
+    if (!createdBlogId) {
+        res.sendStatus(HTTP_REQUEST_STATUS.SERVICE_UNAVAILABLE)
+        return
+    }
+
+    const createdBlog = await BlogsRepository.getEntityById(createdBlogId)
+    res.status(HTTP_REQUEST_STATUS.CREATED).send(createdBlog)
 })
 blogsRouter.put('/:id', authMiddleware, blogValidation(), async (req: Request, res: Response) => {
     const id = req.params.id
