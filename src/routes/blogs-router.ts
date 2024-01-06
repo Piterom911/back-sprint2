@@ -2,8 +2,8 @@ import {Router, Request, Response} from "express"
 import {BlogsRepository} from "../repositories/blogs-repository";
 import {authMiddleware} from "../middlewares/auth/auth-middleware";
 import {blogValidation} from "../validators/blog-validator";
-import {ObjectId} from "mongodb";
 import {HTTP_REQUEST_STATUS} from "../models/common";
+import {mongoIdParamValidation} from "../validators/id-param-validation";
 
 export const blogsRouter = Router({})
 
@@ -11,12 +11,8 @@ blogsRouter.get('/', async (req: Request, res: Response) => {
     const blogs = await BlogsRepository.getAllEntities()
     res.send(blogs)
 })
-blogsRouter.get('/:id',  async (req: Request, res: Response) => {
+blogsRouter.get('/:id', mongoIdParamValidation(),  async (req: Request, res: Response) => {
     const id = req.params.id
-    if (!ObjectId.isValid(id)) {
-        res.send(HTTP_REQUEST_STATUS.NOT_FOUND)
-        return
-    }
 
     const targetBlog = await BlogsRepository.getEntityById(id)
     if (!targetBlog) {
@@ -37,12 +33,8 @@ blogsRouter.post('/', authMiddleware, blogValidation(), async (req: Request, res
     const createdBlog = await BlogsRepository.getEntityById(createdBlogId)
     res.status(HTTP_REQUEST_STATUS.CREATED).send(createdBlog)
 })
-blogsRouter.put('/:id', authMiddleware, blogValidation(), async (req: Request, res: Response) => {
+blogsRouter.put('/:id', mongoIdParamValidation(), authMiddleware, blogValidation(), async (req: Request, res: Response) => {
     const id = req.params.id
-    if (!ObjectId.isValid(id)) {
-        res.sendStatus(HTTP_REQUEST_STATUS.NOT_FOUND)
-        return
-    }
 
     const name = req.body.name
     const description = req.body.description
@@ -62,12 +54,8 @@ blogsRouter.put('/:id', authMiddleware, blogValidation(), async (req: Request, r
 
     res.sendStatus(HTTP_REQUEST_STATUS.NO_CONTENT)
 })
-blogsRouter.delete('/:id', authMiddleware, async (req: Request, res: Response) => {
+blogsRouter.delete('/:id', mongoIdParamValidation(), authMiddleware, async (req: Request, res: Response) => {
     const id = req.params.id
-    if (!ObjectId.isValid(id)) {
-        res.sendStatus(HTTP_REQUEST_STATUS.NOT_FOUND)
-        return
-    }
 
     const isExistedBlog = await BlogsRepository.getEntityById(id)
     if (!isExistedBlog) {
