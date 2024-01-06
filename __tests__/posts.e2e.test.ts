@@ -1,6 +1,7 @@
 import request from 'supertest'
 import {app} from "../src/app";
 import {HTTP_REQUEST_STATUS, URI_PATHS} from "../src/models/common";
+import {ObjectId} from "mongodb";
 
 const getRequest = () => request(app)
 
@@ -17,7 +18,7 @@ describe('Endpoints posts', () => {
 
     it('should return status 404 for not existing post', async () => {
         await getRequest()
-            .get(`${URI_PATHS.posts}/938475`)
+            .get(`${URI_PATHS.posts}/659704e12741c44a25524424`)
             .expect(HTTP_REQUEST_STATUS.NOT_FOUND)
     })
 
@@ -47,13 +48,24 @@ describe('Endpoints posts', () => {
 
     let postExampleForTests: any = undefined;
     it('should  create an object with correct post properties', async () => {
+        const newBlogReqData = {
+            isMembership: false,
+            name: 'Ein Versuch',
+            description: 'Das bin ich',
+            websiteUrl: 'https://ZzcQfsPbtTQEQYkCBJogfcQRdWGrh-2vIArtzFwlWbLg7hzm215YimA3LtvxwUdYiB.M4ruVPXLhKE2gQAZM1mShLlLE'
+        }
+
+        const blogIdForNewPost = await getRequest()
+            .post(URI_PATHS.blogs)
+            .set('Authorization', `Basic YWRtaW46cXdlcnR5`)
+            .send(newBlogReqData)
+            .expect(HTTP_REQUEST_STATUS.CREATED)
+
         const newPostReqData = {
-            id: "someID",
-            title: "SOME GRATE TITLE",
+            title: "SOME TITLE",
             shortDescription: "a very very short description",
             content: "It's a big content fot this small object",
-            blogId: "someBlogID",
-            blogName: "This must be a blog name"
+            blogId: blogIdForNewPost.body.id
         }
 
         postExampleForTests = await getRequest()
@@ -65,16 +77,17 @@ describe('Endpoints posts', () => {
         expect(postExampleForTests.body).toEqual({
             ...newPostReqData,
             id: expect.any(String),
-            blogName: expect.any(String)
+            blogName: expect.any(String),
+            createdAt: expect.any(String)
         })
     })
 
     it('should update post data', async () => {
         const updateBlogReqData = {
-            title: "New Title for this post",
-            shortDescription: "And this is a new description",
+            title: "New Title post",
+            shortDescription: "new description",
             content: "Now it has no content",
-            blogId: "someBlogID2"
+            blogId: postExampleForTests.body.blogId
         }
 
         await request(app)
@@ -83,6 +96,7 @@ describe('Endpoints posts', () => {
             .send(updateBlogReqData)
             .expect(HTTP_REQUEST_STATUS.NO_CONTENT)
     })
+
 
     it('should`nt update post data', async () => {
         const updateBlogReqData = {

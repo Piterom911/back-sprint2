@@ -19,7 +19,7 @@ describe('Endpoints videos', () => {
 
     it('should return status 404 for not existing blog', async () => {
         await getRequest()
-            .get(`${URI_PATHS.blogs}/938475`)
+            .get(`${URI_PATHS.blogs}/659704e12741c44a25524424`)
             .expect(HTTP_REQUEST_STATUS.NOT_FOUND)
     })
 
@@ -48,8 +48,9 @@ describe('Endpoints videos', () => {
     })
 
     let blogExampleForTests: any = undefined;
-    it('should  create an object with correct video properties', async () => {
+    it('should  create an object', async () => {
         const newBlogReqData = {
+            isMembership: false,
             name: 'Ein Versuch',
             description: 'Das bin ich',
             websiteUrl: 'https://ZzcQfsPbtTQEQYkCBJogfcQRdWGrh-2vIArtzFwlWbLg7hzm215YimA3LtvxwUdYiB.M4ruVPXLhKE2gQAZM1mShLlLE'
@@ -61,7 +62,7 @@ describe('Endpoints videos', () => {
             .send(newBlogReqData)
             .expect(HTTP_REQUEST_STATUS.CREATED)
 
-        expect(blogExampleForTests.body).toEqual({...newBlogReqData, id: expect.any(String)})
+        expect(blogExampleForTests.body).toEqual({...newBlogReqData, id: expect.any(String), createdAt: expect.any(String)})
 
         const responseAllBlogs = await getRequest()
             .get(URI_PATHS.blogs)
