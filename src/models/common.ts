@@ -13,7 +13,7 @@ export type ErrorType = {
     errorsMessages: ErrorMessage[]
 }
 
-export const HTTP_REQUEST_STATUS = {
+export const HTTP_STATUS = {
     OK: 200,
     CREATED: 201,
     ACCEPTED: 202,
@@ -32,6 +32,9 @@ export const HTTP_REQUEST_STATUS = {
     SERVICE_UNAVAILABLE: 503, // Служба недоступна
     GATEWAY_TIMEOUT: 504, // Шлюз не отвечает
 };
+
+type HttpStatusKeys = keyof typeof HTTP_STATUS
+export type HttpStatusType = (typeof HTTP_STATUS)[HttpStatusKeys]
 
 export const URI_PATHS = {
     videos: '/videos',
