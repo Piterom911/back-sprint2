@@ -1,6 +1,7 @@
 import request from 'supertest'
 import {app} from "../../src/app";
 import {HTTP_STATUS, URI_PATHS} from "../../src/models/common";
+import {blogTestManager} from "../utils/blogTestManager";
 
 
 const getRequest = () => request(app)
@@ -24,11 +25,7 @@ describe('Endpoints videos', () => {
     })
 
     it('should return 401 status code', async () => {
-        await getRequest()
-            .post(URI_PATHS.blogs)
-            .set('Authorization', `Basic YWRtaW46cXdlcnR5asd`)
-            .send({name: 'An attempt'})
-            .expect(HTTP_STATUS.UNAUTHORIZED)
+        await blogTestManager.createBlog({name: "an attempt"}, HTTP_STATUS.UNAUTHORIZED, `Basic YWRtaW46cXdlcnR5asd`)
 
         await getRequest()
             .get(URI_PATHS.blogs)
@@ -36,11 +33,7 @@ describe('Endpoints videos', () => {
     })
 
     it('should`nt create an object with incorrect blog properties', async () => {
-        await getRequest()
-            .post(URI_PATHS.blogs)
-            .set('Authorization', `Basic YWRtaW46cXdlcnR5`)
-            .send({name: 'An attempt'})
-            .expect(HTTP_STATUS.BAD_REQUEST)
+        await blogTestManager.createBlog({name: "an attempt"}, HTTP_STATUS.BAD_REQUEST, `Basic YWRtaW46cXdlcnR5`)
 
         await getRequest()
             .get(URI_PATHS.blogs)
@@ -56,11 +49,7 @@ describe('Endpoints videos', () => {
             websiteUrl: 'https://ZzcQfsPbtTQEQYkCBJogfcQRdWGrh-2vIArtzFwlWbLg7hzm215YimA3LtvxwUdYiB.M4ruVPXLhKE2gQAZM1mShLlLE'
         }
 
-        blogExampleForTests = await getRequest()
-            .post(URI_PATHS.blogs)
-            .set('Authorization', `Basic YWRtaW46cXdlcnR5`)
-            .send(newBlogReqData)
-            .expect(HTTP_STATUS.CREATED)
+        blogExampleForTests = await blogTestManager.createBlog(newBlogReqData, HTTP_STATUS.CREATED, `Basic YWRtaW46cXdlcnR5`)
 
         expect(blogExampleForTests.body).toEqual({...newBlogReqData, id: expect.any(String), createdAt: expect.any(String)})
 

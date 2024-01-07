@@ -2,6 +2,7 @@ import request from 'supertest'
 import {app} from "../../src/app";
 import {HTTP_STATUS, URI_PATHS} from "../../src/models/common";
 import {postTestManager} from "../utils/postTestManager";
+import {blogTestManager} from "../utils/blogTestManager";
 
 const getRequest = () => request(app)
 
@@ -47,11 +48,11 @@ describe('Endpoints posts', () => {
             websiteUrl: 'https://ZzcQfsPbtTQEQYkCBJogfcQRdWGrh-2vIArtzFwlWbLg7hzm215YimA3LtvxwUdYiB.M4ruVPXLhKE2gQAZM1mShLlLE'
         }
 
-        const blogIdForNewPost = await getRequest()
-            .post(URI_PATHS.blogs)
-            .set('Authorization', `Basic YWRtaW46cXdlcnR5`)
-            .send(newBlogReqData)
-            .expect(HTTP_STATUS.CREATED)
+        const blogIdForNewPost = await blogTestManager.createBlog(
+            newBlogReqData,
+            HTTP_STATUS.CREATED,
+            `Basic YWRtaW46cXdlcnR5`
+        )
 
         const newPostReqData = {
             title: "SOME TITLE",

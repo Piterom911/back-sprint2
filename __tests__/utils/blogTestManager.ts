@@ -4,18 +4,18 @@ import {app} from "../../src/app";
 
 const getRequest = () => request(app)
 
-export const postTestManager = {
-    async createPost(data: any,
+export const blogTestManager = {
+    async createBlog(data: any,
                      expectedStatusCode: HttpStatusType = HTTP_STATUS.CREATED,
                      authData: string
     ) {
 
-        const createPostResponse = await getRequest()
-            .post(URI_PATHS.posts)
+        const createBlogResponse = await getRequest()
+            .post(URI_PATHS.blogs)
             .set('Authorization', authData)
             .send(data)
             .expect(expectedStatusCode)
 
-        return createPostResponse
+        return createBlogResponse
     }
 }
