@@ -1,7 +1,7 @@
 import request from 'supertest'
-import {app} from "../src/app";
-import {HTTP_REQUEST_STATUS, URI_PATHS} from "../src/models/common";
-import {ObjectId} from "mongodb";
+import {app} from "../../src/app";
+import {HTTP_STATUS, URI_PATHS} from "../../src/models/common";
+import {postTestManager} from "../utils/postTestManager";
 
 const getRequest = () => request(app)
 
@@ -13,37 +13,29 @@ describe('Endpoints posts', () => {
     it('should return status 200 and an empty array', async () => {
         await getRequest()
             .get(URI_PATHS.posts)
-            .expect(HTTP_REQUEST_STATUS.OK, [])
+            .expect(HTTP_STATUS.OK, [])
     })
 
     it('should return status 404 for not existing post', async () => {
         await getRequest()
             .get(`${URI_PATHS.posts}/659704e12741c44a25524424`)
-            .expect(HTTP_REQUEST_STATUS.NOT_FOUND)
+            .expect(HTTP_STATUS.NOT_FOUND)
     })
 
     it('should return 401 status code', async () => {
-        await getRequest()
-            .post(URI_PATHS.posts)
-            .set('Authorization', `Basic YWRtaW46cXdlcnR5asd`)
-            .send({title: 'An attempt'})
-            .expect(HTTP_REQUEST_STATUS.UNAUTHORIZED)
+        await postTestManager.createPost({title: 'An attempt'}, HTTP_STATUS.UNAUTHORIZED, `Basic YWRtaW46cXdlcnR5asd`)
 
         await getRequest()
             .get(URI_PATHS.posts)
-            .expect(HTTP_REQUEST_STATUS.OK, [])
+            .expect(HTTP_STATUS.OK, [])
     })
 
     it('should`nt create an object with incorrect post properties', async () => {
-        await getRequest()
-            .post(URI_PATHS.posts)
-            .set('Authorization', `Basic YWRtaW46cXdlcnR5`)
-            .send({title: 'An attempt'})
-            .expect(HTTP_REQUEST_STATUS.BAD_REQUEST)
+        await postTestManager.createPost({title: 'An attempt'}, HTTP_STATUS.BAD_REQUEST, `Basic YWRtaW46cXdlcnR5`)
 
         await getRequest()
             .get(URI_PATHS.posts)
-            .expect(HTTP_REQUEST_STATUS.OK, [])
+            .expect(HTTP_STATUS.OK, [])
     })
 
     let postExampleForTests: any = undefined;
@@ -59,7 +51,7 @@ describe('Endpoints posts', () => {
             .post(URI_PATHS.blogs)
             .set('Authorization', `Basic YWRtaW46cXdlcnR5`)
             .send(newBlogReqData)
-            .expect(HTTP_REQUEST_STATUS.CREATED)
+            .expect(HTTP_STATUS.CREATED)
 
         const newPostReqData = {
             title: "SOME TITLE",
@@ -68,11 +60,7 @@ describe('Endpoints posts', () => {
             blogId: blogIdForNewPost.body.id
         }
 
-        postExampleForTests = await getRequest()
-            .post(URI_PATHS.posts)
-            .set('Authorization', `Basic YWRtaW46cXdlcnR5`)
-            .send(newPostReqData)
-            .expect(HTTP_REQUEST_STATUS.CREATED)
+        postExampleForTests = await postTestManager.createPost(newPostReqData, HTTP_STATUS.CREATED, `Basic YWRtaW46cXdlcnR5`)
 
         expect(postExampleForTests.body).toEqual({
             ...newPostReqData,
@@ -94,7 +82,7 @@ describe('Endpoints posts', () => {
             .put(`${URI_PATHS.posts}/` + postExampleForTests.body.id)
             .set('Authorization', `Basic YWRtaW46cXdlcnR5`)
             .send(updateBlogReqData)
-            .expect(HTTP_REQUEST_STATUS.NO_CONTENT)
+            .expect(HTTP_STATUS.NO_CONTENT)
     })
 
 
@@ -107,7 +95,7 @@ describe('Endpoints posts', () => {
             .put(`${URI_PATHS.posts}/` + postExampleForTests.body.id)
             .set('Authorization', `Basic YWRtaW46cXdlcnR5`)
             .send(updateBlogReqData)
-            .expect(HTTP_REQUEST_STATUS.BAD_REQUEST)
+            .expect(HTTP_STATUS.BAD_REQUEST)
 
         expect(response.body).toEqual({
             errorsMessages: expect.arrayContaining([{ message: expect.any(String), field: expect.any(String) }])
@@ -118,11 +106,11 @@ describe('Endpoints posts', () => {
         postExampleForTests = await getRequest()
             .delete(`${URI_PATHS.posts}/` + postExampleForTests.body.id )
             .set('Authorization', `Basic YWRtaW46cXdlcnR5`)
-            .expect(HTTP_REQUEST_STATUS.NO_CONTENT)
+            .expect(HTTP_STATUS.NO_CONTENT)
 
         await request(app)
             .get(URI_PATHS.posts)
-            .expect(HTTP_REQUEST_STATUS.OK, [])
+            .expect(HTTP_STATUS.OK, [])
     })
 
 })
