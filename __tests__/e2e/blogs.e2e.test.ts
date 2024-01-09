@@ -6,7 +6,7 @@ import {blogTestManager} from "../utils/blogTestManager";
 
 const getRequest = () => request(app)
 
-describe('Endpoints videos', () => {
+describe('Endpoints blogs', () => {
 
     beforeAll(async () => {
         await getRequest().delete(URI_PATHS.tests)

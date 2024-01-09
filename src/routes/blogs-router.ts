@@ -1,20 +1,21 @@
-import {Router, Request, Response} from "express"
-import {BlogsRepository} from "../repositories/blogs-repository";
+import {Request, Response, Router} from "express"
 import {authMiddleware} from "../middlewares/auth/auth-middleware";
 import {blogValidation} from "../validators/blog-validator";
 import {HTTP_STATUS} from "../models/common";
 import {mongoIdParamValidation} from "../validators/id-param-validation";
+import {BlogsService} from "../domain/blog-service";
+import {OutputBlogType} from "../models/blog/output";
 
 export const blogsRouter = Router({})
 
 blogsRouter.get('/', async (req: Request, res: Response) => {
-    const blogs = await BlogsRepository.getAllEntities()
+    const blogs: OutputBlogType[] = await BlogsService.getAllEntities()
     res.send(blogs)
 })
 blogsRouter.get('/:id', mongoIdParamValidation(),  async (req: Request, res: Response) => {
     const id = req.params.id
 
-    const targetBlog = await BlogsRepository.getEntityById(id)
+    const targetBlog = await BlogsService.getEntityById(id)
     if (!targetBlog) {
         res.send(HTTP_STATUS.NOT_FOUND)
         return
@@ -23,14 +24,14 @@ blogsRouter.get('/:id', mongoIdParamValidation(),  async (req: Request, res: Res
     res.send(targetBlog)
 })
 blogsRouter.post('/', authMiddleware, blogValidation(), async (req: Request, res: Response) => {
-    const createdBlogId = await BlogsRepository.postNewEntity(req.body)
+    const createdBlogId = await BlogsService.postNewEntity(req.body)
 
     if (!createdBlogId) {
         res.sendStatus(HTTP_STATUS.SERVICE_UNAVAILABLE)
         return
     }
 
-    const createdBlog = await BlogsRepository.getEntityById(createdBlogId)
+    const createdBlog = await BlogsService.getEntityById(createdBlogId)
     res.status(HTTP_STATUS.CREATED).send(createdBlog)
 })
 blogsRouter.put('/:id', mongoIdParamValidation(), authMiddleware, blogValidation(), async (req: Request, res: Response) => {
@@ -40,13 +41,13 @@ blogsRouter.put('/:id', mongoIdParamValidation(), authMiddleware, blogValidation
     const description = req.body.description
     const websiteUrl = req.body.websiteUrl
 
-    const blog = await BlogsRepository.getEntityById(id)
+    const blog = await BlogsService.getEntityById(id)
     if (!blog) {
         res.sendStatus(HTTP_STATUS.NOT_FOUND)
         return
     }
 
-    const targetBlog = await BlogsRepository.updateEntity(id, {name, description, websiteUrl})
+    const targetBlog = await BlogsService.updateEntity(id, {name, description, websiteUrl})
     if (!targetBlog) {
         res.sendStatus(HTTP_STATUS.NOT_FOUND)
         return
@@ -57,12 +58,12 @@ blogsRouter.put('/:id', mongoIdParamValidation(), authMiddleware, blogValidation
 blogsRouter.delete('/:id', mongoIdParamValidation(), authMiddleware, async (req: Request, res: Response) => {
     const id = req.params.id
 
-    const isExistedBlog = await BlogsRepository.getEntityById(id)
+    const isExistedBlog = await BlogsService.getEntityById(id)
     if (!isExistedBlog) {
         res.sendStatus(HTTP_STATUS.NOT_FOUND)
         return
     }
-    const targetBlog = await BlogsRepository.deleteEntity(id)
+    const targetBlog = await BlogsService.deleteEntity(id)
     if (!targetBlog) {
         res.sendStatus(HTTP_STATUS.NOT_FOUND);
         return

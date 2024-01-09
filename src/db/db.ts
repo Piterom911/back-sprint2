@@ -1,5 +1,5 @@
-import {MongoClient} from "mongodb";
-import {BlogDBType, PostDBType, VideoDBType} from "../models/db/db";
+import {Collection, MongoClient} from "mongodb";
+import {BlogDBType, PostDBType} from "../models/db/db";
 import dotenv from "dotenv";
 
 dotenv.config()
@@ -12,9 +12,8 @@ const client = new MongoClient(uri)
 
 export const database = client.db('blogs-hws');
 
-export const blogCollection = database.collection<BlogDBType>('blogs')
-export const postCollection = database.collection<PostDBType>('posts')
-export const videoCollection = database.collection<VideoDBType>('videos')
+export const blogCollection: Collection<BlogDBType> = database.collection<BlogDBType>('blogs')
+export const postCollection: Collection<PostDBType> = database.collection<PostDBType>('posts')
 
 export const runDb = async () => {
     try {
