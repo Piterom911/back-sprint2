@@ -1,7 +1,7 @@
 import {blogCollection} from "../db/db";
-import {BlogUpdateModel} from "../models/blog/intup";
 import {InsertOneResult, ObjectId, WithId} from "mongodb";
 import {BlogDBType} from "../models/db/db";
+import {UpdateBlogModel} from "../models/blog/input/update-blog-input-model";
 
 export class BlogsRepository {
     static async getAllEntities(): Promise<WithId<BlogDBType>[]> {
@@ -16,7 +16,7 @@ export class BlogsRepository {
         return await blogCollection.insertOne(newEntityData)
     }
 
-    static async updateEntity(id: string, updateData: BlogUpdateModel): Promise<boolean> {
+    static async updateEntity(id: string, updateData: UpdateBlogModel): Promise<boolean> {
         const blog = await blogCollection.updateOne(
             {_id: new ObjectId(id)},
             { $set: updateData }

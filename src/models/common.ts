@@ -1,8 +1,11 @@
-import {Request} from "express";
+import {Request, Response} from "express";
 
 export type RequestWithParams<P> = Request<P, {}, {}, {}>
 export type RequestWithBody<B> = Request<{}, {}, B, {}>
+export type RequestWithQuery<Q> = Request<{}, {}, {}, Q>
 export type RequestWithParamsAndBody<P, B> = Request<P, {}, B, {}>
+
+export type ResponseType<T> = Response<T, {}>
 
 export type ErrorMessage = {
     message: string,
@@ -37,10 +40,7 @@ type HttpStatusKeys = keyof typeof HTTP_STATUS
 export type HttpStatusType = (typeof HTTP_STATUS)[HttpStatusKeys]
 
 export const URI_PATHS = {
-    videos: '/videos',
     blogs: '/blogs',
     posts: '/posts',
     tests: '/testing/all-data'
 }
-
-export const AvailableVideoResolutions = ['P144', 'P240', 'P360', 'P480', 'P720', 'P1080', 'P1440', 'P2160']
