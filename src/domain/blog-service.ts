@@ -1,16 +1,13 @@
 import {CreateBlogModel} from "../models/blog/input/create-blog-input-model";
-import {OutputBlogModel} from "../models/blog/output/output";
+import {BlogOutputModel} from "../models/blog/output/blog-output-model";
 import {blogMapper} from "../models/mappers/mapper";
 import {WithId} from "mongodb";
 import {BlogsRepository} from "../repositories/blogs-repository";
 import {BlogDBType} from "../models/db/db";
 import {UpdateBlogModel} from "../models/blog/input/update-blog-input-model";
+import {QueryBlogInputModel} from "../models/blog/input/query-blog-input-model";
 
 export class BlogsService {
-    static async getAllEntities(): Promise<OutputBlogModel[]> {
-        const blogs: WithId<BlogDBType>[] =  await BlogsRepository.getAllEntities()
-        return blogs.map(blogMapper)
-    }
 
     static async getEntityById(id: string): Promise<BlogDBType | null> {
         const blog = await BlogsRepository.getEntityById(id)

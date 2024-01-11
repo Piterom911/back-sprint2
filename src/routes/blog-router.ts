@@ -1,16 +1,26 @@
 import {Request, Response, Router} from "express"
 import {authMiddleware} from "../middlewares/auth/auth-middleware";
 import {blogValidation} from "../validators/blog-validator";
-import {HTTP_STATUS} from "../models/common";
+import {HTTP_STATUS, RequestWithQuery, ResponseType} from "../models/common";
 import {mongoIdParamValidation} from "../validators/id-param-validation";
 import {BlogsService} from "../domain/blog-service";
-import {OutputBlogModel} from "../models/blog/output/output";
+import {BlogOutputModel} from "../models/blog/output/blog-output-model";
+import {QueryBlogInputModel} from "../models/blog/input/query-blog-input-model";
+import {BlogsRepository} from "../repositories/blogs-repository";
+import {SortBlogOutputModel} from "../models/blog/output/sort-blog-output-model";
 
 export const blogRouter = Router({})
 
-blogRouter.get('/', async (req: Request, res: Response) => {
-    const blogs: OutputBlogModel[] = await BlogsService.getAllEntities()
-    res.send(blogs)
+blogRouter.get('/', async (req: RequestWithQuery<QueryBlogInputModel>, res: ResponseType<SortBlogOutputModel>) => {
+    const sortData = {
+        searchNameTerm: req.query.searchNameTerm,
+        sortBy: req.query.sortBy,
+        sortDirection: req.query.sortDirection,
+        pageNumber: req.query.pageNumber,
+        pageSize: req.query.pageSize,
+    }
+    const bloggers: SortBlogOutputModel = await BlogsRepository.getAllEntities(sortData)
+    res.send(bloggers)
 })
 blogRouter.get('/:id', mongoIdParamValidation(),  async (req: Request, res: Response) => {
     const id = req.params.id
