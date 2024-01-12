@@ -1,11 +1,8 @@
 import {CreateBlogModel} from "../models/blog/input/create-blog-input-model";
-import {BlogOutputModel} from "../models/blog/output/blog-output-model";
 import {blogMapper} from "../models/mappers/mapper";
-import {WithId} from "mongodb";
 import {BlogsRepository} from "../repositories/blogs-repository";
 import {BlogDBType} from "../models/db/db";
 import {UpdateBlogModel} from "../models/blog/input/update-blog-input-model";
-import {QueryBlogInputModel} from "../models/blog/input/query-blog-input-model";
 
 export class BlogsService {
 

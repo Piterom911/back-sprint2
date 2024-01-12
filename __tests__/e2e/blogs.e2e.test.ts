@@ -8,6 +8,14 @@ const getRequest = () => request(app)
 
 describe('Endpoints blogs', () => {
 
+    let noBlogsResponse = {
+        pagesCount: 0,
+        page: 1,
+        pageSize: 10,
+        totalCount: 0,
+        items: []
+    }
+
     beforeAll(async () => {
         await getRequest().delete(URI_PATHS.tests)
     })
@@ -15,7 +23,7 @@ describe('Endpoints blogs', () => {
     it('should return status 200 and an empty array', async () => {
         await getRequest()
             .get(URI_PATHS.blogs)
-            .expect(HTTP_STATUS.OK, [])
+            .expect(HTTP_STATUS.OK, noBlogsResponse)
     })
 
     it('should return status 404 for not existing blog', async () => {
@@ -29,7 +37,7 @@ describe('Endpoints blogs', () => {
 
         await getRequest()
             .get(URI_PATHS.blogs)
-            .expect(HTTP_STATUS.OK, [])
+            .expect(HTTP_STATUS.OK, noBlogsResponse)
     })
 
     it('should`nt create an object with incorrect blog properties', async () => {
@@ -37,7 +45,7 @@ describe('Endpoints blogs', () => {
 
         await getRequest()
             .get(URI_PATHS.blogs)
-            .expect(HTTP_STATUS.OK, [])
+            .expect(HTTP_STATUS.OK, noBlogsResponse)
     })
 
     let blogExampleForTests: any = undefined;
@@ -57,7 +65,7 @@ describe('Endpoints blogs', () => {
             .get(URI_PATHS.blogs)
             .expect(HTTP_STATUS.OK) // !!!!!!!!!!!!!!!!!!!!!!!!!!!!  ..expect(HTTP_REQUEST_STATUS.OK, [createdVideoObj])
 
-        expect(responseAllBlogs.body).toEqual([blogExampleForTests.body])
+        expect(responseAllBlogs.body.items).toEqual([blogExampleForTests.body])
     })
 
     it('should update video data', async () => {
@@ -98,7 +106,7 @@ describe('Endpoints blogs', () => {
 
         await request(app)
             .get(URI_PATHS.blogs)
-            .expect(HTTP_STATUS.OK, [])
+            .expect(HTTP_STATUS.OK, {...noBlogsResponse, items: []})
     })
 
 })

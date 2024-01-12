@@ -4,7 +4,6 @@ import {blogValidation} from "../validators/blog-validator";
 import {HTTP_STATUS, RequestWithQuery, ResponseType} from "../models/common";
 import {mongoIdParamValidation} from "../validators/id-param-validation";
 import {BlogsService} from "../domain/blog-service";
-import {BlogOutputModel} from "../models/blog/output/blog-output-model";
 import {QueryBlogInputModel} from "../models/blog/input/query-blog-input-model";
 import {BlogsRepository} from "../repositories/blogs-repository";
 import {SortBlogOutputModel} from "../models/blog/output/sort-blog-output-model";
