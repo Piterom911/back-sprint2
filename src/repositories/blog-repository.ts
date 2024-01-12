@@ -6,7 +6,7 @@ import {QueryBlogInputModel} from "../models/blog/input/query-blog-input-model";
 import {blogMapper} from "../models/mappers/mapper";
 import {SortBlogOutputModel} from "../models/blog/output/sort-blog-output-model";
 
-export class BlogsRepository {
+export class BlogRepository {
     static async getAllEntities(sortData: QueryBlogInputModel): Promise<SortBlogOutputModel> {
         const searchNameTerm = sortData.searchNameTerm ?? null
         const sortBy = sortData.sortBy ?? 'createdAt'

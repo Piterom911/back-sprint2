@@ -4,13 +4,14 @@ import {postValidation} from "../validators/post-validator";
 import {HTTP_STATUS} from "../models/common";
 import {mongoIdParamValidation} from "../validators/id-param-validation";
 import {PostsService} from "../domain/post-service";
-export const postsRouter = Router({})
+import {PostRepository} from "../repositories/post-repository";
+export const postRouter = Router({})
 
-postsRouter.get('/', async (req: Request, res: Response) => {
-    const posts = await PostsService.getAllEntities()
+postRouter.get('/', async (req: Request, res: Response) => {
+    const posts = await PostRepository.getAllEntities()
     res.send(posts)
 })
-postsRouter.get('/:id', mongoIdParamValidation(), async (req: Request, res: Response) => {
+postRouter.get('/:id', mongoIdParamValidation(), async (req: Request, res: Response) => {
     const id = req.params.id
 
     const isExistedPost = await PostsService.getEntityById(id)
@@ -24,7 +25,7 @@ postsRouter.get('/:id', mongoIdParamValidation(), async (req: Request, res: Resp
 
     res.send(targetPost)
 })
-postsRouter.post('/', authMiddleware, postValidation(), async (req: Request, res: Response) => {
+postRouter.post('/', authMiddleware, postValidation(), async (req: Request, res: Response) => {
     const postId = await PostsService.postNewEntity(req.body)
     if (!postId) {
         res.sendStatus(HTTP_STATUS.NOT_FOUND)
@@ -36,7 +37,7 @@ postsRouter.post('/', authMiddleware, postValidation(), async (req: Request, res
     }
     res.status(HTTP_STATUS.CREATED).send(createdPost)
 })
-postsRouter.put('/:id', mongoIdParamValidation(), authMiddleware, postValidation(), async (req: Request, res: Response) => {
+postRouter.put('/:id', mongoIdParamValidation(), authMiddleware, postValidation(), async (req: Request, res: Response) => {
     const id = req.params.id
 
     const isExistedPost = await PostsService.getEntityById(id)
@@ -53,7 +54,7 @@ postsRouter.put('/:id', mongoIdParamValidation(), authMiddleware, postValidation
 
     res.send(HTTP_STATUS.NO_CONTENT)
 })
-postsRouter.delete('/:id', mongoIdParamValidation(), authMiddleware, async (req: Request, res: Response) => {
+postRouter.delete('/:id', mongoIdParamValidation(), authMiddleware, async (req: Request, res: Response) => {
     const id = req.params.id
 
     const isExistedPost = await PostsService.getEntityById(id)

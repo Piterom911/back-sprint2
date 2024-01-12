@@ -1,6 +1,6 @@
 import express from 'express'
 import {blogRouter} from "./routes/blog-router";
-import {postsRouter} from "./routes/posts-router";
+import {postRouter} from "./routes/post-router";
 import morganBody from 'morgan-body';
 import bodyParser from 'body-parser';
 import {testsRouter} from "./routes/tests-router";
@@ -12,7 +12,7 @@ app.use(bodyParser.json())
 
 app.use(URI_PATHS.tests, testsRouter)
 app.use(URI_PATHS.blogs, blogRouter)
-app.use(URI_PATHS.posts, postsRouter)
+app.use(URI_PATHS.posts, postRouter)
 
 
 

@@ -5,7 +5,7 @@ import {HTTP_STATUS, RequestWithQuery, ResponseType} from "../models/common";
 import {mongoIdParamValidation} from "../validators/id-param-validation";
 import {BlogsService} from "../domain/blog-service";
 import {QueryBlogInputModel} from "../models/blog/input/query-blog-input-model";
-import {BlogsRepository} from "../repositories/blogs-repository";
+import {BlogRepository} from "../repositories/blog-repository";
 import {SortBlogOutputModel} from "../models/blog/output/sort-blog-output-model";
 
 export const blogRouter = Router({})
@@ -18,7 +18,7 @@ blogRouter.get('/', async (req: RequestWithQuery<QueryBlogInputModel>, res: Resp
         pageNumber: req.query.pageNumber,
         pageSize: req.query.pageSize,
     }
-    const bloggers: SortBlogOutputModel = await BlogsRepository.getAllEntities(sortData)
+    const bloggers: SortBlogOutputModel = await BlogRepository.getAllEntities(sortData)
     res.send(bloggers)
 })
 blogRouter.get('/:id', mongoIdParamValidation(),  async (req: Request, res: Response) => {

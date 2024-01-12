@@ -1,9 +1,9 @@
 import {postCollection} from "../db/db";
-import {PostUpdateModel} from "../models/post/intup";
 import {PostDBType} from "../models/db/db";
 import {InsertOneResult, ObjectId, WithId} from "mongodb";
+import {UpdatePostModel} from "../models/post/input/update-post-input-model";
 
-export class PostsRepository {
+export class PostRepository {
     static async getAllEntities(): Promise<WithId<PostDBType>[]> {
         return await postCollection.find({}).toArray()
     }
@@ -16,7 +16,7 @@ export class PostsRepository {
         return await postCollection.insertOne(newEntityData)
     }
 
-    static async updateEntity(id: string, updateData: PostUpdateModel): Promise<boolean> {
+    static async updateEntity(id: string, updateData: UpdatePostModel): Promise<boolean> {
         const targetEntity = await postCollection.updateOne(
             {_id: new ObjectId(id)},
             {$set: updateData}

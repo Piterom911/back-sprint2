@@ -1,7 +1,7 @@
 import {WithId} from "mongodb";
 import {BlogDBType, PostDBType} from "../db/db";
 import {BlogOutputModel} from "../blog/output/blog-output-model";
-import {OutputPostType} from "../post/output";
+import {PostOutputModel} from "../post/output/post-output-model";
 
 export const blogMapper = (blogDb: WithId<BlogDBType>): BlogOutputModel => {
     return {
@@ -13,7 +13,7 @@ export const blogMapper = (blogDb: WithId<BlogDBType>): BlogOutputModel => {
         isMembership: blogDb.isMembership
     }
 }
-export const postMapper = (postDb: WithId<PostDBType>): OutputPostType => {
+export const postMapper = (postDb: WithId<PostDBType>): PostOutputModel => {
     return {
         id: postDb._id.toString(),
         title: postDb.title,

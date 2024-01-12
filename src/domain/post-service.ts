@@ -1,26 +1,27 @@
-import {PostCreateModel, PostUpdateModel} from "../models/post/intup";
-import {OutputPostType} from "../models/post/output";
+import {CreatePostModel} from "../models/post/input/create-post-input-model";
+import {PostOutputModel} from "../models/post/output/post-output-model";
 import {PostDBType} from "../models/db/db";
-import {BlogsRepository} from "../repositories/blogs-repository";
+import {BlogRepository} from "../repositories/blog-repository";
 import {WithId} from "mongodb";
 import {postMapper} from "../models/mappers/mapper";
-import {PostsRepository} from "../repositories/posts-repository";
+import {PostRepository} from "../repositories/post-repository";
+import {UpdatePostModel} from "../models/post/input/update-post-input-model";
 
 export class PostsService {
-    static async getAllEntities(): Promise<OutputPostType[]> {
-        const posts: WithId<PostDBType>[] = await PostsRepository.getAllEntities()
+    static async getAllEntities(): Promise<PostOutputModel[]> {
+        const posts: WithId<PostDBType>[] = await PostRepository.getAllEntities()
         return posts.map(postMapper)
     }
 
-    static async getEntityById(id: string): Promise<OutputPostType | null> {
-        const targetPost: WithId<PostDBType> | null = await PostsRepository.getEntityById(id)
+    static async getEntityById(id: string): Promise<PostOutputModel | null> {
+        const targetPost: WithId<PostDBType> | null = await PostRepository.getEntityById(id)
         if (!targetPost) return null
         return postMapper(targetPost)
     }
 
-    static async postNewEntity(newEntityData: PostCreateModel): Promise<string | null> {
+    static async postNewEntity(newEntityData: CreatePostModel): Promise<string | null> {
         let {title, content, blogId, shortDescription} = newEntityData
-        const targetBlog = await BlogsRepository.getEntityById(blogId)
+        const targetBlog = await BlogRepository.getEntityById(blogId)
 
         if (!targetBlog) {
             return null
@@ -35,12 +36,12 @@ export class PostsService {
             createdAt: new Date().toISOString()
         }
 
-        const createdPost = await PostsRepository.postNewEntity(newPost)
+        const createdPost = await PostRepository.postNewEntity(newPost)
         return createdPost ? createdPost.insertedId.toString() : null
     }
 
-    static async updateEntity(id: string, updateData: PostUpdateModel): Promise<boolean> {
-        return await PostsRepository.updateEntity(
+    static async updateEntity(id: string, updateData: UpdatePostModel): Promise<boolean> {
+        return await PostRepository.updateEntity(
             id,
             {
                 title: updateData.title,
@@ -52,6 +53,6 @@ export class PostsService {
     }
 
     static async deleteEntity(id: string): Promise<boolean> {
-        return await PostsRepository.deleteEntity(id)
+        return await PostRepository.deleteEntity(id)
     }
 }

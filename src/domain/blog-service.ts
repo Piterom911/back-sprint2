@@ -1,13 +1,13 @@
 import {CreateBlogModel} from "../models/blog/input/create-blog-input-model";
 import {blogMapper} from "../models/mappers/mapper";
-import {BlogsRepository} from "../repositories/blogs-repository";
+import {BlogRepository} from "../repositories/blog-repository";
 import {BlogDBType} from "../models/db/db";
 import {UpdateBlogModel} from "../models/blog/input/update-blog-input-model";
 
 export class BlogsService {
 
     static async getEntityById(id: string): Promise<BlogDBType | null> {
-        const blog = await BlogsRepository.getEntityById(id)
+        const blog = await BlogRepository.getEntityById(id)
 
         return !blog ? null : blogMapper(blog)
     }
@@ -22,12 +22,12 @@ export class BlogsService {
             createdAt: new Date().toISOString()
         }
 
-        const createdBlog = await BlogsRepository.postNewEntity(newBlog)
+        const createdBlog = await BlogRepository.postNewEntity(newBlog)
         return createdBlog ? createdBlog.insertedId.toString() : null
     }
 
     static async updateEntity(id: string, updateData: UpdateBlogModel): Promise<boolean> {
-        return await BlogsRepository.updateEntity(
+        return await BlogRepository.updateEntity(
             id,
             {
                 name: updateData.name,
@@ -38,6 +38,6 @@ export class BlogsService {
     }
 
     static async deleteEntity(id: string): Promise<boolean> {
-        return BlogsRepository.deleteEntity(id)
+        return BlogRepository.deleteEntity(id)
     }
 }
