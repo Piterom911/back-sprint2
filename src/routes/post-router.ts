@@ -1,14 +1,22 @@
 import {Router, Request, Response} from "express";
 import {authMiddleware} from "../middlewares/auth/auth-middleware";
 import {postValidation} from "../validators/post-validator";
-import {HTTP_STATUS} from "../models/common";
+import {HTTP_STATUS, RequestWithQuery, ResponseType} from "../models/common";
 import {mongoIdParamValidation} from "../validators/id-param-validation";
 import {PostsService} from "../domain/post-service";
 import {PostRepository} from "../repositories/post-repository";
+import {QueryPostInputModel} from "../models/post/input/query-post-input-model";
+import {SortPostOutputModel} from "../models/post/output/sort-post-output-model";
 export const postRouter = Router({})
 
-postRouter.get('/', async (req: Request, res: Response) => {
-    const posts = await PostRepository.getAllEntities()
+postRouter.get('/', async (req: RequestWithQuery<QueryPostInputModel>, res: ResponseType<SortPostOutputModel>) => {
+    const sortData = {
+        sortBy: req.query.sortBy,
+        sortDirection: req.query.sortDirection,
+        pageNumber: req.query.pageNumber,
+        pageSize: req.query.pageSize,
+    }
+    const posts = await PostRepository.getAllEntities(sortData)
     res.send(posts)
 })
 postRouter.get('/:id', mongoIdParamValidation(), async (req: Request, res: Response) => {

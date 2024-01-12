@@ -8,10 +8,6 @@ import {PostRepository} from "../repositories/post-repository";
 import {UpdatePostModel} from "../models/post/input/update-post-input-model";
 
 export class PostsService {
-    static async getAllEntities(): Promise<PostOutputModel[]> {
-        const posts: WithId<PostDBType>[] = await PostRepository.getAllEntities()
-        return posts.map(postMapper)
-    }
 
     static async getEntityById(id: string): Promise<PostOutputModel | null> {
         const targetPost: WithId<PostDBType> | null = await PostRepository.getEntityById(id)

@@ -1,6 +1,6 @@
 import {PostOutputModel} from "./post-output-model";
 
-export type SortBlogOutputModel = {
+export type SortPostOutputModel = {
     pagesCount: number
     page: number
     pageSize: number
