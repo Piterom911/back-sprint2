@@ -7,6 +7,13 @@ import {blogTestManager} from "../utils/blogTestManager";
 const getRequest = () => request(app)
 
 describe('Endpoints posts', () => {
+    let startArrayWithNoPosts = {
+        pagesCount: 0,
+        page: 1,
+        pageSize: 10,
+        totalCount: 0,
+        items: []
+    }
     beforeAll(async () => {
         await getRequest().delete('/testing/all-data')
     })
@@ -14,7 +21,7 @@ describe('Endpoints posts', () => {
     it('should return status 200 and an empty array', async () => {
         await getRequest()
             .get(URI_PATHS.posts)
-            .expect(HTTP_STATUS.OK, [])
+            .expect(HTTP_STATUS.OK, startArrayWithNoPosts)
     })
 
     it('should return status 404 for not existing post', async () => {
@@ -28,7 +35,7 @@ describe('Endpoints posts', () => {
 
         await getRequest()
             .get(URI_PATHS.posts)
-            .expect(HTTP_STATUS.OK, [])
+            .expect(HTTP_STATUS.OK, startArrayWithNoPosts)
     })
 
     it('should`nt create an object with incorrect post properties', async () => {
@@ -36,7 +43,7 @@ describe('Endpoints posts', () => {
 
         await getRequest()
             .get(URI_PATHS.posts)
-            .expect(HTTP_STATUS.OK, [])
+            .expect(HTTP_STATUS.OK, startArrayWithNoPosts)
     })
 
     let postExampleForTests: any = undefined;
@@ -111,7 +118,7 @@ describe('Endpoints posts', () => {
 
         await request(app)
             .get(URI_PATHS.posts)
-            .expect(HTTP_STATUS.OK, [])
+            .expect(HTTP_STATUS.OK, startArrayWithNoPosts)
     })
 
 })
