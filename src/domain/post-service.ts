@@ -1,9 +1,6 @@
 import {CreatePostModel} from "../models/post/input/create-post-input-model";
-import {PostOutputModel} from "../models/post/output/post-output-model";
 import {PostDBType} from "../models/db/db";
 import {BlogRepository} from "../repositories/blog-repository";
-import {WithId} from "mongodb";
-import {postMapper} from "../models/mappers/mapper";
 import {PostRepository} from "../repositories/post-repository";
 import {UpdatePostModel} from "../models/post/input/update-post-input-model";
 

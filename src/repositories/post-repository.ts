@@ -5,6 +5,7 @@ import {UpdatePostModel} from "../models/post/input/update-post-input-model";
 import {QueryPostInputModel} from "../models/post/input/query-post-input-model";
 import {postMapper} from "../models/mappers/mapper";
 import {SortPostOutputModel} from "../models/post/output/sort-post-output-model";
+import {PostOutputModel} from "../models/post/output/post-output-model";
 
 export class PostRepository {
     static async getAllEntities(sortData: QueryPostInputModel): Promise<SortPostOutputModel> {
@@ -33,8 +34,10 @@ export class PostRepository {
         }
     }
 
-    static async getEntityById(id: string): Promise<WithId<PostDBType> | null> {
-        return await postCollection.findOne({_id: new ObjectId(id)})
+    static async getEntityById(id: string): Promise<PostOutputModel | null> {
+        const targetPost =  await postCollection.findOne({_id: new ObjectId(id)})
+        if (!targetPost) return null
+        return postMapper(targetPost)
     }
 
     static async postNewEntity(newEntityData: PostDBType): Promise<InsertOneResult | null> {

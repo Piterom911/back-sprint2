@@ -1,16 +1,9 @@
-import {CreateBlogModel} from "../models/blog/input/create-blog-input-model";
-import {blogMapper} from "../models/mappers/mapper";
+import {CreateBlogModel, CreatePostBlogModel} from "../models/blog/input/create-blog-input-model";
 import {BlogRepository} from "../repositories/blog-repository";
-import {BlogDBType} from "../models/db/db";
 import {UpdateBlogModel} from "../models/blog/input/update-blog-input-model";
+import {PostsService} from "./post-service";
 
 export class BlogsService {
-
-    static async getEntityById(id: string): Promise<BlogDBType | null> {
-        const blog = await BlogRepository.getEntityById(id)
-
-        return !blog ? null : blogMapper(blog)
-    }
 
     static async postNewEntity(newEntityData: CreateBlogModel): Promise<string | null> {
         let {name, description, websiteUrl} = newEntityData
@@ -24,6 +17,21 @@ export class BlogsService {
 
         const createdBlog = await BlogRepository.postNewEntity(newBlog)
         return createdBlog ? createdBlog.insertedId.toString() : null
+    }
+
+    static async createNewPostToBlogId(blogId: string, newPostData: CreatePostBlogModel): Promise<string | null> {
+        const blog = await BlogRepository.getEntityById(blogId)
+
+        const post = {
+            title: newPostData.title,
+            content: newPostData.content,
+            shortDescription: newPostData.shortDescription,
+            blogName: blog?.name,
+            blogId
+        }
+
+        return await PostsService.postNewEntity(post)
+
     }
 
     static async updateEntity(id: string, updateData: UpdateBlogModel): Promise<boolean> {

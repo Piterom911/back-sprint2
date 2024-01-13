@@ -1,10 +1,11 @@
 import {blogCollection} from "../db/db";
-import {InsertOneResult, ObjectId, WithId} from "mongodb";
+import {InsertOneResult, ObjectId} from "mongodb";
 import {BlogDBType} from "../models/db/db";
 import {UpdateBlogModel} from "../models/blog/input/update-blog-input-model";
 import {QueryBlogInputModel} from "../models/blog/input/query-blog-input-model";
 import {blogMapper} from "../models/mappers/mapper";
 import {SortBlogOutputModel} from "../models/blog/output/sort-blog-output-model";
+import {BlogOutputModel} from "../models/blog/output/blog-output-model";
 
 export class BlogRepository {
     static async getAllEntities(sortData: QueryBlogInputModel): Promise<SortBlogOutputModel> {
@@ -42,8 +43,10 @@ export class BlogRepository {
         }
     }
 
-    static async getEntityById(id: string): Promise<WithId<BlogDBType> | null> {
-        return await blogCollection.findOne({_id: new ObjectId(id)})
+    static async getEntityById(id: string): Promise<BlogOutputModel | null> {
+        const blog =  await blogCollection.findOne({_id: new ObjectId(id)})
+
+        return !blog ? null : blogMapper(blog)
     }
 
     static async postNewEntity(newEntityData: BlogDBType): Promise<InsertOneResult | null> {
