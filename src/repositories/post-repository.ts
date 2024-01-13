@@ -1,6 +1,6 @@
 import {postCollection} from "../db/db";
 import {PostDBType} from "../models/db/db";
-import {InsertOneResult, ObjectId, WithId} from "mongodb";
+import {InsertOneResult, ObjectId} from "mongodb";
 import {UpdatePostModel} from "../models/post/input/update-post-input-model";
 import {QueryPostInputModel} from "../models/post/input/query-post-input-model";
 import {postMapper} from "../models/mappers/mapper";
