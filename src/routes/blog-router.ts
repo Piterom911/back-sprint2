@@ -5,7 +5,7 @@ import {
     HTTP_STATUS,
     RequestWithBody,
     RequestWithParams,
-    RequestWithParamsAndBody,
+    RequestWithParamsAndBody, RequestWithParamsAndQuery,
     RequestWithQuery,
     ResponseType
 } from "../models/common";
@@ -19,6 +19,8 @@ import {CreateBlogModel, CreatePostBlogModel} from "../models/blog/input/create-
 import {PostOutputModel} from "../models/post/output/post-output-model";
 import {PostRepository} from "../repositories/post-repository";
 import {postToBlogValidation} from "../validators/post-to-blog-validator";
+import {QueryPostInputModel} from "../models/post/input/query-post-input-model";
+import {SortPostOutputModel} from "../models/post/output/sort-post-output-model";
 
 export const blogRouter = Router({})
 
@@ -43,6 +45,26 @@ blogRouter.get('/:id', mongoIdParamValidation(),  async (req: RequestWithParams<
     }
 
     res.send(targetBlog)
+})
+blogRouter.get('/:id/posts', async (req: RequestWithParamsAndQuery<{ id: string }, QueryPostInputModel>, res: ResponseType<SortPostOutputModel>) => {
+    const sortData = {
+        sortBy: req.query.sortBy,
+        sortDirection: req.query.sortDirection,
+        pageNumber: req.query.pageNumber,
+        pageSize: req.query.pageSize,
+    }
+
+    const blogId = req.params.id
+
+    const isExistedBlog = await BlogRepository.getEntityById(blogId)
+
+    if (!isExistedBlog) {
+        res.sendStatus(HTTP_STATUS.NOT_FOUND)
+        return
+    }
+
+    const posts: SortPostOutputModel = await BlogRepository.getAllPostsByBlogId(blogId, sortData)
+    res.send(posts)
 })
 blogRouter.post('/', authMiddleware, blogValidation(), async (req: RequestWithBody<CreateBlogModel>, res: ResponseType<BlogOutputModel | null>) => {
     const createdBlogId = await BlogsService.postNewEntity(req.body)
