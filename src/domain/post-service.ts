@@ -9,12 +9,6 @@ import {UpdatePostModel} from "../models/post/input/update-post-input-model";
 
 export class PostsService {
 
-    static async getEntityById(id: string): Promise<PostOutputModel | null> {
-        const targetPost: WithId<PostDBType> | null = await PostRepository.getEntityById(id)
-        if (!targetPost) return null
-        return postMapper(targetPost)
-    }
-
     static async postNewEntity(newEntityData: CreatePostModel): Promise<string | null> {
         let {title, content, blogId, shortDescription} = newEntityData
         const targetBlog = await BlogRepository.getEntityById(blogId)

@@ -22,13 +22,13 @@ postRouter.get('/', async (req: RequestWithQuery<QueryPostInputModel>, res: Resp
 postRouter.get('/:id', mongoIdParamValidation(), async (req: Request, res: Response) => {
     const id = req.params.id
 
-    const isExistedPost = await PostsService.getEntityById(id)
+    const isExistedPost = await PostRepository.getEntityById(id)
     if (!isExistedPost) {
         res.sendStatus(HTTP_STATUS.NOT_FOUND)
         return
     }
 
-    const targetPost = await PostsService.getEntityById(id)
+    const targetPost = await PostRepository.getEntityById(id)
     if (!targetPost) res.send(HTTP_STATUS.NOT_FOUND)
 
     res.send(targetPost)
@@ -39,7 +39,7 @@ postRouter.post('/', authMiddleware, postValidation(), async (req: Request, res:
         res.sendStatus(HTTP_STATUS.NOT_FOUND)
         return
     }
-    const createdPost = await PostsService.getEntityById(postId)
+    const createdPost = await PostRepository.getEntityById(postId)
     if (!createdPost) {
         res.sendStatus(HTTP_STATUS.NOT_FOUND)
     }
@@ -48,7 +48,7 @@ postRouter.post('/', authMiddleware, postValidation(), async (req: Request, res:
 postRouter.put('/:id', mongoIdParamValidation(), authMiddleware, postValidation(), async (req: Request, res: Response) => {
     const id = req.params.id
 
-    const isExistedPost = await PostsService.getEntityById(id)
+    const isExistedPost = await PostRepository.getEntityById(id)
     if (!isExistedPost) {
         res.sendStatus(HTTP_STATUS.NOT_FOUND)
         return
@@ -65,7 +65,7 @@ postRouter.put('/:id', mongoIdParamValidation(), authMiddleware, postValidation(
 postRouter.delete('/:id', mongoIdParamValidation(), authMiddleware, async (req: Request, res: Response) => {
     const id = req.params.id
 
-    const isExistedPost = await PostsService.getEntityById(id)
+    const isExistedPost = await PostRepository.getEntityById(id)
     if (!isExistedPost) {
         res.sendStatus(HTTP_STATUS.NOT_FOUND)
         return
