@@ -1,11 +1,12 @@
-import {Request, Response, Router} from "express"
+import {Response, Router} from "express"
 import {authMiddleware} from "../middlewares/auth/auth-middleware";
 import {blogValidation} from "../validators/blog-validator";
 import {
     HTTP_STATUS,
     RequestWithBody,
     RequestWithParams,
-    RequestWithParamsAndBody, RequestWithParamsAndQuery,
+    RequestWithParamsAndBody,
+    RequestWithParamsAndQuery,
     RequestWithQuery,
     ResponseType
 } from "../models/common";

@@ -1,4 +1,4 @@
-import {Router, Request, Response} from "express";
+import {Response, Router} from "express";
 import {authMiddleware} from "../middlewares/auth/auth-middleware";
 import {postValidation} from "../validators/post-validator";
 import {
@@ -17,6 +17,7 @@ import {SortPostOutputModel} from "../models/post/output/sort-post-output-model"
 import {CreatePostModel} from "../models/post/input/create-post-input-model";
 import {PostOutputModel} from "../models/post/output/post-output-model";
 import {UpdatePostModel} from "../models/post/input/update-post-input-model";
+
 export const postRouter = Router({})
 
 postRouter.get('/', async (req: RequestWithQuery<QueryPostInputModel>, res: ResponseType<SortPostOutputModel>) => {
