@@ -26,7 +26,7 @@ export class BlogRepository {
 
         const totalCount = await blogCollection.countDocuments(filter)
 
-        const pagesCount = Math.ceil(totalCount / pageSize)
+        const pagesCount = Math.ceil(totalCount / +pageSize)
 
         const blogs =  await blogCollection
             .find(filter)
@@ -37,8 +37,8 @@ export class BlogRepository {
 
         return {
             pagesCount,
-            page: pageNumber,
-            pageSize,
+            page: +pageNumber,
+            pageSize: +pageSize,
             totalCount,
             items: blogs.map(blogMapper)
         }
@@ -65,12 +65,12 @@ export class BlogRepository {
 
         const totalCount = await postCollection.countDocuments({blogId: blogId})
 
-        const pagesCount = Math.ceil(totalCount / pageSize)
+        const pagesCount = Math.ceil(totalCount / +pageSize)
 
         return {
             pagesCount,
-            page: pageNumber,
-            pageSize,
+            page: +pageNumber,
+            pageSize: +pageSize,
             totalCount,
             items: posts.map(postMapper)
         }

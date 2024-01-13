@@ -16,7 +16,7 @@ export class PostRepository {
 
         const totalCount = await postCollection.countDocuments({})
 
-        const pagesCount = Math.ceil(totalCount / pageSize)
+        const pagesCount = Math.ceil(totalCount / +pageSize)
 
         const posts =  await postCollection
             .find({})
@@ -27,8 +27,8 @@ export class PostRepository {
 
         return {
             pagesCount,
-            page: pageNumber,
-            pageSize,
+            page: +pageNumber,
+            pageSize: +pageSize,
             totalCount,
             items: posts.map(postMapper)
         }
