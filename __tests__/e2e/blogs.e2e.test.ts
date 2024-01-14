@@ -2,6 +2,7 @@ import request from 'supertest'
 import {app} from "../../src/app";
 import {HTTP_STATUS, URI_PATHS} from "../../src/models/common";
 import {blogTestManager} from "../utils/blogTestManager";
+import {CreatePostBlogModel} from "../../src/models/blog/input/create-blog-input-model";
 
 
 const getRequest = () => request(app)
@@ -68,7 +69,42 @@ describe('Endpoints blogs', () => {
         expect(responseAllBlogs.body.items).toEqual([blogExampleForTests.body])
     })
 
-    it('should update video data', async () => {
+    it('shouldn\'t  create a post to a specific  Blog id', async () => {
+        const newPostReqData: CreatePostBlogModel = {
+            title: "",
+            content: "",
+            shortDescription: ""
+        }
+
+        await request(app)
+            .post(`${URI_PATHS.blogs}/${blogExampleForTests.body.id}/posts`)
+            .set('Authorization', `Basic YWRtaW46cXdlcnR5`)
+            .send(newPostReqData)
+            .expect(HTTP_STATUS.BAD_REQUEST)
+    })
+
+    it('should  create a post to a specific  Blog id', async () => {
+        const newPostReqData: CreatePostBlogModel = {
+            title: "hallo",
+            content: "Ohne Content",
+            shortDescription: "Das ist eine sehr kurze Description"
+        }
+
+        await request(app)
+            .post(`${URI_PATHS.blogs}/${blogExampleForTests.body.id}/posts`)
+            .set('Authorization', `Basic YWRtaW46cXdlcnR5`)
+            .send(newPostReqData)
+            .expect(HTTP_STATUS.CREATED)
+    })
+
+    it('should  return all posts from a specific  Blog id', async () => {
+
+        await request(app)
+            .get(`${URI_PATHS.blogs}/${blogExampleForTests.body.id}/posts`)
+            .expect(HTTP_STATUS.OK)
+    })
+
+    it('should update blog data', async () => {
         const updateBlogReqData = {
             name: 'Ein',
             description: 'Das',
@@ -82,7 +118,7 @@ describe('Endpoints blogs', () => {
             .expect(HTTP_STATUS.NO_CONTENT)
     })
 
-    it('should`nt update video data', async () => {
+    it('should`nt update blog data', async () => {
         const updateBlogReqData = {
             websiteUrl: 'https://shortVeryShort'
         }
@@ -98,7 +134,7 @@ describe('Endpoints blogs', () => {
         })
     })
 
-    it('deletes target video object', async () => {
+    it('deletes target blog object', async () => {
         blogExampleForTests = await getRequest()
             .delete(`${URI_PATHS.blogs}/` + blogExampleForTests.body.id )
             .set('Authorization', `Basic YWRtaW46cXdlcnR5`)
