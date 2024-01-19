@@ -11,12 +11,12 @@ import {
 } from "../models/common";
 import {mongoIdParamValidation} from "../validators/id-param-validation";
 import {PostsService} from "../domain/post-service";
-import {PostRepository} from "../repositories/post-repository";
 import {QueryPostInputModel} from "../models/post/input/query-post-input-model";
 import {SortPostOutputModel} from "../models/post/output/sort-post-output-model";
 import {CreatePostModel} from "../models/post/input/create-post-input-model";
 import {PostOutputModel} from "../models/post/output/post-output-model";
 import {UpdatePostModel} from "../models/post/input/update-post-input-model";
+import {QueryPostRepository} from "../repostitories/query-repositories/post-repository";
 
 export const postRouter = Router({})
 
@@ -27,19 +27,19 @@ postRouter.get('/', async (req: RequestWithQuery<QueryPostInputModel>, res: Resp
         pageNumber: req.query.pageNumber,
         pageSize: req.query.pageSize,
     }
-    const posts = await PostRepository.getAllEntities(sortData)
+    const posts = await QueryPostRepository.getAllEntities(sortData)
     res.send(posts)
 })
 postRouter.get('/:id', mongoIdParamValidation(), async (req: RequestWithParams<{ id: string }>, res: ResponseType<PostOutputModel>) => {
     const id = req.params.id
 
-    const isExistedPost = await PostRepository.getEntityById(id)
+    const isExistedPost = await QueryPostRepository.getEntityById(id)
     if (!isExistedPost) {
         res.sendStatus(HTTP_STATUS.NOT_FOUND)
         return
     }
 
-    const targetPost = await PostRepository.getEntityById(id)
+    const targetPost = await QueryPostRepository.getEntityById(id)
     if (!targetPost) {
         res.sendStatus(HTTP_STATUS.NOT_FOUND)
         return
@@ -53,7 +53,7 @@ postRouter.post('/', authMiddleware, postValidation(), async (req: RequestWithBo
         res.sendStatus(HTTP_STATUS.NOT_FOUND)
         return
     }
-    const createdPost = await PostRepository.getEntityById(postId)
+    const createdPost = await QueryPostRepository.getEntityById(postId)
     if (!createdPost) {
         res.sendStatus(HTTP_STATUS.NOT_FOUND)
         return
@@ -65,7 +65,7 @@ postRouter.put('/:id', mongoIdParamValidation(), authMiddleware, postValidation(
 }, UpdatePostModel>, res: Response) => {
     const id = req.params.id
 
-    const isExistedPost = await PostRepository.getEntityById(id)
+    const isExistedPost = await QueryPostRepository.getEntityById(id)
     if (!isExistedPost) {
         res.sendStatus(HTTP_STATUS.NOT_FOUND)
         return
@@ -82,7 +82,7 @@ postRouter.put('/:id', mongoIdParamValidation(), authMiddleware, postValidation(
 postRouter.delete('/:id', mongoIdParamValidation(), authMiddleware, async (req: RequestWithParams<{ id: string }>, res: Response) => {
     const id = req.params.id
 
-    const isExistedPost = await PostRepository.getEntityById(id)
+    const isExistedPost = await QueryPostRepository.getEntityById(id)
     if (!isExistedPost) {
         res.sendStatus(HTTP_STATUS.NOT_FOUND)
         return

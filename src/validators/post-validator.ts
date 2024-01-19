@@ -1,6 +1,6 @@
 import {body} from "express-validator";
 import {inputValidation} from "../input-model-validation/input-validation";
-import {BlogRepository} from "../repositories/blog-repository";
+import {QueryBlogRepository} from "../repostitories/query-repositories/blog-repository";
 
 export const titleValidation = body('title')
     .isString()
@@ -22,7 +22,7 @@ export const contentValidation = body('content')
 
 export const blogIdValidation = body('blogId').isString().trim()
     .custom(async (value) => {
-        const blog = await BlogRepository.getEntityById(value)
+        const blog = await QueryBlogRepository.getEntityById(value)
         if (!blog) {
             throw Error('Incorrect blogId')
         }

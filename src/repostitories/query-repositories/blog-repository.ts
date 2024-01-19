@@ -1,14 +1,12 @@
-import {blogCollection, postCollection} from "../db/db";
-import {InsertOneResult, ObjectId} from "mongodb";
-import {BlogDBType} from "../models/db/db";
-import {UpdateBlogModel} from "../models/blog/input/update-blog-input-model";
-import {QueryBlogInputModel, QueryPostByBlogIdInputModel} from "../models/blog/input/query-blog-input-model";
-import {blogMapper, postMapper} from "../models/mappers/mapper";
-import {SortBlogOutputModel} from "../models/blog/output/sort-blog-output-model";
-import {BlogOutputModel} from "../models/blog/output/blog-output-model";
-import {SortPostOutputModel} from "../models/post/output/sort-post-output-model";
+import {blogCollection, postCollection} from "../../db/db";
+import {ObjectId} from "mongodb";
+import {QueryBlogInputModel, QueryPostByBlogIdInputModel} from "../../models/blog/input/query-blog-input-model";
+import {blogMapper, postMapper} from "../../models/mappers/mapper";
+import {SortBlogOutputModel} from "../../models/blog/output/sort-blog-output-model";
+import {BlogOutputModel} from "../../models/blog/output/blog-output-model";
+import {SortPostOutputModel} from "../../models/post/output/sort-post-output-model";
 
-export class BlogRepository {
+export class QueryBlogRepository {
     static async getAllEntities(sortData: QueryBlogInputModel): Promise<SortBlogOutputModel> {
         const searchNameTerm = sortData.searchNameTerm ?? null
         const sortBy = sortData.sortBy ?? 'createdAt'
@@ -74,23 +72,5 @@ export class BlogRepository {
             totalCount,
             items: posts.map(postMapper)
         }
-    }
-
-    static async postNewEntity(newEntityData: BlogDBType): Promise<InsertOneResult | null> {
-        return await blogCollection.insertOne(newEntityData)
-    }
-
-    static async updateEntity(id: string, updateData: UpdateBlogModel): Promise<boolean> {
-        const blog = await blogCollection.updateOne(
-            {_id: new ObjectId(id)},
-            { $set: updateData }
-        )
-        return !!blog.matchedCount
-    }
-
-    static async deleteEntity(id: string): Promise<boolean> {
-        const deleteResult = await blogCollection.deleteOne({_id: new ObjectId(id)})
-
-        return !!deleteResult.deletedCount
     }
 }

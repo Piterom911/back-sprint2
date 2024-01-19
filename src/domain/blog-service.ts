@@ -1,7 +1,8 @@
 import {CreateBlogModel, CreatePostBlogModel} from "../models/blog/input/create-blog-input-model";
-import {BlogRepository} from "../repositories/blog-repository";
+import {BlogRepository} from "../repostitories/params-repositories/blog-repository";
 import {UpdateBlogModel} from "../models/blog/input/update-blog-input-model";
 import {PostsService} from "./post-service";
+import {QueryBlogRepository} from "../repostitories/query-repositories/blog-repository";
 
 export class BlogsService {
 
@@ -20,7 +21,7 @@ export class BlogsService {
     }
 
     static async createNewPostToBlogId(blogId: string, newPostData: CreatePostBlogModel): Promise<string | null> {
-        const blog = await BlogRepository.getEntityById(blogId)
+        const blog = await QueryBlogRepository.getEntityById(blogId)
 
         const post = {
             title: newPostData.title,

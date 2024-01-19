@@ -1,14 +1,14 @@
 import {CreatePostModel} from "../models/post/input/create-post-input-model";
 import {PostDBType} from "../models/db/db";
-import {BlogRepository} from "../repositories/blog-repository";
-import {PostRepository} from "../repositories/post-repository";
+import {PostRepository} from "../repostitories/params-repositories/post-repository";
 import {UpdatePostModel} from "../models/post/input/update-post-input-model";
+import {QueryBlogRepository} from "../repostitories/query-repositories/blog-repository";
 
 export class PostsService {
 
     static async postNewEntity(newEntityData: CreatePostModel): Promise<string | null> {
         let {title, content, blogId, shortDescription} = newEntityData
-        const targetBlog = await BlogRepository.getEntityById(blogId)
+        const targetBlog = await QueryBlogRepository.getEntityById(blogId)
 
         if (!targetBlog) {
             return null
