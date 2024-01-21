@@ -41,7 +41,8 @@ type HttpStatusKeys = keyof typeof HTTP_STATUS
 export type HttpStatusType = (typeof HTTP_STATUS)[HttpStatusKeys]
 
 export const URI_PATHS = {
+    tests: '/testing/all-data',
     blogs: '/blogs',
     posts: '/posts',
-    tests: '/testing/all-data'
+    users: '/users'
 }
