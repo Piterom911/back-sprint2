@@ -42,6 +42,7 @@ export type HttpStatusType = (typeof HTTP_STATUS)[HttpStatusKeys]
 
 export const URI_PATHS = {
     tests: '/testing/all-data',
+    auth: '/auth',
     blogs: '/blogs',
     posts: '/posts',
     users: '/users'

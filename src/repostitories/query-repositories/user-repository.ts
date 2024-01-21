@@ -4,25 +4,19 @@ import {userMapper} from "../../models/mappers/mapper";
 import {SortUserOutputModel} from "../../models/user/output/sort-user-output-model";
 import {UserOutputModel} from "../../models/user/output/user-output-model";
 import {ObjectId} from "mongodb";
+import {UserDBType} from "../../models/db/db";
+import {FilterType} from "../../models/user/find-user-by-query-filter-model";
 
 export class QueryUserRepository {
     static async getAllEntities(sortData: QueryUserInputModel): Promise<SortUserOutputModel> {
-        const loginOrEmail = sortData.searchLoginTerm ?? sortData.searchEmailTerm ??null
+        const searchLoginTerm = sortData.searchLoginTerm || null
+        const searchEmailTerm = sortData.searchEmailTerm || null
         const sortBy = sortData.sortBy ?? 'createdAt'
         const sortDirection = sortData.sortDirection ?? 'desc'
         const pageNumber = sortData.pageNumber ?? 1
         const pageSize = sortData.pageSize ?? 10
 
-        let filter = {}
-
-        if (loginOrEmail) {
-            filter = {
-                $or: [
-                    {login: {$regex: loginOrEmail, $options: 'i'}},
-                    {email: {$regex: loginOrEmail, $options: 'i'}},
-                ]
-            }
-        }
+        let filter = this.filter_Find_EmailORLoginTerm(searchEmailTerm, searchLoginTerm)
 
         const totalCount = await userCollection.countDocuments(filter)
 
@@ -44,9 +38,32 @@ export class QueryUserRepository {
         }
     }
 
+    static async findByLoginOrEmail(loginOrEmail: string): Promise<UserDBType | null> {
+        return await userCollection.findOne({
+            $or: [
+                { email: { $regex: loginOrEmail, $options: 'i' } },
+                { login: { $regex: loginOrEmail, $options: 'i' } }
+            ]})
+    }
+
     static async getEntityById(id: string): Promise<UserOutputModel | null> {
         const targetUser =  await userCollection.findOne({_id: new ObjectId(id)})
         if (!targetUser) return null
         return userMapper(targetUser)
+    }
+
+    static filter_Find_EmailORLoginTerm(email: string | null, login: string | null): FilterType {
+
+        let filter: FilterType = {$or: []};
+        if (email) {
+            filter['$or']?.push({email: {$regex: email, $options: 'i'}});
+        }
+        if (login) {
+            filter['$or']?.push({login: {$regex: login, $options: 'i'}});
+        }
+        if (filter['$or']?.length === 0) {
+            filter['$or']?.push({});
+        }
+        return filter;
     }
 }
