@@ -1,12 +1,13 @@
 import {Collection, MongoClient} from "mongodb";
 import {BlogDBType, PostDBType, UserDBType} from "../models/db/db";
 import dotenv from "dotenv";
+import {SETTINGS} from "../settings";
 
 dotenv.config()
 
 const port = 3000
 
-const uri = process.env.MONGO_URI || 'mongodb://0.0.0.0:27017'
+const uri = SETTINGS.mongoURI
 
 const client = new MongoClient(uri)
 
@@ -23,7 +24,6 @@ export const runDb = async () => {
         console.log(`This App is listening on port ${port}`)
     } catch (error) {
         console.log(`Some error occurred: ${error}`)
-
         await client.close()
     }
 }

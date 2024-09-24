@@ -1,8 +1,7 @@
 import {app} from "./app"
 import {runDb} from "./db/db";
+import {SETTINGS} from "./settings";
 
-const port = 3000
-
-app.listen(port, async () => {
+app.listen(SETTINGS.port, async () => {
     await runDb()
 })

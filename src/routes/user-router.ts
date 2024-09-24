@@ -2,7 +2,7 @@ import {Response, Router} from "express";
 import {HTTP_STATUS, RequestWithBody, RequestWithParams, RequestWithQuery, ResponseType} from "../models/common";
 import {CreateUserModel} from "../models/user/input/create-user-input-model";
 import {UserOutputModel} from "../models/user/output/user-output-model";
-import {UserService} from "../domain/user-service";
+import {UserService} from "../services/user-service";
 import {QueryUserInputModel} from "../models/user/input/query-user-input-model";
 import {SortUserOutputModel} from "../models/user/output/sort-user-output-model";
 import {QueryUserRepository} from "../repostitories/query-repositories/user-repository";

@@ -1,6 +1,6 @@
 import {CreateUserModel} from "../models/user/input/create-user-input-model";
 import bcrypt from 'bcrypt'
-import {UserRepository} from "../repostitories/params-repositories/user-repository";
+import {UserRepository} from "../repostitories/command-repositories/user-repository";
 import {ObjectId} from "mongodb";
 import {QueryUserRepository} from "../repostitories/query-repositories/user-repository";
 
@@ -32,10 +32,10 @@ export class UserService {
         return await bcrypt.hash(password,10)
     }
 
-    static async checkCredentials(loginOrEmail: string, password: string): Promise<boolean> {
+    static async checkCredentials(loginOrEmail: string, password: string): Promise<any> {
         const targetUser = await QueryUserRepository.findByLoginOrEmail(loginOrEmail)
-        if (!targetUser) return false
+        if (!targetUser) return null
 
-        return bcrypt.compare(password, targetUser.password)
+        if (await bcrypt.compare(password, targetUser.password)) return targetUser._id.toString()
     }
 }

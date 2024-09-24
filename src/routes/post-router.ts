@@ -10,7 +10,7 @@ import {
     ResponseType
 } from "../models/common";
 import {mongoIdParamValidation} from "../validators/id-param-validation";
-import {PostsService} from "../domain/post-service";
+import {PostsService} from "../services/post-service";
 import {QueryPostInputModel} from "../models/post/input/query-post-input-model";
 import {SortPostOutputModel} from "../models/post/output/sort-post-output-model";
 import {CreatePostModel} from "../models/post/input/create-post-input-model";

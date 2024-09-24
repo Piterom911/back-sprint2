@@ -11,7 +11,7 @@ import {
     ResponseType
 } from "../models/common";
 import {mongoIdParamValidation, mongoIDValidation} from "../validators/id-param-validation";
-import {BlogsService} from "../domain/blog-service";
+import {BlogsService} from "../services/blog-service";
 import {QueryBlogInputModel} from "../models/blog/input/query-blog-input-model";
 import {SortBlogOutputModel} from "../models/blog/output/sort-blog-output-model";
 import {BlogOutputModel} from "../models/blog/output/blog-output-model";

@@ -1,5 +1,5 @@
 import {CreateBlogModel, CreatePostBlogModel} from "../models/blog/input/create-blog-input-model";
-import {BlogRepository} from "../repostitories/params-repositories/blog-repository";
+import {BlogRepository} from "../repostitories/command-repositories/blog-repository";
 import {UpdateBlogModel} from "../models/blog/input/update-blog-input-model";
 import {PostsService} from "./post-service";
 import {QueryBlogRepository} from "../repostitories/query-repositories/blog-repository";
