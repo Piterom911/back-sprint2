@@ -6,7 +6,7 @@ import bodyParser from 'body-parser';
 import {testsRouter} from "./routes/tests-router";
 import {URI_PATHS} from "./models/common";
 import {userRouter} from "./routes/user-router";
-import {authRouter} from "./routes/auth-router";
+import {authRouter} from "./features/auth/routes/auth-router";
 
 export const app = express()
 morganBody(app)

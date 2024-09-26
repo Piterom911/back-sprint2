@@ -2,7 +2,7 @@ import {userCollection} from "../../db/db";
 import {QueryUserInputModel} from "../../models/user/input/query-user-input-model";
 import {userMapper} from "../../models/mappers/mapper";
 import {SortUserOutputModel} from "../../models/user/output/sort-user-output-model";
-import {UserOutputModel} from "../../models/user/output/user-output-model";
+import {AuthMeViewModel, UserOutputModel} from "../../models/user/output/user-output-model";
 import {ObjectId} from "mongodb";
 import {UserDBType} from "../../models/db/db";
 import {FilterType} from "../../models/user/find-user-by-query-filter-model";
@@ -22,7 +22,7 @@ export class QueryUserRepository {
 
         const pagesCount = Math.ceil(totalCount / +pageSize)
 
-        const users =  await userCollection
+        const users = await userCollection
             .find(filter)
             .sort(sortBy, sortDirection)
             .skip((+pageNumber - 1) * +pageSize)
@@ -38,16 +38,29 @@ export class QueryUserRepository {
         }
     }
 
+    static async findUserByToken(id: string): Promise<AuthMeViewModel | null> {
+        const user = await userCollection.findOne({id})
+        if (user === null)
+            return null;
+
+        return {
+            email: user.email,
+            login: user.login,
+            userId: user._id
+        };
+    }
+
     static async findByLoginOrEmail(loginOrEmail: string): Promise<UserDBType | null> {
         return await userCollection.findOne({
             $or: [
-                { email: { $regex: loginOrEmail, $options: 'i' } },
-                { login: { $regex: loginOrEmail, $options: 'i' } }
-            ]})
+                {email: {$regex: loginOrEmail, $options: 'i'}},
+                {login: {$regex: loginOrEmail, $options: 'i'}}
+            ]
+        })
     }
 
     static async getEntityById(id: string): Promise<UserOutputModel | null> {
-        const targetUser =  await userCollection.findOne({_id: new ObjectId(id)})
+        const targetUser = await userCollection.findOne({_id: new ObjectId(id)})
         if (!targetUser) return null
         return userMapper(targetUser)
     }

@@ -1,15 +1,15 @@
 import {CreateUserModel} from "../models/user/input/create-user-input-model";
-import bcrypt from 'bcrypt'
 import {UserRepository} from "../repostitories/command-repositories/user-repository";
 import {ObjectId} from "mongodb";
 import {QueryUserRepository} from "../repostitories/query-repositories/user-repository";
+import {comparePassword, generateHash} from "../utilities/passwordHash";
 
 export class UserService {
 
     static async createNewEntity(newEntityData: CreateUserModel): Promise<string | null> {
         let {login, email, password} = newEntityData
 
-        const hash = await this._generateHash(password)
+        const hash = await generateHash(password)
 
         const newUser = {
             _id: new ObjectId(),
@@ -28,14 +28,10 @@ export class UserService {
         return UserRepository.deleteEntity(id)
     }
 
-    static async _generateHash(password: string) {
-        return await bcrypt.hash(password,10)
-    }
-
     static async checkCredentials(loginOrEmail: string, password: string): Promise<any> {
         const targetUser = await QueryUserRepository.findByLoginOrEmail(loginOrEmail)
         if (!targetUser) return null
 
-        if (await bcrypt.compare(password, targetUser.password)) return targetUser._id.toString()
+        if (await comparePassword(password, targetUser.password)) return targetUser._id.toString()
     }
 }

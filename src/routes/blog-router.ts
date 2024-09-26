@@ -10,7 +10,7 @@ import {
     RequestWithQuery,
     ResponseType
 } from "../models/common";
-import {mongoIdParamValidation, mongoIDValidation} from "../validators/id-param-validation";
+import {mongoIdParamValidation, mongoIDValidation} from "../validators/id-param-validator";
 import {BlogsService} from "../services/blog-service";
 import {QueryBlogInputModel} from "../models/blog/input/query-blog-input-model";
 import {SortBlogOutputModel} from "../models/blog/output/sort-blog-output-model";
@@ -130,7 +130,9 @@ blogRouter.put(
 
         res.sendStatus(HTTP_STATUS.NO_CONTENT)
     })
-blogRouter.delete('/:id', mongoIdParamValidation(), authMiddleware, async (req: RequestWithParams<{ id: string }>, res: Response) => {
+blogRouter.delete('/:id', mongoIdParamValidation(), authMiddleware, async (req: RequestWithParams<{
+    id: string
+}>, res: Response) => {
     const id = req.params.id
 
     const isExistedBlog = await QueryBlogRepository.getEntityById(id)
