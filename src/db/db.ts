@@ -1,5 +1,5 @@
 import {Collection, MongoClient} from "mongodb";
-import {BlogDBType, PostDBType, UserDBType} from "../models/db/db";
+import {BlogDBType, PostDBType, UserDBType} from "./db-models";
 import dotenv from "dotenv";
 import {SETTINGS} from "../settings";
 

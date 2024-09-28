@@ -1,8 +1,8 @@
 import {CreateBlogModel, CreatePostBlogModel} from "../types/create-blog-model";
-import {BlogRepository} from "../../../repostitories/command-repositories/blog-repository";
+import {CommandBlogRepository} from "../repostitories/command-blog-repository";
 import {UpdateBlogModel} from "../types/update-blog-model";
-import {PostsService} from "../../../services/post-service";
-import {QueryBlogRepository} from "../../../repostitories/query-repositories/blog-repository";
+import {PostsService} from "../../post/services/post-service";
+import {QueryBlogRepository} from "../repostitories/query-blog-repository";
 
 export class BlogsService {
 
@@ -16,7 +16,7 @@ export class BlogsService {
             createdAt: new Date().toISOString()
         }
 
-        const createdBlog = await BlogRepository.postNewEntity(newBlog)
+        const createdBlog = await CommandBlogRepository.postNewEntity(newBlog)
         return createdBlog ? createdBlog.insertedId.toString() : null
     }
 
@@ -36,7 +36,7 @@ export class BlogsService {
     }
 
     static async updateEntity(id: string, updateData: UpdateBlogModel): Promise<boolean> {
-        return await BlogRepository.updateEntity(
+        return await CommandBlogRepository.updateEntity(
             id,
             {
                 name: updateData.name,
@@ -47,6 +47,6 @@ export class BlogsService {
     }
 
     static async deleteEntity(id: string): Promise<boolean> {
-        return BlogRepository.deleteEntity(id)
+        return CommandBlogRepository.deleteEntity(id)
     }
 }

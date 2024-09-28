@@ -1,6 +1,6 @@
 import express from 'express'
 import {blogRouter} from "./features/blog/routers/blog-router";
-import {postRouter} from "./routes/post-router";
+import {postRouter} from "./features/post/routers/post-router";
 import morganBody from 'morgan-body';
 import bodyParser from 'body-parser';
 import {testsRouter} from "./routes/tests-router";

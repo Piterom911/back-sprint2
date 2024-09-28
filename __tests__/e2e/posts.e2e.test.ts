@@ -6,7 +6,7 @@ import {blogTestManager} from "../utils/blogTestManager";
 
 const getRequest = () => request(app)
 
-describe('Endpoints posts', () => {
+describe('Post endpoints', () => {
     let startArrayWithNoPosts = {
         pagesCount: 0,
         page: 1,

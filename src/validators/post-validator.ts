@@ -1,6 +1,6 @@
 import {body} from "express-validator";
 import {inputValidation} from "../input-model-validation/input-validation";
-import {QueryBlogRepository} from "../repostitories/query-repositories/blog-repository";
+import {QueryBlogRepository} from "../features/blog/repostitories/query-blog-repository";
 
 export const titleValidation = body('title')
     .isString()

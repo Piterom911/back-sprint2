@@ -3,13 +3,13 @@ import {authMiddleware} from "../../../middlewares/auth/auth-middleware";
 import {blogValidation} from "../validators/blog-validator";
 import {mongoIdParamValidation, mongoIDValidation} from "../validators/id-param-validator";
 import {postToBlogValidation} from "../../../validators/post-to-blog-validator";
-import {getAllBlogsController} from "../controller/getAllBlogsController";
-import {getBlogByIdController} from "../controller/getBlogByIdController";
-import {getPostsByBlogIdController} from "../controller/getPostsByBlogIdController";
-import {createBlogController} from "../controller/createBlogController";
-import {createPostByBlogIdController} from "../controller/createPostByBlogIdController";
-import {updateBlogController} from "../controller/updateBlogController";
-import {deleteBlogController} from "../controller/deleteBlogController";
+import {getAllBlogsController} from "../controllers/get-all-blogs-controller";
+import {getBlogByIdController} from "../controllers/get-blog-by-id-controller";
+import {getPostsByBlogIdController} from "../controllers/get-posts-by-blog-id-controller";
+import {createBlogController} from "../controllers/create-blog-controller";
+import {createPostByBlogIdController} from "../controllers/create-post-by-blog-id-controller";
+import {updateBlogController} from "../controllers/update-blog-controller";
+import {deleteBlogController} from "../controllers/delete-blog-controller";
 
 export const blogRouter = Router({})
 
