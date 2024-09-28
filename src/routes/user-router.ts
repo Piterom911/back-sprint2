@@ -8,7 +8,7 @@ import {SortUserOutputModel} from "../models/user/output/sort-user-output-model"
 import {QueryUserRepository} from "../repostitories/query-repositories/user-repository";
 import {authMiddleware} from "../middlewares/auth/auth-middleware";
 import {userValidation} from "../validators/user-validator";
-import {mongoIdParamValidation} from "../validators/id-param-validator";
+import {mongoIdParamValidation} from "../features/blog/validators/id-param-validator";
 
 export const userRouter = Router({})
 

@@ -1,10 +1,10 @@
 import {WithId} from "mongodb";
 import {BlogDBType, PostDBType, UserDBType} from "../db/db";
-import {BlogOutputModel} from "../blog/output/blog-output-model";
+import {BlogResponseType} from "../../features/blog/types/blog-response-type";
 import {PostOutputModel} from "../post/output/post-output-model";
 import {UserOutputModel} from "../user/output/user-output-model";
 
-export const blogMapper = (blogDb: WithId<BlogDBType>): BlogOutputModel => {
+export const blogMapper = (blogDb: WithId<BlogDBType>): BlogResponseType => {
     return {
         id: blogDb._id.toString(),
         name: blogDb.name,

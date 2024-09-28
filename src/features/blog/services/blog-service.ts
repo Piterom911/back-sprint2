@@ -1,8 +1,8 @@
-import {CreateBlogModel, CreatePostBlogModel} from "../models/blog/input/create-blog-input-model";
-import {BlogRepository} from "../repostitories/command-repositories/blog-repository";
-import {UpdateBlogModel} from "../models/blog/input/update-blog-input-model";
-import {PostsService} from "./post-service";
-import {QueryBlogRepository} from "../repostitories/query-repositories/blog-repository";
+import {CreateBlogModel, CreatePostBlogModel} from "../types/create-blog-model";
+import {BlogRepository} from "../../../repostitories/command-repositories/blog-repository";
+import {UpdateBlogModel} from "../types/update-blog-model";
+import {PostsService} from "../../../services/post-service";
+import {QueryBlogRepository} from "../../../repostitories/query-repositories/blog-repository";
 
 export class BlogsService {
 

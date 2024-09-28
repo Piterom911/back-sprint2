@@ -9,7 +9,7 @@ import {
     RequestWithQuery,
     ResponseType
 } from "../models/common";
-import {mongoIdParamValidation} from "../validators/id-param-validator";
+import {mongoIdParamValidation} from "../features/blog/validators/id-param-validator";
 import {PostsService} from "../services/post-service";
 import {QueryPostInputModel} from "../models/post/input/query-post-input-model";
 import {SortPostOutputModel} from "../models/post/output/sort-post-output-model";

@@ -2,12 +2,12 @@ import request from 'supertest'
 import {app} from "../../src/app";
 import {HTTP_STATUS, URI_PATHS} from "../../src/models/common";
 import {blogTestManager} from "../utils/blogTestManager";
-import {CreatePostBlogModel} from "../../src/models/blog/input/create-blog-input-model";
+import {CreatePostBlogModel} from "../../src/features/blog/types/create-blog-model";
 
 
 const getRequest = () => request(app)
 
-describe('Endpoints blogs', () => {
+describe('Blog endpoints', () => {
 
     let noBlogsResponse = {
         pagesCount: 0,

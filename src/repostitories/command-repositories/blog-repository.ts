@@ -1,7 +1,7 @@
 import {blogCollection} from "../../db/db";
 import {InsertOneResult, ObjectId} from "mongodb";
 import {BlogDBType} from "../../models/db/db";
-import {UpdateBlogModel} from "../../models/blog/input/update-blog-input-model";
+import {UpdateBlogModel} from "../../features/blog/types/update-blog-model";
 
 export class BlogRepository {
     static async postNewEntity(newEntityData: BlogDBType): Promise<InsertOneResult | null> {

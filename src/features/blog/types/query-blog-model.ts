@@ -1,6 +1,6 @@
 import {SortDirection} from "mongodb";
 
-export type QueryBlogInputModel = {
+export type QueryBlogModel = {
     searchNameTerm?: string
     sortBy?: string
     sortDirection?: SortDirection

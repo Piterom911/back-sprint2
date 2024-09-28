@@ -1,13 +1,13 @@
 import {blogCollection, postCollection} from "../../db/db";
 import {ObjectId} from "mongodb";
-import {QueryBlogInputModel, QueryPostByBlogIdInputModel} from "../../models/blog/input/query-blog-input-model";
+import {QueryBlogModel, QueryPostByBlogIdInputModel} from "../../features/blog/types/query-blog-model";
 import {blogMapper, postMapper} from "../../models/mappers/mapper";
-import {SortBlogOutputModel} from "../../models/blog/output/sort-blog-output-model";
-import {BlogOutputModel} from "../../models/blog/output/blog-output-model";
+import {BlogSortType} from "../../features/blog/types/blog-sort-type";
+import {BlogResponseType} from "../../features/blog/types/blog-response-type";
 import {SortPostOutputModel} from "../../models/post/output/sort-post-output-model";
 
 export class QueryBlogRepository {
-    static async getAllEntities(sortData: QueryBlogInputModel): Promise<SortBlogOutputModel> {
+    static async getAllEntities(sortData: QueryBlogModel): Promise<BlogSortType> {
         const searchNameTerm = sortData.searchNameTerm ?? null
         const sortBy = sortData.sortBy ?? 'createdAt'
         const sortDirection = sortData.sortDirection ?? 'desc'
@@ -42,7 +42,7 @@ export class QueryBlogRepository {
         }
     }
 
-    static async getEntityById(id: string): Promise<BlogOutputModel | null> {
+    static async getEntityById(id: string): Promise<BlogResponseType | null> {
         const blog =  await blogCollection.findOne({_id: new ObjectId(id)})
 
         return !blog ? null : blogMapper(blog)
