@@ -1,8 +1,8 @@
-import {CreateUserModel} from "../models/user/input/create-user-input-model";
-import {CommandUserRepository} from "../repostitories/command-repositories/command-user-repository";
+import {CreateUserModel} from "../types/create-user-model";
+import {CommandUserRepository} from "../repostitories/command-user-repository";
 import {ObjectId} from "mongodb";
-import {QueryUserRepository} from "../repostitories/query-repositories/query-user-repository";
-import {comparePassword, generateHash} from "../utilities/passwordHash";
+import {QueryUserRepository} from "../repostitories/query-user-repository";
+import {comparePassword, generateHash} from "../../../utils/passwordHash";
 
 export class UserService {
 

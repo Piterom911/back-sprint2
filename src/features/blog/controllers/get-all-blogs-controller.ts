@@ -1,4 +1,4 @@
-import {RequestWithQuery, ResponseType} from "../../../models/common";
+import {RequestWithQuery, ResponseType} from "../../../types/request-types";
 import {QueryBlogModel} from "../types/query-blog-model";
 import {BlogSortResponseType} from "../types/blog-sort-response-type";
 import {QueryBlogRepository} from "../repostitories/query-blog-repository";

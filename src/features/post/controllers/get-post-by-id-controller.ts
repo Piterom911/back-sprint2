@@ -1,6 +1,7 @@
-import {HTTP_STATUS, RequestWithParams, ResponseType} from "../../../models/common";
+import {RequestWithParams, ResponseType} from "../../../types/request-types";
 import {QueryPostRepository} from "../repostitories/query-post-repository";
 import {PostResponseType} from "../types/post-response-type";
+import {HTTP_STATUS} from "../../../constants/http-status";
 
 export const getPostByIdController = async (req: RequestWithParams<{
     id: string

@@ -3,10 +3,10 @@ import {blogRouter} from "./features/blog/routers/blog-router";
 import {postRouter} from "./features/post/routers/post-router";
 import morganBody from 'morgan-body';
 import bodyParser from 'body-parser';
-import {testsRouter} from "./routes/tests-router";
-import {URI_PATHS} from "./models/common";
-import {userRouter} from "./routes/user-router";
+import {testsRouter} from "./features/test/routes/tests-router";
+import {userRouter} from "./features/user/routers/user-router";
 import {authRouter} from "./features/auth/routers/auth-router";
+import {URI_PATHS} from "./constants/uri-paths";
 
 export const app = express()
 morganBody(app)

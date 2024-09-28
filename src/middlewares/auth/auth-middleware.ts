@@ -1,7 +1,8 @@
 import {NextFunction, Request, Response} from "express";
 import dotenv from 'dotenv'
 import 'dotenv/config'
-import {HTTP_STATUS} from "../../models/common";
+
+import {HTTP_STATUS} from "../../constants/http-status";
 
 dotenv.config()
 

@@ -1,8 +1,9 @@
-import {HTTP_STATUS, RequestWithBody, ResponseType} from "../../../models/common";
+import {RequestWithBody, ResponseType} from "../../../types/request-types";
 import {QueryPostRepository} from "../repostitories/query-post-repository";
 import {CreatePostModel} from "../types/create-post-model";
 import {PostResponseType} from "../types/post-response-type";
 import {PostsService} from "../services/post-service";
+import {HTTP_STATUS} from "../../../constants/http-status";
 
 export const createPostController = async (req: RequestWithBody<CreatePostModel>, res: ResponseType<PostResponseType>) => {
     const postId = await PostsService.postNewEntity(req.body)

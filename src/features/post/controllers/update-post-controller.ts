@@ -1,8 +1,9 @@
-import {HTTP_STATUS, RequestWithParamsAndBody} from "../../../models/common";
+import {RequestWithParamsAndBody} from "../../../types/request-types";
 import {QueryPostRepository} from "../repostitories/query-post-repository";
 import {UpdatePostModel} from "../types/update-post-model";
 import {Response} from "express";
 import {PostsService} from "../services/post-service";
+import {HTTP_STATUS} from "../../../constants/http-status";
 
 export const updatePostController = async (req: RequestWithParamsAndBody<{
     id: string

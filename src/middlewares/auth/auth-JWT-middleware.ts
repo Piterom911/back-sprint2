@@ -1,6 +1,7 @@
 import {Request, Response, NextFunction} from "express";
 import {jwtService} from "../../adapters/jwtService";
-import {HTTP_STATUS} from "../../models/common";
+
+import {HTTP_STATUS} from "../../constants/http-status";
 
 
 export const authJwtMiddleware = async (req: Request, res: Response, next: NextFunction) => {

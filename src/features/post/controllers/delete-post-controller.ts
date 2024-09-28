@@ -1,7 +1,8 @@
-import {HTTP_STATUS, RequestWithParams} from "../../../models/common";
+import {RequestWithParams} from "../../../types/request-types";
 import {QueryPostRepository} from "../repostitories/query-post-repository";
 import {Response} from "express";
 import {PostsService} from "../services/post-service";
+import {HTTP_STATUS} from "../../../constants/http-status";
 
 export const deletePostController = async (req: RequestWithParams<{ id: string }>, res: Response) => {
     const id = req.params.id

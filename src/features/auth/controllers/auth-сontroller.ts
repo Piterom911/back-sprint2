@@ -1,10 +1,11 @@
-import {HTTP_STATUS, RequestWithBody, ResponseType} from "../../../models/common";
+import {RequestWithBody, ResponseType} from "../../../types/request-types";
 import {Request, Response} from "express"
-import {UserService} from "../../../services/user-service";
+import {UserService} from "../../user/services/user-service";
 import {jwtService} from "../../../adapters/jwtService";
 import {AccessTokenType, AuthLoginType} from "../types/auth-types";
-import {AuthMeViewModel} from "../../../models/user/output/user-output-model";
-import {QueryUserRepository} from "../../../repostitories/query-repositories/query-user-repository";
+import {AuthMeViewModel} from "../../user/types/user-response-type";
+import {QueryUserRepository} from "../../user/repostitories/query-user-repository";
+import {HTTP_STATUS} from "../../../constants/http-status";
 
 export const authOntroller = {
     async authLogin(req: RequestWithBody<AuthLoginType>, res: ResponseType<AccessTokenType>): Promise<void> {

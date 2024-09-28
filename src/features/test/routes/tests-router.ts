@@ -1,6 +1,7 @@
 import {Request, Response, Router} from "express"
-import {blogCollection, postCollection, userCollection} from "../db/db";
-import {HTTP_STATUS} from "../models/common";
+import {blogCollection, postCollection, userCollection} from "../../../db/db";
+
+import {HTTP_STATUS} from "../../../constants/http-status";
 
 export const testsRouter = Router({})
 

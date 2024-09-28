@@ -1,6 +1,6 @@
 import {userCollection} from "../../../db/db";
 import {jwtService} from "../../../adapters/jwtService";
-import {comparePassword} from "../../../utilities/passwordHash";
+import {comparePassword} from "../../../utils/passwordHash";
 
 export const authService = {
 

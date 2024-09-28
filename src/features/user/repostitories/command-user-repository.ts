@@ -1,6 +1,6 @@
-import {userCollection} from "../../db/db";
+import {userCollection} from "../../../db/db";
 import {ObjectId} from "mongodb";
-import {UserDBType} from "../../db/db-models";
+import {UserDBType} from "../../../db/db-models";
 
 export class CommandUserRepository {
     static async createNewEntity(newEntityData: UserDBType): Promise<string | null> {

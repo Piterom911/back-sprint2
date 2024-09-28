@@ -1,7 +1,8 @@
-import {HTTP_STATUS, RequestWithParamsAndQuery, ResponseType} from "../../../models/common";
+import {RequestWithParamsAndQuery, ResponseType} from "../../../types/request-types";
 import {QueryBlogRepository} from "../repostitories/query-blog-repository";
 import {QueryPostModel} from "../../post/types/query-post-model";
 import {PostSortResponseType} from "../../post/types/post-sort-response-type";
+import {HTTP_STATUS} from "../../../constants/http-status";
 
 export const getPostsByBlogIdController = async (req: RequestWithParamsAndQuery<{
     id: string

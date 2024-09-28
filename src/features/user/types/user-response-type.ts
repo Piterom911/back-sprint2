@@ -1,6 +1,6 @@
 import {ObjectId} from "mongodb";
 
-export type UserOutputModel = {
+export type UserResponseType = {
     id: string,
     login: string,
     email: string,

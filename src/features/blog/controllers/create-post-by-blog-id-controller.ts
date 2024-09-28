@@ -1,9 +1,10 @@
-import {HTTP_STATUS, RequestWithParamsAndBody, ResponseType} from "../../../models/common";
+import {RequestWithParamsAndBody, ResponseType} from "../../../types/request-types";
 import {CreatePostBlogModel} from "../types/create-blog-model";
 import {PostResponseType} from "../../post/types/post-response-type";
 import {QueryBlogRepository} from "../repostitories/query-blog-repository";
 import {BlogsService} from "../services/blog-service";
 import {QueryPostRepository} from "../../post/repostitories/query-post-repository";
+import {HTTP_STATUS} from "../../../constants/http-status";
 
 export const createPostByBlogIdController = async (req: RequestWithParamsAndBody<{
     id: string

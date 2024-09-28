@@ -1,14 +1,14 @@
-import {userCollection} from "../../db/db";
-import {QueryUserInputModel} from "../../models/user/input/query-user-input-model";
-import {SortUserOutputModel} from "../../models/user/output/sort-user-output-model";
-import {AuthMeViewModel, UserOutputModel} from "../../models/user/output/user-output-model";
+import {userCollection} from "../../../db/db";
+import {QueryUserModel} from "../types/query-user-model";
+import {UserSortResponseType} from "../types/user-sort-response-type";
+import {AuthMeViewModel, UserResponseType} from "../types/user-response-type";
 import {ObjectId} from "mongodb";
-import {UserDBType} from "../../db/db-models";
-import {FilterType} from "../../models/user/find-user-by-query-filter-model";
-import {userMapper} from "../../features/user/mappers/user-response-mapper";
+import {UserDBType} from "../../../db/db-models";
+import {FilterType} from "../types/find-user-by-query-filter-type";
+import {userMapper} from "../mappers/user-response-mapper";
 
 export class QueryUserRepository {
-    static async getAllEntities(sortData: QueryUserInputModel): Promise<SortUserOutputModel> {
+    static async getAllEntities(sortData: QueryUserModel): Promise<UserSortResponseType> {
         const searchLoginTerm = sortData.searchLoginTerm || null
         const searchEmailTerm = sortData.searchEmailTerm || null
         const sortBy = sortData.sortBy ?? 'createdAt'
@@ -59,7 +59,7 @@ export class QueryUserRepository {
         })
     }
 
-    static async getEntityById(id: string): Promise<UserOutputModel | null> {
+    static async getEntityById(id: string): Promise<UserResponseType | null> {
         const targetUser = await userCollection.findOne({_id: new ObjectId(id)})
         if (!targetUser) return null
         return userMapper(targetUser)

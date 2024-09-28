@@ -1,8 +1,9 @@
 import request from 'supertest'
 import {app} from "../../src/app";
-import {HTTP_STATUS, URI_PATHS} from "../../src/models/common";
 import {blogTestManager} from "../utils/blogTestManager";
 import {CreatePostBlogModel} from "../../src/features/blog/types/create-blog-model";
+import {HTTP_STATUS} from "../../src/constants/http-status";
+import {URI_PATHS} from "../../src/constants/uri-paths";
 
 
 const getRequest = () => request(app)

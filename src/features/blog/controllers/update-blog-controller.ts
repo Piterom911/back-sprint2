@@ -1,8 +1,9 @@
-import {HTTP_STATUS, RequestWithParamsAndBody} from "../../../models/common";
+import {RequestWithParamsAndBody} from "../../../types/request-types";
 import {UpdateBlogModel} from "../types/update-blog-model";
 import {Response} from "express";
 import {QueryBlogRepository} from "../repostitories/query-blog-repository";
 import {BlogsService} from "../services/blog-service";
+import {HTTP_STATUS} from "../../../constants/http-status";
 
 export const updateBlogController = async (req: RequestWithParamsAndBody<{ id: string }, UpdateBlogModel>, res: Response) => {
     const id = req.params.id

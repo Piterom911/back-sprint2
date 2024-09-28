@@ -1,18 +1,19 @@
 import {Response, Router} from "express";
-import {HTTP_STATUS, RequestWithBody, RequestWithParams, RequestWithQuery, ResponseType} from "../models/common";
-import {CreateUserModel} from "../models/user/input/create-user-input-model";
-import {UserOutputModel} from "../models/user/output/user-output-model";
+import {RequestWithBody, RequestWithParams, RequestWithQuery, ResponseType} from "../../../types/request-types";
+import {CreateUserModel} from "../types/create-user-model";
+import {UserResponseType} from "../types/user-response-type";
 import {UserService} from "../services/user-service";
-import {QueryUserInputModel} from "../models/user/input/query-user-input-model";
-import {SortUserOutputModel} from "../models/user/output/sort-user-output-model";
-import {QueryUserRepository} from "../repostitories/query-repositories/query-user-repository";
-import {authMiddleware} from "../middlewares/auth/auth-middleware";
-import {userValidation} from "../validators/user-validator";
-import {mongoIdParamValidation} from "../features/blog/validators/id-param-validator";
+import {QueryUserModel} from "../types/query-user-model";
+import {UserSortResponseType} from "../types/user-sort-response-type";
+import {QueryUserRepository} from "../repostitories/query-user-repository";
+import {authMiddleware} from "../../../middlewares/auth/auth-middleware";
+import {userValidation} from "../../../validators/user-validator";
+import {mongoIdParamValidation} from "../../blog/validators/id-param-validator";
+import {HTTP_STATUS} from "../../../constants/http-status";
 
 export const userRouter = Router({})
 
-userRouter.get('/', authMiddleware, async (req: RequestWithQuery<QueryUserInputModel>, res: ResponseType<SortUserOutputModel>): Promise<void> => {
+userRouter.get('/', authMiddleware, async (req: RequestWithQuery<QueryUserModel>, res: ResponseType<UserSortResponseType>): Promise<void> => {
     const sortData = {
         searchLoginTerm: req.query.searchLoginTerm,
         searchEmailTerm: req.query.searchEmailTerm,
@@ -21,12 +22,12 @@ userRouter.get('/', authMiddleware, async (req: RequestWithQuery<QueryUserInputM
         pageNumber: req.query.pageNumber,
         pageSize: req.query.pageSize,
     }
-    const users: SortUserOutputModel = await QueryUserRepository.getAllEntities(sortData)
+    const users: UserSortResponseType = await QueryUserRepository.getAllEntities(sortData)
     res.send(users)
 })
 
 userRouter.post('/', authMiddleware, userValidation(),
-    async (req: RequestWithBody<CreateUserModel>, res: ResponseType<UserOutputModel>): Promise<void> => {
+    async (req: RequestWithBody<CreateUserModel>, res: ResponseType<UserResponseType>): Promise<void> => {
         const createdUser = await UserService.createNewEntity(req.body)
         if (!createdUser) {
             res.sendStatus(HTTP_STATUS.BAD_REQUEST)

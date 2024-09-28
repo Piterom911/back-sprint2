@@ -1,7 +1,8 @@
-import {HTTP_STATUS, RequestWithParams} from "../../../models/common";
+import {RequestWithParams} from "../../../types/request-types";
 import {Response} from "express";
 import {QueryBlogRepository} from "../repostitories/query-blog-repository";
 import {BlogsService} from "../services/blog-service";
+import {HTTP_STATUS} from "../../../constants/http-status";
 
 export const deleteBlogController = async (req: RequestWithParams<{
     id: string

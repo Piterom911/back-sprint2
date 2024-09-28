@@ -1,6 +1,7 @@
-import {HTTP_STATUS, HttpStatusType, URI_PATHS} from "../../src/models/common";
 import request from "supertest";
 import {app} from "../../src/app";
+import {HTTP_STATUS, HttpStatusType} from "../../src/constants/http-status";
+import {URI_PATHS} from "../../src/constants/uri-paths";
 
 const getRequest = () => request(app)
 
@@ -10,12 +11,10 @@ export const blogTestManager = {
                      authData: string
     ) {
 
-        const createBlogResponse = await getRequest()
+        return getRequest()
             .post(URI_PATHS.blogs)
             .set('Authorization', authData)
             .send(data)
-            .expect(expectedStatusCode)
-
-        return createBlogResponse
+            .expect(expectedStatusCode);
     }
 }
