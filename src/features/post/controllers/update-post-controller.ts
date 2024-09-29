@@ -1,5 +1,5 @@
 import {RequestWithParamsAndBody} from "../../../types/request-types";
-import {QueryPostRepository} from "../repostitories/query-post-repository";
+import {QueryPostRepository} from "../repositories/query-post-repository";
 import {UpdatePostModel} from "../types/update-post-model";
 import {Response} from "express";
 import {PostsService} from "../services/post-service";

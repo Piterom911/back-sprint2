@@ -7,6 +7,7 @@ import {testsRouter} from "./features/test/routes/tests-router";
 import {userRouter} from "./features/user/routers/user-router";
 import {authRouter} from "./features/auth/routers/auth-router";
 import {URI_PATHS} from "./constants/uri-paths";
+import {commentRouter} from "./features/comment/routers/comment-router";
 
 export const app = express()
 morganBody(app)
@@ -17,6 +18,7 @@ app.use(URI_PATHS.auth, authRouter)
 app.use(URI_PATHS.blogs, blogRouter)
 app.use(URI_PATHS.posts, postRouter)
 app.use(URI_PATHS.users, userRouter)
+app.use(URI_PATHS.comments, commentRouter)
 
 
 

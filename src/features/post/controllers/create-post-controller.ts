@@ -1,5 +1,5 @@
 import {RequestWithBody, ResponseType} from "../../../types/request-types";
-import {QueryPostRepository} from "../repostitories/query-post-repository";
+import {QueryPostRepository} from "../repositories/query-post-repository";
 import {CreatePostModel} from "../types/create-post-model";
 import {PostResponseType} from "../types/post-response-type";
 import {PostsService} from "../services/post-service";

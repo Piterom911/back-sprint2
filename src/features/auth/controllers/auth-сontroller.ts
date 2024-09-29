@@ -1,7 +1,7 @@
 import {RequestWithBody, ResponseType} from "../../../types/request-types";
 import {Request, Response} from "express"
 import {UserService} from "../../user/services/user-service";
-import {jwtService} from "../../../adapters/jwtService";
+import {jwtService} from "../../../adapters/jwt-service";
 import {AccessTokenType, AuthLoginType} from "../types/auth-types";
 import {AuthMeViewModel} from "../../user/types/user-response-type";
 import {QueryUserRepository} from "../../user/repostitories/query-user-repository";

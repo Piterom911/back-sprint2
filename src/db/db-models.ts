@@ -29,3 +29,12 @@ export type UserDBType = {
     password: string
     createdAt: string
 }
+
+export type CommentDBType = {
+    content: string
+    commentatorInfo: {
+        userId: string
+        userLogin: string
+    },
+    createdAt: string
+}

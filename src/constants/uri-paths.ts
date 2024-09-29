@@ -3,5 +3,6 @@ export const URI_PATHS = {
     auth: '/auth',
     blogs: '/blogs',
     posts: '/posts',
-    users: '/users'
+    users: '/users',
+    comments: '/comments',
 }

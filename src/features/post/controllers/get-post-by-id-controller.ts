@@ -1,5 +1,5 @@
 import {RequestWithParams, ResponseType} from "../../../types/request-types";
-import {QueryPostRepository} from "../repostitories/query-post-repository";
+import {QueryPostRepository} from "../repositories/query-post-repository";
 import {PostResponseType} from "../types/post-response-type";
 import {HTTP_STATUS} from "../../../constants/http-status";
 

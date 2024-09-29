@@ -1,6 +1,6 @@
 import {CreatePostModel} from "../types/create-post-model";
 import {PostDBType} from "../../../db/db-models";
-import {CommandPostRepository} from "../repostitories/command-post-repository";
+import {CommandPostRepository} from "../repositories/command-post-repository";
 import {UpdatePostModel} from "../types/update-post-model";
 import {QueryBlogRepository} from "../../blog/repostitories/query-blog-repository";
 

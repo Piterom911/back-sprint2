@@ -1,7 +1,7 @@
 import {RequestWithQuery, ResponseType} from "../../../types/request-types";
 import {QueryPostModel} from "../types/query-post-model";
 import {PostSortResponseType} from "../types/post-sort-response-type";
-import {QueryPostRepository} from "../repostitories/query-post-repository";
+import {QueryPostRepository} from "../repositories/query-post-repository";
 
 export const getPostsController = async (req: RequestWithQuery<QueryPostModel>, res: ResponseType<PostSortResponseType>) => {
     const sortData = {

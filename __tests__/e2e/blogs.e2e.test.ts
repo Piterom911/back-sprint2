@@ -1,6 +1,6 @@
 import request from 'supertest'
 import {app} from "../../src/app";
-import {blogTestManager} from "../utils/blogTestManager";
+import {blogTestManager} from "../utils/blog-test-manager";
 import {CreatePostBlogModel} from "../../src/features/blog/types/create-blog-model";
 import {HTTP_STATUS} from "../../src/constants/http-status";
 import {URI_PATHS} from "../../src/constants/uri-paths";
