@@ -11,7 +11,8 @@ export const authJwtMiddleware = async (req: Request, res: Response, next: NextF
     }
     const token: string = req.headers.authorization.split(' ')[1]
     try {
-        req.body.userToken = await jwtService.verifyToken(token)
+        const userData = await jwtService.verifyToken(token)
+        req.body.userId = userData?.userId
         next()
     } catch {
         res.sendStatus(HTTP_STATUS.UNAUTHORIZED)

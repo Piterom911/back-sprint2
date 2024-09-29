@@ -22,7 +22,7 @@ postRouter.delete('/:id', mongoIdParamValidation(), authMiddleware, deletePostCo
 
 // comment by post id routers
 postRouter.get('/:id/comments', getAllCommentsController)
-postRouter.post('/:id/comments', authJwtMiddleware, createCommentController)
+postRouter.post('/:postId/comments', authJwtMiddleware, createCommentController)
 
 
 

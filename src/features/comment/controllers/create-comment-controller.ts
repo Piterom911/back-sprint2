@@ -1,13 +1,18 @@
 import {Response} from "express";
-import {RequestWithBody} from "../../../types/request-types";
+import {RequestWithParamsAndBody} from "../../../types/request-types";
 import {CreateCommentType} from "../types/create-comment-type";
 import {CommentResponseType} from "../types/comment-response-type";
 import {HTTP_STATUS} from "../../../constants/http-status";
 import {CommentService} from "../services/comment-service";
 import {QueryCommentRepository} from "../repositories/query-comment-repository";
 
-export const createCommentController = async (req: RequestWithBody<CreateCommentType>, res: Response<CommentResponseType>) => {
-    const commentId = await CommentService.postNewEntity(req.body)
+export const createCommentController = async (req: RequestWithParamsAndBody<{
+    postId: string
+}, CreateCommentType>, res: Response<CommentResponseType>) => {
+
+    const commentData = {...req.body, ...req.params}
+    debugger
+    const commentId = await CommentService.postNewEntity(commentData)
     if (!commentId) {
         res.sendStatus(HTTP_STATUS.NOT_FOUND)
         return
