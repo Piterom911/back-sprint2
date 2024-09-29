@@ -8,8 +8,7 @@ export type JwtServiceTokenType = {
 
 export const jwtService = {
     async createToken(userId: string): Promise<string> {
-        const token = jwt.sign({userId}, SETTINGS.jwt.secret, {expiresIn: '1h'})
-        return token
+        return jwt.sign({userId}, SETTINGS.jwt.secret, {expiresIn: '1h'})
     },
     async decodeToken(token: string): Promise<any> {
         try {

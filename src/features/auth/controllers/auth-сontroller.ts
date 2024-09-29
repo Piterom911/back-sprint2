@@ -7,7 +7,7 @@ import {AuthMeViewModel} from "../../user/types/user-response-type";
 import {QueryUserRepository} from "../../user/repostitories/query-user-repository";
 import {HTTP_STATUS} from "../../../constants/http-status";
 
-export const authOntroller = {
+export const authController = {
     async authLogin(req: RequestWithBody<AuthLoginType>, res: ResponseType<AccessTokenType>): Promise<void> {
         const loginOrEmail = req.body.loginOrEmail
         const password = req.body.password
@@ -29,7 +29,7 @@ export const authOntroller = {
 
     async authMe(req: Request, res: Response<AuthMeViewModel>) {
         try {
-            const result = await QueryUserRepository.findUserByToken(req.body.userId)
+            const result = await QueryUserRepository.findUserByToken(req.body.userToken.userId)
             res.status(HTTP_STATUS.OK).json(result!)
             return;
         } catch (error) {

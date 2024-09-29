@@ -39,9 +39,8 @@ export class QueryUserRepository {
     }
 
     static async findUserByToken(id: string): Promise<AuthMeViewModel | null> {
-        const user = await userCollection.findOne({id})
-        if (user === null)
-            return null;
+        const user = await userCollection.findOne({_id: new ObjectId(id)})
+        if (user === null) return null;
 
         return {
             email: user.email,
