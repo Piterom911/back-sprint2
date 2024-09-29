@@ -3,6 +3,7 @@ import {CommentDBType} from "../../../db/db-models";
 import {QueryPostRepository} from "../../post/repositories/query-post-repository";
 import {QueryUserRepository} from "../../user/repostitories/query-user-repository";
 import {CommandCommentRepository} from "../repositories/command-comment-repository";
+import {ObjectId} from "mongodb";
 
 export class CommentService {
     static async postNewEntity(newEntityData: CreateCommentType): Promise<string | null> {
@@ -14,6 +15,7 @@ export class CommentService {
         if (!targetPost || !userLogin) return null
 
         const newComment: CommentDBType = {
+            postId: new ObjectId(postId),
             content,
             commentatorInfo: {
                 userId: userId,

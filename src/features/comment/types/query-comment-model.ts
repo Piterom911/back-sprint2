@@ -6,3 +6,7 @@ export type QueryCommentModel = {
     pageNumber?: number
     pageSize?: number
 }
+
+export type QueryCommentByPostIdModel = {
+    postId: string
+} & QueryCommentModel

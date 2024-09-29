@@ -21,7 +21,7 @@ postRouter.put('/:id', mongoIdParamValidation(), authMiddleware, postValidation(
 postRouter.delete('/:id', mongoIdParamValidation(), authMiddleware, deletePostController)
 
 // comment by post id routers
-postRouter.get('/:id/comments', getAllCommentsController)
+postRouter.get('/:postId/comments', getAllCommentsController)
 postRouter.post('/:postId/comments', authJwtMiddleware, createCommentController)
 
 

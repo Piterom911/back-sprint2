@@ -1,4 +1,4 @@
-import {QueryCommentModel} from "../types/query-comment-model";
+import {QueryCommentByPostIdModel} from "../types/query-comment-model";
 import {CommentSortResponseType} from "../types/comment-sort-response-type";
 import {commentCollection} from "../../../db/db";
 import {commentMapper} from "../mappers/comment-response-mapper";
@@ -6,7 +6,7 @@ import {ObjectId} from "mongodb";
 import {CommentResponseType} from "../types/comment-response-type";
 
 export class QueryCommentRepository {
-    static async getAllEntities(sortData: QueryCommentModel): Promise<CommentSortResponseType> {
+    static async getAllEntities(sortData: QueryCommentByPostIdModel): Promise<CommentSortResponseType> {
         const sortBy = sortData.sortBy ?? 'createdAt'
         const sortDirection = sortData.sortDirection ?? 'desc'
         const pageNumber = sortData.pageNumber ?? 1
@@ -17,7 +17,7 @@ export class QueryCommentRepository {
         const pagesCount = Math.ceil(totalCount / +pageSize)
 
         const comments = await commentCollection
-            .find({})
+            .find({postId: sortData.postId})
             .sort(sortBy, sortDirection)
             .skip((+pageNumber - 1) * +pageSize)
             .limit(+pageSize)
