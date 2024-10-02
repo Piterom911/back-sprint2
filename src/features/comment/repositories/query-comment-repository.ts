@@ -17,7 +17,7 @@ export class QueryCommentRepository {
         const pagesCount = Math.ceil(totalCount / +pageSize)
 
         const comments = await commentCollection
-            .find({postId: sortData.postId})
+            .find({postId: new ObjectId(sortData.postId)})
             .sort(sortBy, sortDirection)
             .skip((+pageNumber - 1) * +pageSize)
             .limit(+pageSize)

@@ -3,3 +3,11 @@ export type CreateCommentType = {
     content: string
     userId: string
 }
+
+export type CreateCommentParamsType = {
+    postId: string
+}
+
+export type CreateCommentBodyType = {
+    content: string
+}

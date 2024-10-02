@@ -29,7 +29,7 @@ export const authController = {
 
     async authMe(req: Request, res: Response<AuthMeViewModel>) {
         try {
-            const result = await QueryUserRepository.findUserByToken(req.body.userToken.userId)
+            const result = await QueryUserRepository.findUserByToken(req.body.userId)
             res.status(HTTP_STATUS.OK).json(result!)
             return;
         } catch (error) {

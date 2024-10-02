@@ -16,7 +16,7 @@ export class QueryPostRepository {
 
         const pagesCount = Math.ceil(totalCount / +pageSize)
 
-        const posts =  await postCollection
+        const posts = await postCollection
             .find({})
             .sort(sortBy, sortDirection)
             .skip((+pageNumber - 1) * +pageSize)
@@ -33,7 +33,8 @@ export class QueryPostRepository {
     }
 
     static async getEntityById(id: string): Promise<PostResponseType | null> {
-        const targetPost =  await postCollection.findOne({_id: new ObjectId(id)})
+        const targetPost = await postCollection.findOne({_id: new ObjectId(id)})
+        debugger
         if (!targetPost) return null
         return postMapper(targetPost)
     }

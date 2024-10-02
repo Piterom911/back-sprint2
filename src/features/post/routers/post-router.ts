@@ -8,8 +8,8 @@ import {createPostController} from "../controllers/create-post-controller";
 import {updatePostController} from "../controllers/update-post-controller";
 import {deletePostController} from "../controllers/delete-post-controller";
 import {authJwtMiddleware} from "../../../middlewares/auth/auth-jwt-middleware";
-import {createCommentController} from "../../comment/controllers/create-comment-controller";
-import {getAllCommentsController} from "../../comment/controllers/get-all-comments-controller";
+import {getAllCommentsByPostIdController} from "../controllers/get-all-comments-by-post-id-controller";
+import {createCommentByPostIdController} from "../controllers/create-comment-by-post-id-controller";
 
 export const postRouter = Router({})
 
@@ -21,8 +21,8 @@ postRouter.put('/:id', mongoIdParamValidation(), authMiddleware, postValidation(
 postRouter.delete('/:id', mongoIdParamValidation(), authMiddleware, deletePostController)
 
 // comment by post id routers
-postRouter.get('/:postId/comments', getAllCommentsController)
-postRouter.post('/:postId/comments', authJwtMiddleware, createCommentController)
+postRouter.get('/:postId/comments', getAllCommentsByPostIdController)
+postRouter.post('/:postId/comments', authJwtMiddleware, createCommentByPostIdController)
 
 
 
