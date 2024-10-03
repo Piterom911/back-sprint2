@@ -3,9 +3,9 @@ import {QueryCommentModel} from "../../comment/types/query-comment-model";
 import {CommentSortResponseType} from "../../comment/types/comment-sort-response-type";
 import {QueryCommentRepository} from "../../comment/repositories/query-comment-repository";
 
-export const getAllCommentsByPostIdController = async (req: RequestWithParamsAndQuery<{postId: string},QueryCommentModel>, res: ResponseType<CommentSortResponseType>) => {
+export const getAllCommentsByPostIdController = async (req: RequestWithParamsAndQuery<{id: string},QueryCommentModel>, res: ResponseType<CommentSortResponseType>) => {
     const sortData = {
-        postId: req.params.postId,
+        postId: req.params.id,
         sortBy: req.query.sortBy,
         sortDirection: req.query.sortDirection,
         pageNumber: req.query.pageNumber,

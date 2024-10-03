@@ -8,14 +8,14 @@ import {CommentService} from "../../comment/services/comment-service";
 import {QueryCommentRepository} from "../../comment/repositories/query-comment-repository";
 
 export const createCommentByPostIdController = async (req: RequestWithParamsAndBody<CreateCommentParamsType, CreateCommentBodyType>, res: Response<CommentResponseType | null>) => {
-    const postId = await QueryPostRepository.getEntityById(req.params.postId)
+    const postId = await QueryPostRepository.getEntityById(req.params.id)
     if (!postId) {
         res.sendStatus(HTTP_STATUS.NOT_FOUND)
         return
     }
 
     const commentData = {
-        postId: req.params.postId,
+        postId: req.params.id,
         content: req.body.content,
         userId: req.userId!.toString(),
     }

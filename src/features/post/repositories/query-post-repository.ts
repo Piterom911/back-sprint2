@@ -34,7 +34,6 @@ export class QueryPostRepository {
 
     static async getEntityById(id: string): Promise<PostResponseType | null> {
         const targetPost = await postCollection.findOne({_id: new ObjectId(id)})
-        debugger
         if (!targetPost) return null
         return postMapper(targetPost)
     }

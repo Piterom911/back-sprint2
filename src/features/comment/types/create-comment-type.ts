@@ -5,7 +5,7 @@ export type CreateCommentType = {
 }
 
 export type CreateCommentParamsType = {
-    postId: string
+    id: string
 }
 
 export type CreateCommentBodyType = {

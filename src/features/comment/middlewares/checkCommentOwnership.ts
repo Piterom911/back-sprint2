@@ -4,10 +4,10 @@ import {RequestWithParams} from "../../../types/request-types";
 import {QueryCommentRepository} from "../repositories/query-comment-repository";
 
 export const checkCommentOwnership = async (req: RequestWithParams<{
-    commentId: string
+    id: string
 }>, res: Response, next: NextFunction) => {
     const {userId} = req;
-    const commentId = req.params.commentId;
+    const commentId = req.params.id;
 
     const targetComment = await QueryCommentRepository.getEntityById(commentId)
 

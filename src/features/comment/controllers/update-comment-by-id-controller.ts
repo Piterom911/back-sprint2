@@ -6,9 +6,9 @@ import {UpdateCommentType} from "../types/update-comment-type";
 import {CommentService} from "../services/comment-service";
 
 export const updateCommentByIdController = async (req: RequestWithParamsAndBody<{
-    commentId: string
+    id: string
 }, UpdateCommentType>, res: Response) => {
-    const commentId = req.params.commentId
+    const commentId = req.params.id
     const content = req.body.content
 
     const targetComment = await QueryCommentRepository.getEntityById(commentId)
