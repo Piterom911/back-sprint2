@@ -27,4 +27,8 @@ export class CommentService {
         const createdComment = await CommandCommentRepository.postNewEntity(newComment)
         return createdComment ? createdComment.insertedId.toString() : null
     }
+
+    static async updateEntity(commentId: string, content: string): Promise<boolean> {
+        return await CommandCommentRepository.updateEntity(commentId, {content})
+    }
 }

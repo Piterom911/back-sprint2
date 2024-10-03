@@ -1,15 +1,23 @@
 import {Response} from "express";
-import {RequestWithParams} from "../../../types/request-types";
-import {CommentResponseType} from "../types/comment-response-type";
+import {RequestWithParamsAndBody} from "../../../types/request-types";
 import {HTTP_STATUS} from "../../../constants/http-status";
 import {QueryCommentRepository} from "../repositories/query-comment-repository";
+import {UpdateCommentType} from "../types/update-comment-type";
+import {CommentService} from "../services/comment-service";
 
-export const updateCommentByIdController = async (req: RequestWithParams<{ commentId: string }>, res: Response<CommentResponseType>) => {
+export const updateCommentByIdController = async (req: RequestWithParamsAndBody<{
+    commentId: string
+}, UpdateCommentType>, res: Response) => {
+    const commentId = req.params.commentId
+    const content = req.body.content
 
-    const comment = await QueryCommentRepository.getEntityById(req.params.commentId)
-    if (!comment) {
+    const targetComment = await QueryCommentRepository.getEntityById(commentId)
+    if (!targetComment) {
         res.sendStatus(HTTP_STATUS.NOT_FOUND)
         return
     }
-    res.status(HTTP_STATUS.CREATED).send(comment)
+
+    await CommentService.updateEntity(commentId, content)
+
+    res.send(HTTP_STATUS.NO_CONTENT)
 }

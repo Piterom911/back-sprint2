@@ -12,11 +12,6 @@ export const deleteCommentByIdController = async (req: RequestWithParams<{ comme
         return
     }
 
-    if (targetComment.commentatorInfo.userId !== req.userId) {
-        res.sendStatus(HTTP_STATUS.FORBIDDEN)
-        return
-    }
-
     await CommandCommentRepository.deleteEntity(req.params.commentId)
     res.sendStatus(HTTP_STATUS.NO_CONTENT)
 }
