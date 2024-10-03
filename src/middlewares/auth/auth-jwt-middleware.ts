@@ -1,4 +1,4 @@
-import {NextFunction, Request, Response} from "express";
+import {NextFunction, Response, Request} from "express";
 import {jwtService} from "../../adapters/jwt-service";
 
 import {HTTP_STATUS} from "../../constants/http-status";

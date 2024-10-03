@@ -5,3 +5,5 @@ declare global {
         }
     }
 }
+
+export type CustomRequest<P = {}, R = {}, B = {}, Q = {}> = Express.Request<P, R, B, Q>;
