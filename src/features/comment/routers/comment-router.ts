@@ -4,10 +4,11 @@ import {updateCommentByIdController} from "../controllers/update-comment-by-id-c
 import {authJwtMiddleware} from "../../../middlewares/auth/auth-jwt-middleware";
 import {deleteCommentByIdController} from "../controllers/delete-comment-by-id-controller";
 import {checkCommentOwnership} from "../middlewares/checkCommentOwnership";
-import {mongoIdParamValidation} from "../../blog/validators/id-param-validator";
+import {mongoIdParamValidation} from "../../../middlewares/mongo-id-param-validator";
+import {commentValidation} from "../validators/comment-validator";
 
 export const commentRouter = Router({})
 
 commentRouter.get("/:id", mongoIdParamValidation(), getCommentByIdController)
-commentRouter.put("/:id", mongoIdParamValidation(), authJwtMiddleware, checkCommentOwnership, updateCommentByIdController)
+commentRouter.put("/:id", mongoIdParamValidation(), commentValidation(), authJwtMiddleware, checkCommentOwnership, updateCommentByIdController)
 commentRouter.delete("/:id", mongoIdParamValidation(), authJwtMiddleware, checkCommentOwnership, deleteCommentByIdController)

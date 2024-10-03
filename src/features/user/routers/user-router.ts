@@ -8,7 +8,7 @@ import {UserSortResponseType} from "../types/user-sort-response-type";
 import {QueryUserRepository} from "../repostitories/query-user-repository";
 import {authMiddleware} from "../../../middlewares/auth/auth-middleware";
 import {userValidation} from "../../../validators/user-validator";
-import {mongoIdParamValidation} from "../../blog/validators/id-param-validator";
+import {mongoIdParamValidation} from "../../../middlewares/mongo-id-param-validator";
 import {HTTP_STATUS} from "../../../constants/http-status";
 
 export const userRouter = Router({})

@@ -1,7 +1,7 @@
 import {Router} from "express"
 import {authMiddleware} from "../../../middlewares/auth/auth-middleware";
 import {blogValidation} from "../validators/blog-validator";
-import {mongoIdParamValidation, mongoIDValidation} from "../validators/id-param-validator";
+import {mongoIdParamValidation} from "../../../middlewares/mongo-id-param-validator";
 import {postToBlogValidation} from "../../../validators/post-to-blog-validator";
 import {getAllBlogsController} from "../controllers/get-all-blogs-controller";
 import {getBlogByIdController} from "../controllers/get-blog-by-id-controller";
@@ -22,7 +22,7 @@ blogRouter.delete('/:id', mongoIdParamValidation(), authMiddleware, deleteBlogCo
 
 // Blog Post controllers
 blogRouter.get('/:id/posts', getPostsByBlogIdController)
-blogRouter.post('/:id/posts', authMiddleware, mongoIDValidation, postToBlogValidation(), createPostByBlogIdController)
+blogRouter.post('/:id/posts', authMiddleware, mongoIdParamValidation(), postToBlogValidation(), createPostByBlogIdController)
 
 
 
