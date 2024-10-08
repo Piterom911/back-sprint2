@@ -4,11 +4,28 @@ import {blogTestManager} from "../utils/blog-test-manager";
 import {CreatePostBlogModel} from "../../src/features/blog/types/create-blog-model";
 import {HTTP_STATUS} from "../../src/constants/http-status";
 import {URI_PATHS} from "../../src/constants/uri-paths";
+import {MongoMemoryServer} from "mongodb-memory-server-global-4.4";
+import {blogCollection, eraseDB, runDb} from "../../src/db/db";
 
 
 const getRequest = () => request(app)
 
 describe('Blog endpoints', () => {
+
+    let mongodb: MongoMemoryServer
+
+    beforeAll(async() => {
+        mongodb = await MongoMemoryServer.create()
+        const uri = mongodb.getUri()
+        await runDb(uri)
+
+        await eraseDB();
+        console.log('Drop successful')
+    })
+
+    afterAll(async () => {
+        await mongodb.stop();
+    })
 
     let noBlogsResponse = {
         pagesCount: 0,
@@ -17,10 +34,6 @@ describe('Blog endpoints', () => {
         totalCount: 0,
         items: []
     }
-
-    beforeAll(async () => {
-        await getRequest().delete(URI_PATHS.tests)
-    })
 
     it('should return status 200 and an empty array', async () => {
         await getRequest()

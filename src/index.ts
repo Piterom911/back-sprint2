@@ -3,5 +3,5 @@ import {runDb} from "./db/db";
 import {SETTINGS} from "./settings";
 
 app.listen(SETTINGS.port, async () => {
-    await runDb()
+    await runDb(SETTINGS.mongoURI)
 })

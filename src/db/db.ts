@@ -1,25 +1,30 @@
-import {Collection, MongoClient} from "mongodb";
+import {Collection, Db, MongoClient} from "mongodb";
 import {BlogDBType, CommentDBType, PostDBType, UserDBType} from "./db-models";
 import dotenv from "dotenv";
 import {SETTINGS} from "../settings";
 
 dotenv.config()
 
-const port = 3000
+const port = SETTINGS.port
 
-const uri = SETTINGS.mongoURI
+let client: MongoClient = {} as MongoClient
+let  database: Db= {} as Db
 
-const client = new MongoClient(uri)
+export let blogCollection: Collection<BlogDBType> = {} as Collection<BlogDBType>
+export let postCollection: Collection<PostDBType> = {} as Collection<PostDBType>
+export let userCollection: Collection<UserDBType> = {} as Collection<UserDBType>
+export let commentCollection: Collection<CommentDBType> = {} as Collection<CommentDBType>
 
-export const database = client.db('blogs-hws');
-
-export const blogCollection: Collection<BlogDBType> = database.collection<BlogDBType>('blogs')
-export const postCollection: Collection<PostDBType> = database.collection<PostDBType>('posts')
-export const userCollection: Collection<UserDBType> = database.collection<UserDBType>('users')
-export const commentCollection: Collection<CommentDBType> = database.collection<CommentDBType>('comments')
-
-export const runDb = async () => {
+export const runDb = async (MONGO_URL: string) => {
     try {
+        console.log('коннект')
+        client = new MongoClient(MONGO_URL)
+        database = client.db(process.env.DB_NAME);
+        blogCollection = database.collection<BlogDBType>('blogs')
+        postCollection = database.collection<PostDBType>('posts')
+        userCollection = database.collection<UserDBType>('users')
+        commentCollection = database.collection<CommentDBType>('comments')
+
         await client.connect()
         console.log('Client connected to DB')
         console.log(`This App is listening on port ${port}`)
@@ -27,4 +32,12 @@ export const runDb = async () => {
         console.log(`Some error occurred: ${error}`)
         await client.close()
     }
+}
+
+export const eraseDB = async() => {
+    await blogCollection.deleteMany()
+    await postCollection.deleteMany()
+    await userCollection.deleteMany()
+    await commentCollection.deleteMany()
+
 }
