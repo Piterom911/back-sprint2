@@ -17,7 +17,6 @@ export let commentCollection: Collection<CommentDBType> = {} as Collection<Comme
 
 export const runDb = async (MONGO_URL: string) => {
     try {
-        console.log('коннект')
         client = new MongoClient(MONGO_URL)
         database = client.db(process.env.DB_NAME);
         blogCollection = database.collection<BlogDBType>('blogs')

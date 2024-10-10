@@ -4,28 +4,13 @@ import {blogTestManager} from "../utils/blog-test-manager";
 import {CreatePostBlogModel} from "../../src/features/blog/types/create-blog-model";
 import {HTTP_STATUS} from "../../src/constants/http-status";
 import {URI_PATHS} from "../../src/constants/uri-paths";
-import {MongoMemoryServer} from "mongodb-memory-server-global-4.4";
-import {blogCollection, eraseDB, runDb} from "../../src/db/db";
+import {createMongoMemoryServer} from "../utils/create-mongo-memory-server";
 
 
 const getRequest = () => request(app)
 
 describe('Blog endpoints', () => {
-
-    let mongodb: MongoMemoryServer
-
-    beforeAll(async() => {
-        mongodb = await MongoMemoryServer.create()
-        const uri = mongodb.getUri()
-        await runDb(uri)
-
-        await eraseDB();
-        console.log('Drop successful')
-    })
-
-    afterAll(async () => {
-        await mongodb.stop();
-    })
+    createMongoMemoryServer();
 
     let noBlogsResponse = {
         pagesCount: 0,

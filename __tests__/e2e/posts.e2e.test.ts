@@ -4,10 +4,13 @@ import {postTestManager} from "../utils/post-test-manager";
 import {blogTestManager} from "../utils/blog-test-manager";
 import {HTTP_STATUS} from "../../src/constants/http-status";
 import {URI_PATHS} from "../../src/constants/uri-paths";
+import {createMongoMemoryServer} from "../utils/create-mongo-memory-server";
 
 const getRequest = () => request(app)
 
 describe('Post endpoints', () => {
+    createMongoMemoryServer();
+
     let startArrayWithNoPosts = {
         pagesCount: 0,
         page: 1,
@@ -15,9 +18,6 @@ describe('Post endpoints', () => {
         totalCount: 0,
         items: []
     }
-    beforeAll(async () => {
-        await getRequest().delete('/testing/all-data')
-    })
 
     it('should return status 200 and an empty array', async () => {
         await getRequest()
