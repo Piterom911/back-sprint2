@@ -24,5 +24,12 @@ export const userTestManager = {
             .set('Authorization', authData)
             .send(data)
             .expect(expectedStatusCode);
+    },
+
+    async deleteUser(expectedStatusCode: HttpStatusType = HTTP_STATUS.CREATED, userId: string, authData: string) {
+        return getRequest()
+            .delete(`${URI_PATHS.users}/${userId}`)
+            .set('Authorization', authData)
+            .expect(expectedStatusCode);
     }
 }
