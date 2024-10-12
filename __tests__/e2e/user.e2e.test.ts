@@ -38,6 +38,7 @@ describe('User endpoints', () => {
         expect(allUsers.body).toEqual({
             ...startEmptyArr,
             totalCount: 1,
+            pagesCount: 1,
             items: [
                 {
                     id: allUsers.body.id,
