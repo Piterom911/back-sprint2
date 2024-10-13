@@ -7,12 +7,13 @@ const getRequest = () => request(app)
 
 export const commentTestManager = {
     async createComment(data: any,
-                     expectedStatusCode: HttpStatusType = HTTP_STATUS.CREATED,
-                     authData: string
+                        postId: string,
+                        expectedStatusCode: HttpStatusType = HTTP_STATUS.CREATED,
+                        authData: string
     ) {
 
         return getRequest()
-            .post(URI_PATHS.comments)
+            .post(`${URI_PATHS.posts}/${postId + URI_PATHS.comments}`)
             .set('Authorization', authData)
             .send(data)
             .expect(expectedStatusCode);
