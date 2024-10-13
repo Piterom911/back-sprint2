@@ -10,5 +10,5 @@ import {commentValidation} from "../validators/comment-validator";
 export const commentRouter = Router({})
 
 commentRouter.get("/:id", mongoIdParamValidation(), getCommentByIdController)
-commentRouter.put("/:id", mongoIdParamValidation(), commentValidation(), authJwtMiddleware, checkCommentOwnership, updateCommentByIdController)
+commentRouter.put("/:id", mongoIdParamValidation(), authJwtMiddleware, checkCommentOwnership, commentValidation(), updateCommentByIdController)
 commentRouter.delete("/:id", mongoIdParamValidation(), authJwtMiddleware, checkCommentOwnership, deleteCommentByIdController)

@@ -19,8 +19,6 @@ export class UserService {
             createdAt: new Date().toISOString(),
         }
 
-        console.log(newUser)
-
         return await CommandUserRepository.createNewEntity(newUser)
     }
 

@@ -31,7 +31,7 @@ export type UserDBType = {
 }
 
 export type CommentDBType = {
-    postId: ObjectId
+    postId: string
     content: string
     commentatorInfo: {
         userId: string

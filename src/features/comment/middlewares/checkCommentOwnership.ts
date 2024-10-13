@@ -11,6 +11,10 @@ export const checkCommentOwnership = async (req: RequestWithParams<{
 
     const targetComment = await QueryCommentRepository.getEntityById(commentId)
 
+    if (!targetComment) {
+        res.sendStatus(HTTP_STATUS.NOT_FOUND);
+        return;
+    }
 
     if (targetComment?.commentatorInfo.userId !== userId) {
         res.sendStatus(HTTP_STATUS.FORBIDDEN);
