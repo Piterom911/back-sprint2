@@ -1,7 +1,7 @@
 import {createMongoMemoryServer} from "../utils/create-mongo-memory-server";
 import {UserService} from "../../src/features/user/services/user-service";
 import {HTTP_STATUS} from "../../src/constants/http-status";
-import {userTestManager} from "../utils/user-test-manager";
+import {userTestManager} from "../utils/managers/user-test-manager";
 
 
 describe('User endpoints', () => {

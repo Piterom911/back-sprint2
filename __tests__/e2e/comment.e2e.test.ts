@@ -6,9 +6,10 @@ import {UserResponseType} from "../../src/features/user/types/user-response-type
 import {BlogResponseType} from "../../src/features/blog/types/blog-response-type";
 import {PostResponseType} from "../../src/features/post/types/post-response-type";
 import {HTTP_STATUS} from "../../src/constants/http-status";
-import {commentTestManager} from "../utils/comment-test-manager";
+import {commentTestManager} from "../utils/managers/comment-test-manager";
 import {CommentResponseType} from "../../src/features/comment/types/comment-response-type";
 import {eraseDB} from "../../src/db/db";
+import {createUsers} from "../utils/creators/create-users";
 
 const getRequest = () => request(app)
 
@@ -23,39 +24,35 @@ describe('Comment endpoints', () => {
         items: []
     }
 
-    let user: UserResponseType,
+    let users: UserResponseType[],
         blog: BlogResponseType,
         post: PostResponseType,
         comment: CommentResponseType,
         accessToken: string
 
-    const authRight = `Basic YWRtaW46cXdlcnR5`;
+    const authBasic = `Basic YWRtaW46cXdlcnR5`;
 
     beforeAll(async () => {
         // 1. User creation
-        const userResponse = await getRequest()
-            .post(URI_PATHS.users)
-            .set("Authorization", authRight)
-            .send({login: "Roman", email: "roman@gamil.com", password: "qwerty",});
-        user = userResponse.body;
+        users = await createUsers(12, authBasic)
 
         // 2. Auth
         const auth = await getRequest()
             .post(`${URI_PATHS.auth}/login`)
-            .send({loginOrEmail: "Roman", password: "qwerty"})
+            .send({loginOrEmail: "Roman1", password: "qwerty"})
         accessToken = `Bearer ${auth.body.accessToken}`
 
         // 3. Blog creation
         const blogResponse = await getRequest()
             .post(URI_PATHS.blogs)
-            .set("Authorization", authRight)
+            .set("Authorization", authBasic)
             .send({name: "Obout me", description: "I am Grut", websiteUrl: "https://dogodadev.com"});
         blog = blogResponse.body;
 
         // 4. Post creation
         const postResponse = await getRequest()
             .post(`${URI_PATHS.blogs}/${blog.id + URI_PATHS.posts}`)
-            .set("Authorization", authRight)
+            .set("Authorization", authBasic)
             .send({title: 'Test Post', shortDescription: "THis is not what you think", content: 'Post content'});
         post = postResponse.body;
     });
@@ -69,13 +66,14 @@ describe('Comment endpoints', () => {
         const commentResponse = await commentTestManager.createComment(commentData, post.id, HTTP_STATUS.CREATED, accessToken)
 
         comment = commentResponse.body
+        console.log("USERS", users);
 
         expect(comment).toEqual({
             ...commentData,
             id: expect.any(String),
             commentatorInfo: {
-                userId: user.id,
-                userLogin: user.login
+                userId: users[0].id,
+                userLogin: users[0].login
             },
             createdAt: expect.any(String)
         })

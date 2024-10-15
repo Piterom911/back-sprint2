@@ -2,7 +2,7 @@ import {createMongoMemoryServer} from "../utils/create-mongo-memory-server";
 import {userCollection} from "../../src/db/db";
 import {ObjectId} from "mongodb";
 import {generateHash} from "../../src/utils/password-hash";
-import {authTestManager} from "../utils/auth-test-manager";
+import {authTestManager} from "../utils/managers/auth-test-manager";
 import {HTTP_STATUS} from "../../src/constants/http-status";
 
 describe("auth endpoints", () => {

@@ -1,8 +1,8 @@
 import request from "supertest";
-import {app} from "../../src/app";
-import {HTTP_STATUS, HttpStatusType} from "../../src/constants/http-status";
-import {URI_PATHS} from "../../src/constants/uri-paths";
-import {UserService} from "../../src/features/user/services/user-service";
+import {app} from "../../../src/app";
+import {HTTP_STATUS, HttpStatusType} from "../../../src/constants/http-status";
+import {URI_PATHS} from "../../../src/constants/uri-paths";
+import {UserService} from "../../../src/features/user/services/user-service";
 
 const getRequest = () => request(app)
 
