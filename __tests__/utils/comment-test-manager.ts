@@ -6,6 +6,13 @@ import {URI_PATHS} from "../../src/constants/uri-paths";
 const getRequest = () => request(app)
 
 export const commentTestManager = {
+    async getComments(expectedStatusCode: HttpStatusType = HTTP_STATUS.OK, postId: string) {
+        debugger
+        return getRequest()
+            .get(`${URI_PATHS.posts}/${postId + URI_PATHS.comments}`)
+            .expect(expectedStatusCode)
+    },
+
     async createComment(data: any,
                         postId: string,
                         expectedStatusCode: HttpStatusType = HTTP_STATUS.CREATED,

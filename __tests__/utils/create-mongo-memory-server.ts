@@ -1,5 +1,5 @@
 import {MongoMemoryServer} from "mongodb-memory-server-global-4.4";
-import {eraseDB, runDb} from "../../src/db/db";
+import {runDb} from "../../src/db/db";
 
 export const createMongoMemoryServer = () => {
     let mongodb: MongoMemoryServer
@@ -9,7 +9,7 @@ export const createMongoMemoryServer = () => {
         const uri = mongodb.getUri()
         await runDb(uri)
 
-        await eraseDB();
+        // await eraseDB();
         console.log('Drop successful')
     })
 
