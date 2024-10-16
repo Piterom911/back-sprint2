@@ -11,6 +11,7 @@ import {CommentResponseType} from "../../src/features/comment/types/comment-resp
 import {eraseDB} from "../../src/db/db";
 import {createUsers} from "../utils/creators/create-users";
 import {createBlogs} from "../utils/creators/create-blogs";
+import {authenticateUser} from "../utils/creators/authenticate-user";
 
 const getRequest = () => request(app)
 
@@ -31,19 +32,12 @@ describe('Comment endpoints', () => {
         comment: CommentResponseType,
         accessToken: string
 
-    const authBasic = `Basic YWRtaW46cXdlcnR5`;
+    const authBasic = "Basic YWRtaW46cXdlcnR5";
+    const userPassword = "qwerty";
 
     beforeAll(async () => {
-        // 1. User creation
-        users = await createUsers(12, authBasic)
-
-        // 2. Auth
-        const auth = await getRequest()
-            .post(`${URI_PATHS.auth}/login`)
-            .send({loginOrEmail: "Roman1", password: "qwerty"})
-        accessToken = `Bearer ${auth.body.accessToken}`
-
-        // 3. Blog creation
+        users = await createUsers(12, authBasic, userPassword)
+        accessToken = await authenticateUser({loginOrEmail: users[0].login, password: userPassword})
         blogs = await createBlogs(15, authBasic)
 
         // 4. Post creation
@@ -52,6 +46,7 @@ describe('Comment endpoints', () => {
             .set("Authorization", authBasic)
             .send({title: 'Test Post', shortDescription: "THis is not what you think", content: 'Post content'});
         post = postResponse.body;
+
     });
 
     afterAll( ()=> {
@@ -59,6 +54,7 @@ describe('Comment endpoints', () => {
     })
 
     it("create a comment", async () => {
+        console.log("BLOGS!!!!!!!!!!!!!!!!!!!!!",blogs);
         const commentData = {content: "some content that should be here"};
         const commentResponse = await commentTestManager.createComment(commentData, post.id, HTTP_STATUS.CREATED, accessToken)
 

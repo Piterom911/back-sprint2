@@ -10,7 +10,7 @@ export const createBlogs = async (numberOfBlogs: number, authorization: string) 
             .post(URI_PATHS.blogs)
             .set("Authorization", authorization)
             .send({
-                name: `Interesting blog #${i}`,
+                name: `Blog #${i}`,
                 description: `#${i}. This blog is about very important thing that should know every partner...`,
                 websiteUrl: `https://dogodadev${i}.com`
             });

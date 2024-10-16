@@ -3,7 +3,7 @@ import request from "supertest";
 import {app} from "../../../src/app";
 import {UserResponseType} from "../../../src/features/user/types/user-response-type";
 
-export const createUsers = async (amount: number, authorization: string) => {
+export const createUsers = async (amount: number, authorization: string, password: string) => {
     const users: UserResponseType[] = [];
     for (let i = 1; i <= amount; i++) {
         const userResponse = await request(app)
@@ -12,7 +12,7 @@ export const createUsers = async (amount: number, authorization: string) => {
             .send({
                 login: `Roman${i}`,
                 email: `roman${i}@gmail.com`,
-                password: "qwerty",
+                password: password,
             });
 
         users.push(userResponse.body)
