@@ -10,6 +10,7 @@ import {commentTestManager} from "../utils/managers/comment-test-manager";
 import {CommentResponseType} from "../../src/features/comment/types/comment-response-type";
 import {eraseDB} from "../../src/db/db";
 import {createUsers} from "../utils/creators/create-users";
+import {createBlogs} from "../utils/creators/create-blogs";
 
 const getRequest = () => request(app)
 
@@ -25,7 +26,7 @@ describe('Comment endpoints', () => {
     }
 
     let users: UserResponseType[],
-        blog: BlogResponseType,
+        blogs: BlogResponseType[],
         post: PostResponseType,
         comment: CommentResponseType,
         accessToken: string
@@ -43,15 +44,11 @@ describe('Comment endpoints', () => {
         accessToken = `Bearer ${auth.body.accessToken}`
 
         // 3. Blog creation
-        const blogResponse = await getRequest()
-            .post(URI_PATHS.blogs)
-            .set("Authorization", authBasic)
-            .send({name: "Obout me", description: "I am Grut", websiteUrl: "https://dogodadev.com"});
-        blog = blogResponse.body;
+        blogs = await createBlogs(15, authBasic)
 
         // 4. Post creation
         const postResponse = await getRequest()
-            .post(`${URI_PATHS.blogs}/${blog.id + URI_PATHS.posts}`)
+            .post(`${URI_PATHS.blogs}/${blogs[0].id + URI_PATHS.posts}`)
             .set("Authorization", authBasic)
             .send({title: 'Test Post', shortDescription: "THis is not what you think", content: 'Post content'});
         post = postResponse.body;
