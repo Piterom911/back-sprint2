@@ -14,14 +14,6 @@ import {createPosts} from "../utils/creators/create-posts";
 describe('Comment endpoints', () => {
     createMongoMemoryServer();
 
-    let startArrayWithNoComment = {
-        pagesCount: 0,
-        page: 1,
-        pageSize: 10,
-        totalCount: 0,
-        items: []
-    }
-
     let users: UserResponseType[],
         blogs: BlogResponseType[],
         posts: PostResponseType[],
@@ -38,7 +30,7 @@ describe('Comment endpoints', () => {
         posts = await createPosts(3, blogs[0].id, authBasic)
     });
 
-    afterAll( ()=> {
+    afterAll(() => {
         eraseDB();
     })
 
@@ -63,7 +55,6 @@ describe('Comment endpoints', () => {
         const errorObj = {
             errorsMessages: [{message: expect.any(String), field: expect.any(String)}]
         }
-        console.log("accessTokenaccessTokenaccessTokenaccessTokenaccessTokenaccessToken", accessToken)
 
         const commentData = {content: "here"};
         const commentResponse = await commentTestManager.createComment(
@@ -104,5 +95,34 @@ describe('Comment endpoints', () => {
         const commentResponse = await commentTestManager.getComments(HTTP_STATUS.OK, posts[0].id)
 
         expect(commentResponse.body.items[0]).toEqual(comment)
+    })
+
+    it("creates 10 comments and compares these to creation array", async () => {
+        const commentsArr: CommentResponseType[] = [];
+        const commentStr = " this is some text. I believe that I should do this fast... ";
+        const postId = posts[2].id;
+
+        for (let i = 0; i < 10; i++) {
+            const commentResponse = await commentTestManager.createComment({content: i + commentStr}, postId, HTTP_STATUS.CREATED, accessToken)
+            commentsArr.push(commentResponse.body)
+        }
+
+        const postComments = await commentTestManager.getComments(HTTP_STATUS.OK, postId)
+
+        expect(postComments.body.items).toEqual(commentsArr.reverse())
+    })
+
+    it("creates a couple dozen of comments", async () => {
+        const commentStr = " this is some text. I believe that I should do this fast... ";
+        const postId = posts[1].id;
+
+        for (let i = 0; i < 24; i++) {
+            await commentTestManager.createComment({content: i + commentStr}, postId, HTTP_STATUS.CREATED, accessToken)
+        }
+
+        const postComments = await commentTestManager.getComments(HTTP_STATUS.OK, postId)
+
+        expect(postComments.body.pagesCount).toBe(3)
+        expect(postComments.body.totalCount).toBe(24)
     })
 })
