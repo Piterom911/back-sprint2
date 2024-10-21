@@ -1,14 +1,21 @@
-import {Router, Response} from "express";
-import {URI_PATHS} from "../../../constants/uri-paths";
+import {Response, Router} from "express";
 import {RequestWithBody} from "../../../types/request-types";
 import {CreateEmailModel} from "../types/create-email-model";
+import {emailAdapter} from "../../../adapters/eamil-adapter";
 
 export const emailRouter = Router({});
 
-emailRouter.post(URI_PATHS.email, async (req: RequestWithBody<CreateEmailModel>, res: Response) => {
-    res.send({
-        email: req.body.email,
-        message: req.body.message,
-        subject: req.body.subject
-    })
+emailRouter.post("", async (req: RequestWithBody<CreateEmailModel>, res: Response) => {
+    try {
+        const {email, message, subject} = req.body
+        await emailAdapter.sendEmail(email, message, subject)
+
+        res.send({
+            email: email,
+            message: message,
+            subject: subject
+        })
+    } catch (e) {
+        console.log(e)
+    }
 })

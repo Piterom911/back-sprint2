@@ -30,8 +30,8 @@ describe('Comment endpoints', () => {
         posts = await createPosts(3, blogs[0].id, authBasic)
     });
 
-    afterAll(() => {
-        eraseDB();
+    afterAll(async () => {
+        await eraseDB();
     })
 
     it("create a comment", async () => {

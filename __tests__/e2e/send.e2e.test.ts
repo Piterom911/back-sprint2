@@ -4,17 +4,19 @@ import request from "supertest";
 import {app} from "../../src/app";
 import {URI_PATHS} from "../../src/constants/uri-paths";
 
-describe("send email endpoints", () => {
+describe("check email endpoints", () => {
     createMongoMemoryServer();
 
-    it("returns the same email data object that was sent", async () => {
-        const emailData: CreateEmailModel = {
-            email: "here should be an email address",
-            message: "Hello my little friend! I'm so glad to write you this message...",
-            subject: "My Happiness"
-        }
+    const emailData: CreateEmailModel = {
+        email: "piterom911@gmail.com",
+        message: `<h1>This is the second Email that I've sent.</h1>
+                  <p>Hello my little friend! I'm so glad to write this message to you...</p>
+                  <a href='https://github.com/Piterom911/back-sprint2'>Click me</a>`,
+        subject: "Second nodemailer message"
+    }
 
-        request(app)
+    it("send email and returns the same email data", async () => {
+        await request(app)
             .post(URI_PATHS.email)
             .send(emailData)
             .expect(emailData)

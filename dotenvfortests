@@ -4,4 +4,3 @@ MONGO_URI='mongodb://0.0.0.0:27017'
 AUTH_LOGIN='admin'
 AUTH_PASSWORD='qwerty'
 DB_NAME='blogs-hws'
-EMAIL_PASSWORD="bowoguoresqhpsgb"
