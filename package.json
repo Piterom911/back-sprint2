@@ -25,6 +25,7 @@
     "mongodb": "^6.3.0",
     "mongodb-memory-server-global-4.4": "^10.0.1",
     "morgan-body": "^2.6.9",
+    "nodemailer": "^6.9.15",
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.1"
   },
