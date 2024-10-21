@@ -5,4 +5,5 @@ export const URI_PATHS = {
     posts: '/posts',
     users: '/users',
     comments: '/comments',
+    email: '/send',
 }
