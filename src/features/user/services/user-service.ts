@@ -1,22 +1,31 @@
-import {CreateUserModel} from "../types/create-user-model";
+import {CreateUserDTO} from "../types/create-user";
 import {CommandUserRepository} from "../repostitories/command-user-repository";
-import {ObjectId} from "mongodb";
 import {QueryUserRepository} from "../repostitories/query-user-repository";
 import {comparePassword, generateHash} from "../../../utils/password-hash";
+import {UserModel, UserModelWithId} from "../../../db/db-models";
+import {randomUUID} from "node:crypto";
+import {add} from "date-fns";
 
 export class UserService {
 
-    static async createNewEntity(newEntityData: CreateUserModel): Promise<string | null> {
+    static async createNewEntity(newEntityData: CreateUserDTO): Promise<string | null> {
         let {login, email, password} = newEntityData
 
         const hash = await generateHash(password)
 
-        const newUser = {
-            _id: new ObjectId(),
+        const newUser: UserModel = {
             login,
             email,
-            password: hash,
-            createdAt: new Date().toISOString(),
+            passwordHash: hash,
+            createdAt: new Date(),
+            emailConfirmation: {
+                confirmationCode: randomUUID(),
+                expirationDate: add(new Date(), {
+                    hours: 1,
+                    minutes: 3,
+                }),
+                isConfirmed: false
+            }
         }
 
         return await CommandUserRepository.createNewEntity(newUser)
@@ -26,10 +35,10 @@ export class UserService {
         return CommandUserRepository.deleteEntity(id)
     }
 
-    static async checkCredentials(loginOrEmail: string, password: string): Promise<any> {
-        const targetUser = await QueryUserRepository.findByLoginOrEmail(loginOrEmail)
+    static async checkCredentials(login: string, email: string, password: string): Promise<any> {
+        const targetUser = await QueryUserRepository.findByLoginOrEmail(login, email)
         if (!targetUser) return null
 
-        if (await comparePassword(password, targetUser.password)) return targetUser._id.toString()
+        if (await comparePassword(password, targetUser.passwordHash)) return targetUser._id.toString()
     }
 }

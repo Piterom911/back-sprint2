@@ -1,9 +1,9 @@
 import {userCollection} from "../../../db/db";
 import {ObjectId} from "mongodb";
-import {UserDBType} from "../../../db/db-models";
+import {UserModel} from "../../../db/db-models";
 
 export class CommandUserRepository {
-    static async createNewEntity(newEntityData: UserDBType): Promise<string | null> {
+    static async createNewEntity(newEntityData: UserModel): Promise<string | null> {
         const result = await userCollection.insertOne(newEntityData)
         return result.insertedId.toString()
     }

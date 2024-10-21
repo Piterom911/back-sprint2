@@ -22,13 +22,22 @@ export type LoginDBType = {
     password: string
 }
 
-export type UserDBType = {
-    _id: ObjectId
+export type UserModel = {
     login: string
     email: string
-    password: string
-    createdAt: string
+    passwordHash: string
+    createdAt: Date
+    emailConfirmation: EmailConfirmation
 }
+
+type EmailConfirmation = {
+    confirmationCode: string
+    expirationDate: Date
+    isConfirmed: boolean
+}
+
+export type UserModelWithId = UserModel & { _id: ObjectId };
+
 
 export type CommentDBType = {
     postId: string

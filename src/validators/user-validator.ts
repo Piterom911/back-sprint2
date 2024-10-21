@@ -10,7 +10,7 @@ export const loginValidation = body('login')
     .withMessage('Incorrect Login')
         .custom(async (login) => {
             // Проверяем наличие email в базе данных
-            const user = await QueryUserRepository.findByLoginOrEmail(login);
+            const user = await QueryUserRepository.findByLogin(login);
             if (user) {
                 throw new Error('Login already in use');
             }
@@ -30,7 +30,7 @@ export const emailValidation = body('email')
     .withMessage('Incorrect Email')
     .custom(async (email) => {
             // Проверяем наличие email в базе данных
-            const user = await QueryUserRepository.findByLoginOrEmail(email);
+            const user = await QueryUserRepository.findByEmail(email);
             if (user) {
                 throw new Error('Email already in use');
             }

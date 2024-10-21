@@ -1,6 +1,6 @@
 import {SortDirection} from "mongodb";
 
-export type QueryUserModel = {
+export type QueryUserDTO = {
     searchLoginTerm?: string
     searchEmailTerm?: string
     sortBy?: string

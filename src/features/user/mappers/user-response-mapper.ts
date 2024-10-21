@@ -1,12 +1,12 @@
 import {WithId} from "mongodb";
-import {UserDBType} from "../../../db/db-models";
-import {UserResponseType} from "../types/user-response-type";
+import {UserModel} from "../../../db/db-models";
+import {UserResponseDTO} from "../types/user-response";
 
-export const userMapper = (userDb: WithId<UserDBType>): UserResponseType => {
+export const userMapper = (userDb: WithId<UserModel>): UserResponseDTO => {
     return {
         id: userDb._id.toString(),
         email: userDb.email,
         login: userDb.login,
-        createdAt: userDb.createdAt
+        createdAt: userDb.createdAt.toISOString()
     }
 }

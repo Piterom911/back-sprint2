@@ -1,9 +1,9 @@
 import {RequestWithQuery, ResponseType} from "../../../types/request-types";
-import {QueryUserModel} from "../types/query-user-model";
-import {UserSortResponseType} from "../types/user-sort-response-type";
+import {QueryUserDTO} from "../types/query-user";
+import {UserSortResponseDTO} from "../types/user-sort-response";
 import {QueryUserRepository} from "../repostitories/query-user-repository";
 
-export const getAllUsersController = async (req: RequestWithQuery<QueryUserModel>, res: ResponseType<UserSortResponseType>): Promise<void> => {
+export const getAllUsersController = async (req: RequestWithQuery<QueryUserDTO>, res: ResponseType<UserSortResponseDTO>): Promise<void> => {
     const sortData = {
         searchLoginTerm: req.query.searchLoginTerm,
         searchEmailTerm: req.query.searchEmailTerm,
@@ -12,6 +12,6 @@ export const getAllUsersController = async (req: RequestWithQuery<QueryUserModel
         pageNumber: req.query.pageNumber,
         pageSize: req.query.pageSize,
     }
-    const users: UserSortResponseType = await QueryUserRepository.getAllEntities(sortData)
+    const users: UserSortResponseDTO = await QueryUserRepository.getAllEntities(sortData)
     res.send(users)
 }

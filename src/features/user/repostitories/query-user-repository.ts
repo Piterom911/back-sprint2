@@ -1,14 +1,14 @@
 import {userCollection} from "../../../db/db";
-import {QueryUserModel} from "../types/query-user-model";
-import {UserSortResponseType} from "../types/user-sort-response-type";
-import {AuthMeViewModel, UserResponseType} from "../types/user-response-type";
+import {QueryUserDTO} from "../types/query-user";
+import {UserSortResponseDTO} from "../types/user-sort-response";
+import {AuthMeDTO, UserResponseDTO} from "../types/user-response";
 import {ObjectId} from "mongodb";
-import {UserDBType} from "../../../db/db-models";
-import {FilterType} from "../types/find-user-by-query-filter-type";
+import {UserModel, UserModelWithId} from "../../../db/db-models";
+import {QueryFilterDTO} from "../types/query-filter";
 import {userMapper} from "../mappers/user-response-mapper";
 
 export class QueryUserRepository {
-    static async getAllEntities(sortData: QueryUserModel): Promise<UserSortResponseType> {
+    static async getAllEntities(sortData: QueryUserDTO): Promise<UserSortResponseDTO> {
         const searchLoginTerm = sortData.searchLoginTerm || null
         const searchEmailTerm = sortData.searchEmailTerm || null
         const sortBy = sortData.sortBy ?? 'createdAt'
@@ -38,7 +38,7 @@ export class QueryUserRepository {
         }
     }
 
-    static async findUserByToken(id: string): Promise<AuthMeViewModel | null> {
+    static async findUserByToken(id: string): Promise<AuthMeDTO | null> {
         const user = await userCollection.findOne({_id: new ObjectId(id)})
         if (user === null) return null;
 
@@ -49,24 +49,36 @@ export class QueryUserRepository {
         };
     }
 
-    static async findByLoginOrEmail(loginOrEmail: string): Promise<UserDBType | null> {
+    static async findByLogin(login: string): Promise<UserModelWithId | null> {
+        return await userCollection.findOne({
+            login: {$regex: login, $options: 'i'}
+        })
+    }
+
+    static async findByEmail(email: string): Promise<UserModelWithId | null> {
+        return await userCollection.findOne({
+            email: {$regex: email, $options: 'i'}
+        })
+    }
+
+    static async findByLoginOrEmail(login: string, email: string): Promise<UserModelWithId | null> {
         return await userCollection.findOne({
             $or: [
-                {email: {$regex: loginOrEmail, $options: 'i'}},
-                {login: {$regex: loginOrEmail, $options: 'i'}}
+                {email: {$regex: email, $options: 'i'}},
+                {login: {$regex: login, $options: 'i'}}
             ]
         })
     }
 
-    static async getEntityById(id: string): Promise<UserResponseType | null> {
+    static async getEntityById(id: string): Promise<UserResponseDTO | null> {
         const targetUser = await userCollection.findOne({_id: new ObjectId(id)})
         if (!targetUser) return null
         return userMapper(targetUser)
     }
 
-    static filter_Find_EmailORLoginTerm(email: string | null, login: string | null): FilterType {
+    static filter_Find_EmailORLoginTerm(email: string | null, login: string | null): QueryFilterDTO {
 
-        let filter: FilterType = {$or: []};
+        let filter: QueryFilterDTO = {$or: []};
         if (email) {
             filter['$or']?.push({email: {$regex: email, $options: 'i'}});
         }

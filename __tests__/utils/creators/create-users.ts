@@ -1,10 +1,10 @@
 import {URI_PATHS} from "../../../src/constants/uri-paths";
 import request from "supertest";
 import {app} from "../../../src/app";
-import {UserResponseType} from "../../../src/features/user/types/user-response-type";
+import {UserResponseDTO} from "../../../src/features/user/types/user-response";
 
 export const createUsers = async (numberOfUsers: number, authorization: string, password: string) => {
-    const users: UserResponseType[] = [];
+    const users: UserResponseDTO[] = [];
     for (let i = 1; i <= numberOfUsers; i++) {
         const userResponse = await request(app)
             .post(URI_PATHS.users)

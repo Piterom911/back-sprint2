@@ -1,5 +1,5 @@
 import {createMongoMemoryServer} from "../utils/create-mongo-memory-server";
-import {UserResponseType} from "../../src/features/user/types/user-response-type";
+import {UserResponseDTO} from "../../src/features/user/types/user-response";
 import {BlogResponseType} from "../../src/features/blog/types/blog-response-type";
 import {PostResponseType} from "../../src/features/post/types/post-response-type";
 import {HTTP_STATUS} from "../../src/constants/http-status";
@@ -14,7 +14,7 @@ import {createPosts} from "../utils/creators/create-posts";
 describe('Comment endpoints', () => {
     createMongoMemoryServer();
 
-    let users: UserResponseType[],
+    let users: UserResponseDTO[],
         blogs: BlogResponseType[],
         posts: PostResponseType[],
         comment: CommentResponseType,

@@ -1,4 +1,4 @@
-export type CreateUserModel = {
+export type CreateUserDTO = {
     login: string,
     password: string,
     email: string
