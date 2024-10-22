@@ -8,6 +8,7 @@ import {QueryUserRepository} from "../../user/repostitories/query-user-repositor
 import {HTTP_STATUS} from "../../../constants/http-status";
 import {authService} from "../services/auth-service";
 import {CreateUserDTO} from "../../user/types/create-user";
+import {ConfirmationEmailDTO} from "../../user/types/confirm-email";
 
 export const authController = {
     async authLogin(req: RequestWithBody<AuthLoginType>, res: ResponseType<AccessTokenType>): Promise<void> {
@@ -41,11 +42,18 @@ export const authController = {
         }
     },
 
-    async registration(req: RequestWithBody<CreateUserDTO>, res: Response) {
+    async registerUser(req: RequestWithBody<CreateUserDTO>, res: Response) {
         const {login, password, email} = req.body
         const user = await authService.registerUser(login, password, email)
 
         if (user) res.status(HTTP_STATUS.CREATED).send()
-        else res.status(HTTP_STATUS.BAD_REQUEST)
+        else res.status(HTTP_STATUS.BAD_REQUEST).send()
+    },
+
+    async confirmEmail(req: RequestWithBody<ConfirmationEmailDTO>, res: Response) {
+        const user = await authService.confirmEmailByCode(req.body)
+
+        if (user) res.status(HTTP_STATUS.CREATED).send()
+        else res.status(HTTP_STATUS.NO_CONTENT).send()
     }
 }

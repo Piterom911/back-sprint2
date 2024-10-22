@@ -6,9 +6,21 @@ import {randomUUID} from "node:crypto";
 import {add} from "date-fns";
 import {CommandUserRepository} from "../../user/repostitories/command-user-repository";
 import {nodemailerService} from "../../../adapters/nodemailer-service";
+import {ConfirmationEmailDTO} from "../../user/types/confirm-email";
 
 
 export const authService = {
+
+    async confirmEmailByCode(data: ConfirmationEmailDTO): Promise<boolean> {
+        const {confirmationCode, email} = data
+        const user = await QueryUserRepository.findByEmail(email);
+        if (!user) return false;
+        if (user.emailConfirmation.confirmationCode === confirmationCode && user.emailConfirmation.expirationDate > new Date()) {
+            return await CommandUserRepository.confirmEmail(confirmationCode, user._id)
+        }
+        return false;
+
+    },
 
     async registerUser(login: string, pass: string, email: string): Promise<UserModel | null> {
         const user = await QueryUserRepository.findByLoginOrEmail(login, email);

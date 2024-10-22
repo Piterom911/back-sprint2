@@ -13,4 +13,10 @@ export class CommandUserRepository {
 
         return !!isDeleted.deletedCount
     }
+
+    static async confirmEmail(code: string, _id: ObjectId) {
+        const result = await userCollection.updateOne({_id: _id},
+            {$set: {"emailConfirmation.isConfirmed": true}})
+        return result.modifiedCount === 1;
+    }
 }
